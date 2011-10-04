@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<document>
+	<infopost>
+		<title><![CDATA[site opening]]></title>
+		<author><![CDATA[admin]]></author>
+		<allow_com>0</allow_com>
+	</infopost>
+	<chapo><![CDATA[This is a typical article with common div class. You can use a CSS to control its output.]]></chapo>
+	<content><![CDATA[]]></content>
+	<adres><![CDATA[]]></adres>
+</document>
