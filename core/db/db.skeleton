@@ -17,8 +17,9 @@
 		"total": "1", //total works in galleries
         "0": {
 			"name": "Сайты",
+			"folder": "sites",
 			"visible": "true", // is gallery shows in main menu
-            "509a6f75849b.jpg": {
+            "509a6f75849b.png": {
                 "name": "idigity.ru",
                 "description": "Дизайн сайта студии Digity",
                 "added": "1317985750" //date added in timestamp
