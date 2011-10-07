@@ -1,16 +1,19 @@
+/* REMOVE THIS FILE FROM PRODUCTION */
+/* FOR INTERNAL USE ONLY */
+
 {
-    "user": {
+    "user": { //user section
         "login": "admin",
-        "password": "c4ca4238a0b923820dcc509a6f75849b"
+        "password": "c4ca4238a0b923820dcc509a6f75849b" //md5
     },
     "galleries": {
-		"total": "1",
+		"total": "1", //total works in galleries
         "Сайты": {
-			"visible": "true",
+			"visible": "true", // is gallery shows in main menu
             "509a6f75849b.jpg": {
                 "name": "idigity.ru",
                 "description": "Дизайн сайта студии Digity",
-                "added": "1317985750"
+                "added": "1317985750" //date added in timestamp
             }
         }
     },
@@ -18,18 +21,18 @@
 		"0": {
 			"title": "Контакты",
 			"text": "Здесь вы видите мои контакты",
-			"visible": "true"
+			"visible": "true" // is static shows in main menu
 		}
 	},
 	"articles": {
 		"0": {
 			"title": "Первая новость",
-			"pretext": "Это...",
-			"text": "первая новость",
+			"pretext": "Это...", // text before cut
+			"text": "первая новость", //pretext + text
 			"tags": "news, first",
-			"date": "1317985750",
+			"date": "1317985750", //publish date in timestamp
 			"author": "admin",
-			"visible": "true"
+			"visible": "true" // is static shows in main stream
 		}
 	}
 }
