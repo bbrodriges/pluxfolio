@@ -8,7 +8,8 @@
     },
     "galleries": {
 		"total": "1", //total works in galleries
-        "Сайты": {
+        "0": {
+			"name": "Сайты",
 			"visible": "true", // is gallery shows in main menu
             "509a6f75849b.jpg": {
                 "name": "idigity.ru",
