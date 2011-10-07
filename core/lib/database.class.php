@@ -20,18 +20,12 @@ class Database {
 		}
 	}
 	
-	/* Returns all user credentials */
-	function returnUser() {
-		$database = readDB();
-		return $database->user;
+	function sanitiseQuery( $data ) { //replace unexepatable chars
+		return str_replace( '"' , '&quot;' , $data );
 	}
 	
-	/* Writes new user credentials */
-	/* Input format: ("login" => "admin", "password" => "c4ca4238a0b923820dcc509a6f75849b") */
-	function updateUser( $data ) { //user credentials as Array or Object
-		$database = readDB(true);
-		$database['user'] = (array) $data;
-		return writeDB( $database );
+	function clearQuery( $data ) { //delete unexepatable chars
+		return str_replace( '"' , '' , $data );
 	}
 	
 }
