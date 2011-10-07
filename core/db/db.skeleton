@@ -7,7 +7,9 @@
 		"version": "2.0",
 		"title": "Моё портфолио",
 		"subtitle": "и многое другое",
-		"GMT": "+3"
+		"GMT": "+3",
+		"showblog": "true",
+		"index": "blog"
 	},
     "user": { //user section
         "login": "admin",
