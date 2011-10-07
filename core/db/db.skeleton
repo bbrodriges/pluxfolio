@@ -9,7 +9,8 @@
 		"subtitle": "и многое другое",
 		"GMT": "+3",
 		"showblog": "true",
-		"index": "blog"
+		"index": "blog",
+		"maintenance": "false" //is site under construction
 	},
     "user": { //user section
         "login": "admin",

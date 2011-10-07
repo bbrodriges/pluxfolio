@@ -6,7 +6,8 @@
 		"subtitle": "",
 		"GMT": "",
 		"showblog": "true",
-		"index": "blog"
+		"index": "blog",
+		"maintenance": "false"
 	},
     "user": {
         "login": "",
