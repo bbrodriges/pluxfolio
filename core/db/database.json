@@ -7,7 +7,7 @@
 		"GMT": "",
 		"showblog": "true",
 		"index": "blog",
-		"maintenance": "true"
+		"maintenance": "false"
 	},
     "user": {
         "login": "",
