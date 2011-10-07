@@ -1,0 +1,34 @@
+{
+    "user": {
+        "login": "admin",
+        "password": "c4ca4238a0b923820dcc509a6f75849b"
+    },
+    "galleries": {
+        "Сайты": {
+			"visible": "true",
+            "509a6f75849b.jpg": {
+                "name": "idigity.ru",
+                "description": "Дизайн сайта студии Digity",
+                "added": "1317985750"
+            }
+        }
+    },
+	"static": {
+		"0": {
+			"title": "Контакты",
+			"text": "Здесь вы видите мои контакты",
+			"visible": "true"
+		}
+	},
+	"articles": {
+		"0": {
+			"title": "Первая новость",
+			"pretext": "Это...",
+			"text": "первая новость",
+			"tags": "news, first",
+			"date": "1317985750",
+			"author": "admin",
+			"visible": "true"
+		}
+	}
+}
