@@ -37,6 +37,17 @@ class Utilities extends Database {
 		return $database['site'][$type];
 	}
 	
+	/* Writes site info */
+	function changeArtworksCount( $mode ) { //mode: 'increase', 'decrease'
+		$count = (int) readSiteData( 'totalartworks' );
+		if( $mode == 'increase' ) {
+			$count++;
+		} else {
+			$count--;
+		}
+		return writeSiteData( 'totalartworks', (string) $count );
+	}
+	
 /* ----------- END SITE SECTION ----------- */
 
 }

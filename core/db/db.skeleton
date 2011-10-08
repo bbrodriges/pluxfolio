@@ -10,14 +10,14 @@
 		"GMT": "+3",
 		"showblog": "true",
 		"index": "blog",
-		"maintenance": "false" //is site under construction
+		"maintenance": "false", //is site under construction
+		"totalartworks": "1" //total works in galleries
 	},
     "user": { //user section
         "login": "admin",
         "password": "c4ca4238a0b923820dcc509a6f75849b" //md5
     },
     "galleries": {
-		"total": "1", //total works in galleries
         "0": {
 			"name": "Сайты",
 			"folder": "sites",

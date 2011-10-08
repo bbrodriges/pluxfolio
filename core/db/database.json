@@ -7,14 +7,14 @@
 		"GMT": "",
 		"showblog": "true",
 		"index": "blog",
-		"maintenance": "false"
+		"maintenance": "false",
+		"totalartworks": "0"
 	},
     "user": {
         "login": "",
         "password": ""
     },
     "galleries": {
-		"total": "0"
     },
 	"statics": {
 	},
