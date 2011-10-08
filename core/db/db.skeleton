@@ -22,14 +22,16 @@
 			"name": "Сайты",
 			"folder": "sites",
 			"visible": "true", // is gallery shows in main menu
-            "509a6f75849b.png": {
-                "name": "idigity.ru",
-                "description": "Дизайн сайта студии Digity",
-                "added": "1317985750" //date added in timestamp
+            "images": {
+            	"509a6f75849b.png": {
+	                "name": "idigity.ru",
+	                "description": "Дизайн сайта студии Digity",
+	                "added": "1317985750" //date added in timestamp
+            	}
             }
         }
     },
-	"static": {
+	"statics": {
 		"0": {
 			"title": "Контакты",
 			"text": "Здесь вы видите мои контакты",
