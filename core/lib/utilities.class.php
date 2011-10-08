@@ -8,16 +8,16 @@ class Utilities extends Database {
 	
 	/* Returns all user credentials */
 	function returnUser() {
-		$database = readDB();
+		$database = Database::readDB();
 		return $database->user;
 	}
 	
 	/* Writes new user credentials */
 	function updateUser( $login , $password ) { //user credentials as Array or Object
-		$database = readDB(true);
-		$database['user']['login'] = clearQuery( $login );
+		$database = Database::readDB( true );
+		$database['user']['login'] = Database::clearQuery( $login );
 		$database['user']['password'] = md5( $login );
-		return writeDB( $database );
+		return Database::writeDB( $database );
 	}
 	
 /* ----------- END USER SECTION ----------- */
@@ -26,14 +26,14 @@ class Utilities extends Database {
 	
 	/* Writes site info */
 	function writeSiteData( $type, $data ) { //(1) type: 'title', 'subtitle' etc... ; (2) Data to write
-		$database = readDB();
-		$database->site->address == sanitiseQuery( $newaddress );
-		return writeDB( $database );
+		$database = Database::readDB();
+		$database->site->address == Database::sanitiseQuery( $newaddress );
+		return Database::writeDB( $database );
 	}
 	
 	/* Writes site info */
 	function readSiteData( $type ) { //type: 'title', 'subtitle' etc...
-		$database = readDB(true);
+		$database = Database::readDB( true );
 		return $database['site'][$type];
 	}
 	
