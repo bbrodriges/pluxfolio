@@ -9,7 +9,8 @@ class Database {
 		return json_decode( file_get_contents( DATABASE ) , $type );
 	}
 	
-	function writeDB( $data ) { //whole DB with changes. Array or Object.
+	/* Opens DB an wrtie changes */
+	function writeDB( $data ) { //input is a whole DB with changes. Array or Object.
 		if(	$fp = fopen( DATABASE , 'w' ) ) {
 			$data = json_encode( (object) $data );
 			fwrite( $fp , $data );
