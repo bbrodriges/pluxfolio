@@ -1,10 +1,10 @@
 <?php
 
 include('database.class.php');
+include('utilities.class.php');
 
+/* Galleries control */
 class Galleries extends Database {
-	
-/* ----------- GALLERY SECTION ----------- */
 	
 	/* Returns all galleries as Array */
 	function getAll(){
@@ -18,14 +18,21 @@ class Galleries extends Database {
 		return $galleries[$id];
 	}
 		
-	/* Delete gallery from DB */
-	function Delete( $id ){ //id of static to be deleted
+	/* Delete gallery */
+	function Delete( $galleryid ){ //id of static to be deleted
 		$database = Database::readDB( true );
-		unset($databese['galleries'][$id]);
-		return Database::writeDB( $database );
+		$folder = '../../galleries/'.$databese['galleries'][$galleryid]['folder'];
+		$mask = $folder.'/*.*';
+		if( array_map( "unlink", glob( $mask ) ) && rmdir( $folder ){ //if all files and folder deleted
+			unset($databese['galleries'][$galleryid]);
+			Utilities::renewArtworksCount(); //recalculating artworks count
+			return Database::writeDB( $database );
+		} else {
+			return false;
+		}
 	}
 	
-	/* Set visibility of static on and off */
+	/* Set visibility of gallery on and off */
 	function toggleVisiblity( $id, $state ){ //id as int, state as string 'true' or 'false'
 		$database = Database::readDB( true );
 		$database['galleries'][$id]['visible'] = $state;
@@ -44,23 +51,56 @@ class Galleries extends Database {
 		}
 		return $result;
 	}
-	
-/* ----------- END GALLERY SECTION ----------- */
 
-/* ----------- ARTWORKS SECTION ----------- */
+}
 
-	/* Append new static to DB */
+/* Artworks in galleries control */
+class Artworks extends Galleries {
+
+	/* Append or modify artwork in gallery */
 	/* $galleryid is id of artwork's parent gallery */
 	/* $data is Array("filename" => string, "name" => string, "description" => string, "added" => timestamp); */
-	function modifyArtwork( $galleryid , $data ){
+	function modifyArtworks( $galleryid , $data ){
 		$database = Database::readDB( true );
 		$filename = $data['filename'];
 		unset($data['filename']); // removing unnecessary data
+		if( !isset( $database['galleries'][$galleryid][$filename] ) ){
+			Utilities::modifyArtworksCount( 'increase' ); //increases artworks counter if appending new artwork	
+		}
 		$database['galleries'][$galleryid][$filename] = $data;
 		return Database::writeDB( $database );
 	}
-
-/* ----------- END ARTWORKS SECTION ----------- */
+	
+	/* Delete specific artwork */
+	function removeArtwork( $galleryid , $filename ){
+		$database = Database::readDB( true );
+		$gallery = Galleries::getById( $galleryid );
+		if( unlink( '../../galleries/'.$gallery['folder'].'/'.$filename ) ){
+			unset( $database['galleries'][$galleryid]['images'][$filename] );
+			Utilities::modifyArtworksCount( 'decrease' ); //decreases artworks counter
+			return Database::writeDB( $database );
+		} else {
+			return false;	
+		}
+	}
+	
+	/* Returns all artworks in gallery */
+	function allArtworks( $galleryid ){
+		$database = Database::readDB( true );
+		return $database['galleries'][$galleryid]['images'];
+	}
+	
+	/* Returns specific artwork from gallery */
+	function returnArtwork( $galleryid , $filename ){
+		$database = Database::readDB( true );
+		return $database['galleries'][$galleryid]['images'][$filename];
+	}
+	
+	/* Returns artwork age in days */
+	function returnArtworkAge( $timestamp ){
+		$unixages = time() - $timestamp; // calculating differense between now and upload time
+		return floor( $unixages * 86400 ); //round to lesser number of days
+	}	
 
 }
 

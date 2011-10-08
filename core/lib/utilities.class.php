@@ -8,8 +8,8 @@ class Utilities extends Database {
 	
 	/* Returns all user credentials */
 	function returnUser() {
-		$database = Database::readDB();
-		return $database->user;
+		$database = Database::readDB( true );
+		return $database['user'];
 	}
 	
 	/* Writes new user credentials */
@@ -26,8 +26,8 @@ class Utilities extends Database {
 	
 	/* Writes site info */
 	function writeSiteData( $type, $data ) { //(1) type: 'title', 'subtitle' etc... ; (2) Data to write
-		$database = Database::readDB();
-		$database->site->address == Database::sanitiseQuery( $newaddress );
+		$database = Database::readDB( true );
+		$database['site'][$type] == Database::sanitiseQuery( $data );
 		return Database::writeDB( $database );
 	}
 	
@@ -38,12 +38,24 @@ class Utilities extends Database {
 	}
 	
 	/* Changes count of site's artworks  */
-	function artworksCount( $mode ) { //mode: 'increase', 'decrease'
+	function modifyArtworksCount( $mode ) { //mode: 'increase', 'decrease'
 		$count = (int) readSiteData( 'totalartworks' );
 		if( $mode == 'increase' ) {
 			$count++;
 		} else {
 			$count--;
+		}
+		return writeSiteData( 'totalartworks', (string) $count );
+	}
+	
+	/* Compleatly recalculates count of site's artworks  */
+	function renewArtworksCount() { //mode: 'increase', 'decrease'
+		$newcount = 0;
+		$database = Database::readDB( true );
+		foreach( $database['galleries'] as $gallery ){
+			foreach( $gallery['images'] as $image ) {
+				$newcount++;
+			}
 		}
 		return writeSiteData( 'totalartworks', (string) $count );
 	}
