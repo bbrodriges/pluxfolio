@@ -17,7 +17,7 @@ class Statics extends Database {
 	}
 	
 	/* Append new static to DB */
-	/* $data is Array("title" => string, "text": string, "visible": bool); */
+	/* $data is Array("title" => string, "text" => string, "visible" => bool); */
 	/* If $id passed - edits existing static */
 	function Modify( $data, $id = false ){
 		$database = Database::readDB( true );

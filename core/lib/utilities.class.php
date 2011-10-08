@@ -37,8 +37,8 @@ class Utilities extends Database {
 		return $database['site'][$type];
 	}
 	
-	/* Writes site info */
-	function changeArtworksCount( $mode ) { //mode: 'increase', 'decrease'
+	/* Changes count of site's artworks  */
+	function artworksCount( $mode ) { //mode: 'increase', 'decrease'
 		$count = (int) readSiteData( 'totalartworks' );
 		if( $mode == 'increase' ) {
 			$count++;

@@ -4,6 +4,8 @@ include('database.class.php');
 
 class Galleries extends Database {
 	
+/* ----------- GALLERY SECTION ----------- */
+	
 	/* Returns all galleries as Array */
 	function getAll(){
 		$database = Database::readDB( true );
@@ -42,6 +44,23 @@ class Galleries extends Database {
 		}
 		return $result;
 	}
+	
+/* ----------- END GALLERY SECTION ----------- */
+
+/* ----------- ARTWORKS SECTION ----------- */
+
+	/* Append new static to DB */
+	/* $galleryid is id of artwork's parent gallery */
+	/* $data is Array("filename" => string, "name" => string, "description" => string, "added" => timestamp); */
+	function modifyArtwork( $galleryid , $data ){
+		$database = Database::readDB( true );
+		$filename = $data['filename'];
+		unset($data['filename']); // removing unnecessary data
+		$database['galleries'][$galleryid][$filename] = $data;
+		return Database::writeDB( $database );
+	}
+
+/* ----------- END ARTWORKS SECTION ----------- */
 
 }
 
