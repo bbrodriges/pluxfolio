@@ -26,7 +26,9 @@
             	"509a6f75849b.png": {
 	                "name": "idigity.ru",
 	                "description": "Дизайн сайта студии Digity",
-	                "added": "1317985750" //date added in timestamp
+	                "added": "1317985750", //date added in timestamp
+	                "good": "3", //votes up
+	                "bad": "1" //votes down
             	}
             }
         }
