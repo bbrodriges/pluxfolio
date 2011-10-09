@@ -1,30 +1,30 @@
 <?php
 
-include('database.class.php');
-
 class Statics extends Database {
 	
 	/* Returns all statics as Array */
 	function getAll(){
 		$database = Database::readDB( true );
-		return $databese['statics'];
+		return $database['statics'];
 	}
 	
 	/* Returns static as Array by id */
 	function getById( $id ){ //id as int
 		$statics = self::getAll();
-		return $statics[$id];
+		return $statics[(string)$id];
 	}
 	
 	/* Append new static to DB */
-	/* $data is Array("title" => string, "text" => string, "visible" => bool); */
+	/* $data is Array("title" => string, "text" => string, "visible" => 'true'/'false'); */
 	/* If $id passed - edits existing static */
 	function Modify( $data, $id = false ){
 		$database = Database::readDB( true );
 		if( $id ) {
 			$database['statics'][$id] = $data;
 		} else {
-			$newId = key( end( $database['statics'] ) ) + 1; //last static id + 1. Might need to apply reset() function to return pointer.
+			krsort( $database['statics'] );
+			$keys = array_keys($database['statics']);
+			$newId = (int)$keys[0] + 1;
 			$database['statics'][$newId] = $data;
 		}
 		return Database::writeDB( $database );
@@ -33,14 +33,14 @@ class Statics extends Database {
 	/* Delete static from DB */
 	function Delete( $id ){ //id of static to be deleted
 		$database = Database::readDB( true );
-		unset($databese['statics'][$id]);
+		unset($database['statics'][(string)$id]);
 		return Database::writeDB( $database );
 	}
 	
 	/* Set visibility of static on and off */
 	function toggleVisiblity( $id, $state ){ //id as int, state as string 'true' or 'false'
 		$database = Database::readDB( true );
-		$database['statics'][$id]['visible'] = $state;
+		$database['statics'][(string)$id]['visible'] = $state;
 		return Database::writeDB( $database );
 	}
 	

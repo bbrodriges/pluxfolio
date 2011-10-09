@@ -1,8 +1,5 @@
 <?php
 
-include('database.class.php');
-include('utilities.class.php');
-
 /* Galleries control */
 class Galleries extends Database {
 	
@@ -15,7 +12,7 @@ class Galleries extends Database {
 	/* Returns gallery as Array by id */
 	function getById( $id ){ //id as int
 		$galleries = self::getAll();
-		return $galleries[$id];
+		return $galleries[(string)$id];
 	}
 		
 	/* Delete gallery */
@@ -23,7 +20,7 @@ class Galleries extends Database {
 		$database = Database::readDB( true );
 		$folder = '../../galleries/'.$databese['galleries'][$galleryid]['folder'];
 		$mask = $folder.'/*.*';
-		if( array_map( "unlink", glob( $mask ) ) && rmdir( $folder ){ //if all files and folder deleted
+		if( array_map( "unlink", glob( $mask ) ) && rmdir( $folder ) ){ //if all files and folder deleted
 			unset($databese['galleries'][$galleryid]);
 			Utilities::renewArtworksCount(); //recalculating artworks count
 			return Database::writeDB( $database );

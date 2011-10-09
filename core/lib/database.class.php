@@ -1,16 +1,16 @@
 <?php
 
-define('DATABASE', '../db/database.json'); //defining DB file
+define( 'DATABASE' , 'core/db/database.json' );
 
 class Database {
 	
 	/* Opens DB file and returns all data */
-	function readDB( $type = false ) { //if TRUE - Array, if FALSE - Object.
+	public function readDB( $type = false ) { //if TRUE - Array, if FALSE - Object.
 		return json_decode( file_get_contents( DATABASE ) , $type );
 	}
 	
 	/* Opens DB an wrtie changes */
-	function writeDB( $data ) { //input is a whole DB with changes. Array or Object.
+	public function writeDB( $data ) { //input is a whole DB with changes. Array or Object.
 		if(	$fp = fopen( DATABASE , 'w' ) ) {
 			$data = json_encode( (object) $data );
 			fwrite( $fp , $data );
@@ -21,11 +21,11 @@ class Database {
 		}
 	}
 	
-	function sanitiseQuery( $data ) { //replace unexepatable chars
+	public function sanitiseQuery( $data ) { //replace unexepatable chars
 		return str_replace( '"' , '&quot;' , $data );
 	}
 	
-	function clearQuery( $data ) { //delete unexepatable chars
+	public function clearQuery( $data ) { //delete unexepatable chars
 		return str_replace( '"' , '' , $data );
 	}
 	
