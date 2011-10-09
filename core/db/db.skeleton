@@ -3,7 +3,6 @@
 
 {
 	"site": {
-		"address": "http://localhost/pluxfolio",
 		"version": "2.0",
 		"title": "Моё портфолио",
 		"subtitle": "и многое другое",
