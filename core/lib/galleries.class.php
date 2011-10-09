@@ -14,6 +14,31 @@ class Galleries extends Database {
 		$galleries = self::getAll();
 		return $galleries[(string)$id];
 	}
+	
+	/* Creates and append new gallery to DB */
+	/* $data is Array("name" => string, "folder" => string, "visible" => 'true'/'false'); */
+	/* If $id passed - edits existing gallery */
+	function Modify( $data, $id = false ){
+		$database = Database::readDB( true );
+		if( $id ) {
+			$oldname = $database['galleries'][(string)$id]['folder']; //old folder name
+			if( $oldname != $data['folder'] ) { //if folder name changed
+				rename( ROOT.'galleries/'.$oldname , ROOT.'galleries/'.$data['folder'] );
+			}
+			$database['galleries'][(string)$id] = $data;
+		} else {
+			if( !file_exists( ROOT.'galleries/'.$data['folder'] ) ) {
+				krsort( $database['galleries'] );
+				$keys = array_keys($database['galleries']);
+				$newId = (int)$keys[0] + 1;
+				$database['galleries'][$newId] = $data;
+				mkdir( ROOT.'galleries/'.$data['folder'] );
+			} else {
+				return false;	
+			}
+		}
+		return Database::writeDB( $database );
+	}
 		
 	/* Delete gallery */
 	function Delete( $galleryid ){ //id of static to be deleted
@@ -57,7 +82,7 @@ class Artworks extends Galleries {
 	/* Append or modify artwork in gallery */
 	/* $galleryid is id of artwork's parent gallery */
 	/* $data is Array("filename" => string, "name" => string, "description" => string, "added" => timestamp); */
-	function modifyArtworks( $galleryid , $data ){
+	function modifyArtwork( $galleryid , $data ){
 		$database = Database::readDB( true );
 		$filename = $data['filename'];
 		unset($data['filename']); // removing unnecessary data
