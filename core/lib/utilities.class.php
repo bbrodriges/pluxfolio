@@ -29,7 +29,7 @@ class Utilities extends Database {
 		return Database::writeDB( $database );
 	}
 	
-	/* Writes site info */
+	/* Reads site info */
 	public function readSiteData( $type ) { //type: 'title', 'subtitle' etc...
 		$database = Database::readDB( true );
 		return $database['site'][$type];
@@ -40,7 +40,7 @@ class Utilities extends Database {
 		$count = (int) self::readSiteData( 'totalartworks' );
 		if( $mode == 'increase' ) {
 			$count++;
-		} elseif ( $mode == 'decrease' && $count >= 0 ) {
+		} elseif ( $mode == 'decrease' && $count > 0 ) {
 			$count--;
 		} else {
 			return false;	
