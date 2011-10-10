@@ -12,3 +12,7 @@ RewriteRule ^(\w+)/(\w+)?$ index.php?type=$1&id=$2 [NC]
 #ErrorDocument 404            index.php?type=error&id=404
 #ErrorDocument 500            index.php?type=error&id=500
 #ErrorDocument 503            index.php?type=error&id=503
+
+#PHP errors suppression
+php_flag display_errors on 
+php_value error_reporting E_ALL~E_NOTICE
