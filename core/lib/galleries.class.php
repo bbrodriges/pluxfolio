@@ -4,13 +4,13 @@
 class Galleries extends Database {
 	
 	/* Returns all galleries as Array */
-	function getAll(){
+	public function getAll(){
 		$database = Database::readDB( true );
 		return $database['galleries'];
 	}
 	
 	/* Returns gallery as Array by id */
-	function getById( $id ){ //id as int
+	public function getById( $id ){ //id as int
 		$galleries = self::getAll();
 		return $galleries[(string)$id];
 	}
@@ -18,7 +18,7 @@ class Galleries extends Database {
 	/* Creates and append new gallery to DB */
 	/* $data is Array("name" => string, "folder" => string, "visible" => 'true'/'false'); */
 	/* If $id passed - edits existing gallery */
-	function Modify( $data, $id = false ){
+	public function Modify( $data, $id = false ){
 		$database = Database::readDB( true );
 		if( $id ) {
 			$oldname = $database['galleries'][(string)$id]['folder']; //old folder name
@@ -48,7 +48,7 @@ class Galleries extends Database {
 	}
 		
 	/* Delete gallery */
-	function Delete( $galleryid ){ //id of static to be deleted
+	public function Delete( $galleryid ){ //id of static to be deleted
 		if( self::getById( $galleryid ) ) { //if gallery exists
 			$database = Database::readDB( true );
 			$folder = ROOT.'galleries/'.$database['galleries'][$galleryid]['folder'];
@@ -69,7 +69,7 @@ class Galleries extends Database {
 	}
 	
 	/* Set visibility of gallery on and off */
-	function toggleVisiblity( $id, $state ){ //id as int, state as string 'true' or 'false'
+	public function toggleVisiblity( $id, $state ){ //id as int, state as string 'true' or 'false'
 		$database = Database::readDB( true );
 		$database['galleries'][$id]['visible'] = $state;
 		return Database::writeDB( $database );
@@ -77,7 +77,7 @@ class Galleries extends Database {
 	
 	/* Returns only visible statics */
 	/* For more simple main menu generation */
-	function returnVisible(){
+	public function returnVisible(){
 		$galleries = self::getAll();
 		$result = Array();
 		foreach( $galleries as $id => $gallery ) {
@@ -96,7 +96,7 @@ class Artworks extends Galleries {
 	/* Append or modify artwork in gallery */
 	/* $galleryid is id of artwork's parent gallery */
 	/* $data is Array("filename" => string, "name" => string, "description" => string, "added" => timestamp); */
-	function modifyArtwork( $galleryid , $data ){
+	public function modifyArtwork( $galleryid , $data ){
 		$database = Database::readDB( true );
 		$filename = $data['filename'];
 		unset($data['filename']); // removing unnecessary data
@@ -108,7 +108,7 @@ class Artworks extends Galleries {
 	}
 	
 	/* Delete specific artwork */
-	function removeArtwork( $galleryid , $filename ){
+	public function removeArtwork( $galleryid , $filename ){
 		$database = Database::readDB( true );
 		$gallery = Galleries::getById( $galleryid );
 		if( unlink( '../../galleries/'.$gallery['folder'].'/'.$filename ) ){
@@ -121,29 +121,57 @@ class Artworks extends Galleries {
 	}
 	
 	/* Returns all artworks in gallery */
-	function allArtworks( $galleryid ){
+	public function allArtworks( $galleryid ){
 		$database = Database::readDB( true );
 		return $database['galleries'][$galleryid]['images'];
 	}
 	
 	/* Returns specific artwork from gallery */
-	function returnArtwork( $galleryid , $filename ){
+	public function returnArtwork( $galleryid , $filename ){
 		$database = Database::readDB( true );
 		return $database['galleries'][$galleryid]['images'][$filename];
 	}
 	
 	/* Returns artwork age in days */
-	function returnArtworkAge( $timestamp ){
+	public function returnArtworkAge( $timestamp ){
 		$unixages = time() - $timestamp; // calculating differense between now and upload time
 		return floor( $unixages * 86400 ); //round to lesser number of days
 	}
 
 	/* Perform artwork vote */
-	function Vote( $galleryid , $filename , $mode ){ //$mode: 'good', 'bad'
+	public function Vote( $galleryid , $filename , $mode ){ //$mode: 'good', 'bad'
 		$database = Database::readDB( true );
 		$votes = (int)$database['galleries'][$galleryid]['images'][$filename][$mode];
 		$database['galleries'][$galleryid]['images'][$filename][$mode] = $votes + 1;
 		return Database::writeDB( $database );
+	}
+	
+	/* Uploads artwork to directory */
+	/* $galleryid - id of parent gallery, $file - $_FILES array */
+	/* UNTESTED!!! */
+	public function Upload( $galleryid , $file ) {
+		$uploaded = 0;
+		$totalartworks = count($_FILES['img']['name']);
+		$gallery = self::getById( $galleryid );
+		
+		foreach( $_FILES['img']['name'] as $id => $file) {
+			$savepath = ROOT.'galleries/'.$gallery['folder'].'/';
+			$name = basename( $_FILES['img']['name'][$id] );
+			if( @move_uploaded_file( $_FILES['img']['tmp_name'][$id] , $savepath.$name ) ) {
+				@chmod( $savepath.$name,0644 );
+				/* Here we will make thumb. Write function */
+				@chmod( $savepath.$name.'.tb', 0644 );
+				$data = Array( "filename" => $name, "name" => '', "description" => '', "added" => time() );
+				if( self::modifyArtwork( $galleryid , $data ) ){
+					$uploaded++;
+				}
+			}
+			if( $uploaded == $totalartworks ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 
 }
