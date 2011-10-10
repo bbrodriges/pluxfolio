@@ -1,6 +1,6 @@
 <?php
 
 	define( 'ROOT' , './' );
-	include('core/includer.php');
+	include( ROOT.'core/includer.php' );
 	
 ?>

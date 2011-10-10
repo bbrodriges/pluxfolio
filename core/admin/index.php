@@ -1,5 +1,6 @@
 <?php
 
-define( 'ROOT' , '../../' );
+	define( 'ROOT' , '../../' );
+	include( ROOT.'core/includer.php' );
 
 ?>
