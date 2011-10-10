@@ -11,10 +11,7 @@
 		"index": "blog",
 		"maintenance": "false", //is site under construction
 		"totalartworks": "1", //total works in galleries
-		"thumbsize": {
-			"width": "200", 
-			"height": "150"
-		}, //artwork thumb size in px
+		"thumbsize": "200x150", //artwork thumb size in px
 		"articlesperpage": "5",
 		"showvotes": "true" //enable/disable artworks voting
 	},

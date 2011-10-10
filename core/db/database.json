@@ -8,10 +8,7 @@
 		"index": "blog",
 		"maintenance": "false",
 		"totalartworks": "0",
-		"thumbsize": {
-			"width": "200", 
-			"height": "150"
-		},
+		"thumbsize": "200x150",
 		"articlesperpage": "5",
 		"showvotes": "true"
 	},
