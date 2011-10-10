@@ -37,7 +37,7 @@ class Database {
 	/* Checks for database errors */
 	public function checkDatabase( $database ) {
 		json_decode($database);
-		switch ( json_last_error( ) {
+		switch ( json_last_error() ) {
 			case JSON_ERROR_NONE:
 				return true;
 				die;
@@ -52,7 +52,7 @@ class Database {
 	/* Makes backup of database */
 	public function backupDatabase() {
 		@unlink( ROOT.'core/db/database.json.bak' );
-		if( copy( ROOT.'core/db/database.json' , ROOT.'core/db/database.json.bak' ) {
+		if( copy( ROOT.'core/db/database.json' , ROOT.'core/db/database.json.bak' ) ) {
 			return true;
 		} else {
 			return false;
