@@ -1,6 +1,6 @@
 <?php
 
-define( 'DATABASE' , 'core/db/database.json' );
+define( 'DATABASE' , ROOT.'core/db/database.json' );
 
 class Database {
 	
