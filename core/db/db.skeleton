@@ -13,6 +13,7 @@
 		"totalartworks": "1", //total works in galleries
 		"thumbsize": "200x150", //artwork thumb size in px
 		"articlesperpage": "5",
+		"showthumbs": "true", //enable/disable thumbs display
 		"showvotes": "true" //enable/disable artworks voting
 	},
     "user": { //user section

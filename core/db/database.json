@@ -10,6 +10,7 @@
 		"totalartworks": "0",
 		"thumbsize": "200x150",
 		"articlesperpage": "5",
+		"showthumbs": "true",
 		"showvotes": "true"
 	},
     "user": {
