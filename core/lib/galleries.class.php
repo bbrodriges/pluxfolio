@@ -66,9 +66,9 @@ class Galleries extends Database {
 	function returnVisible(){
 		$galleries = self::getAll();
 		$result = Array();
-		foreach( $galleries as $gallery ) {
+		foreach( $galleries as $id => $gallery ) {
 			if( $gallery['visible'] == 'true' ){
-				$result[] = $gallery;
+				$result[$id] = $gallery;
 			}
 		}
 		return $result;
