@@ -11,7 +11,8 @@
 		"index": "blog",
 		"maintenance": "false", //is site under construction
 		"totalartworks": "1", //total works in galleries
-		"thumbsize": "200x150" //artwork thumb size WxH in px
+		"thumbsize": "200x150", //artwork thumb size WxH in px
+		"articlesperpage": "5"
 	},
     "user": { //user section
         "login": "admin",
