@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule ^([^/]*)/([^/]*)$ /index.php?type=$1&id=$2 [L] # Automagically transfoms ugly URL to pretty one
