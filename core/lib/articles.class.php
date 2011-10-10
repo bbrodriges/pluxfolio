@@ -24,7 +24,7 @@ class Articles extends Database {
 		} else {
 			krsort( $database['articles'] );
 			$keys = array_keys($database['articles']);
-			$newId = (int)$keys[0] + 1;
+			$newId = @(int)$keys[0] + 1;
 			$database['articles'][$newId] = $data;
 		}
 		return Database::writeDB( $database );
@@ -49,9 +49,9 @@ class Articles extends Database {
 	function returnVisible(){
 		$articles = self::getAll();
 		$result = Array();
-		foreach( $articles as $article ) {
+		foreach( $articles as $id => $article ) {
 			if( $article['visible'] == 'true' ){
-				$result[] = $article;
+				$result[$id] = $article;
 			}
 		}
 		return $result;
@@ -61,10 +61,10 @@ class Articles extends Database {
 	function returnWithTag( $tag ){ //$tag as string
 		$articles = self::returnVisible();
 		$result = Array();
-		foreach( $articles as $article ) {
+		foreach( $articles as $id => $article ) {
 			/* Adding space to the begining of tags string to insure that our position will never be 0 */
-			if( mb_strpos( ' '.$article['tags'] , $tag ) ) ){
-				$result[] = $article;
+			if( mb_strpos( ' '.$article['tags'] , $tag ) ){
+				$result[$id] = $article;
 			}
 		}
 		return $result;
