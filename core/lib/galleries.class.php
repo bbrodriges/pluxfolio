@@ -122,7 +122,15 @@ class Artworks extends Galleries {
 	function returnArtworkAge( $timestamp ){
 		$unixages = time() - $timestamp; // calculating differense between now and upload time
 		return floor( $unixages * 86400 ); //round to lesser number of days
-	}	
+	}
+
+	/* Perform artwork vote */
+	function Vote( $galleryid , $filename , $mode ){ //$mode: 'good', 'bad'
+		$database = Database::readDB( true );
+		$votes = (int)$database['galleries'][$galleryid]['images'][$filename][$mode];
+		$database['galleries'][$galleryid]['images'][$filename][$mode] = $votes + 1;
+		return Database::writeDB( $database );
+	}
 
 }
 
