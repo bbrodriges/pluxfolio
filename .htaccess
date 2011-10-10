@@ -1,2 +1,14 @@
 RewriteEngine On
-RewriteRule ^([^/]*)/([^/]*)$ /index.php?type=$1&id=$2 [L] # Automagically transfoms ugly URL to pretty one
+
+#add here REQUEST_URI instead /pluxfolio
+RewriteBase /pluxfolio
+
+RewriteRule ^(\w+)/(\w+)?$ index.php?type=$1&id=$2 [NC]
+
+# Work needed to prettify error output
+#ErrorDocument 400            index.php?type=error&id=400
+#ErrorDocument 401            index.php?type=error&id=401
+#ErrorDocument 403            index.php?type=error&id=403
+#ErrorDocument 404            index.php?type=error&id=404
+#ErrorDocument 500            index.php?type=error&id=500
+#ErrorDocument 503            index.php?type=error&id=503
