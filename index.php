@@ -1,6 +1,6 @@
 <?php
 
-	define( 'ROOT' , $_SERVER['REQUEST_URI'] );
+	define( 'ROOT' , './' );
 	include('core/includer.php');
 	
 ?>
