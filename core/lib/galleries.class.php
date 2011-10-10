@@ -6,7 +6,7 @@ class Galleries extends Database {
 	/* Returns all galleries as Array */
 	function getAll(){
 		$database = Database::readDB( true );
-		return $databese['galleries'];
+		return $database['galleries'];
 	}
 	
 	/* Returns gallery as Array by id */
@@ -23,15 +23,22 @@ class Galleries extends Database {
 		if( $id ) {
 			$oldname = $database['galleries'][(string)$id]['folder']; //old folder name
 			if( $oldname != $data['folder'] ) { //if folder name changed
-				rename( ROOT.'galleries/'.$oldname , ROOT.'galleries/'.$data['folder'] );
+				if( !file_exists( ROOT.'galleries/'.$data['folder'] ) ) { //if no existing folder has given name already
+					rename( ROOT.'galleries/'.$oldname , ROOT.'galleries/'.$data['folder'] );
+				} else {
+					return false;
+				}
 			}
+			$images = $database['galleries'][(string)$id]['images']; //saving images
 			$database['galleries'][(string)$id] = $data;
+			$database['galleries'][(string)$id]['images'] = $images; //writing images back
 		} else {
 			if( !file_exists( ROOT.'galleries/'.$data['folder'] ) ) {
 				krsort( $database['galleries'] );
 				$keys = array_keys($database['galleries']);
 				$newId = (int)$keys[0] + 1;
-				$database['galleries'][$newId] = $data;
+				$database['galleries'][(string)$newId] = $data;
+				$database['galleries'][(string)$newId]['images'] = Array();
 				mkdir( ROOT.'galleries/'.$data['folder'] );
 			} else {
 				return false;	
@@ -42,13 +49,20 @@ class Galleries extends Database {
 		
 	/* Delete gallery */
 	function Delete( $galleryid ){ //id of static to be deleted
-		$database = Database::readDB( true );
-		$folder = '../../galleries/'.$databese['galleries'][$galleryid]['folder'];
-		$mask = $folder.'/*.*';
-		if( array_map( "unlink", glob( $mask ) ) && rmdir( $folder ) ){ //if all files and folder deleted
-			unset($databese['galleries'][$galleryid]);
-			Utilities::renewArtworksCount(); //recalculating artworks count
-			return Database::writeDB( $database );
+		if( self::getById( $galleryid ) ) { //if gallery exists
+			$database = Database::readDB( true );
+			$folder = ROOT.'galleries/'.$database['galleries'][$galleryid]['folder'];
+			$mask = $folder.'/*.*'; //all files except '.' and '..'
+			if( ( $files = scandir( $folder ) ) && ( count( $files ) > 2 ) ) { //if any files exists delete them
+				array_map( "unlink", glob( $mask ) );
+			}
+			if( rmdir( $folder ) ){ //if folder deleted
+				unset($database['galleries'][$galleryid]);
+				Utilities::renewArtworksCount(); //recalculating artworks count
+				return Database::writeDB( $database );
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}
