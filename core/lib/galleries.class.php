@@ -58,8 +58,12 @@ class Galleries extends Database {
 			}
 			if( rmdir( $folder ) ){ //if folder deleted
 				unset($database['galleries'][$galleryid]);
-				Utilities::renewArtworksCount(); //recalculating artworks count
-				return Database::writeDB( $database );
+				if( Database::writeDB( $database ) ){
+					Utilities::renewArtworksCount(); //recalculating artworks count
+					return true;
+				} else {
+					return false;
+				}
 			} else {
 				return false;
 			}
@@ -124,8 +128,12 @@ class Artworks extends Galleries {
 			unlink( $file );
 		}
 		unset( $database['galleries'][$galleryid]['images'][$filename] );
-		Utilities::modifyArtworksCount( 'decrease' ); //decreases artworks counter
-		return Database::writeDB( $database );
+		if( Database::writeDB( $database ) ) {
+			Utilities::modifyArtworksCount( 'decrease' ); //decreases artworks counter
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/* Returns all artworks in gallery */
