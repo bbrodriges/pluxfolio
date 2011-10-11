@@ -119,13 +119,13 @@ class Artworks extends Galleries {
 	public function removeArtwork( $galleryid , $filename ){
 		$database = Database::readDB( true );
 		$gallery = Galleries::getById( $galleryid );
-		if( unlink( '../../galleries/'.$gallery['folder'].'/'.$filename ) ){
-			unset( $database['galleries'][$galleryid]['images'][$filename] );
-			Utilities::modifyArtworksCount( 'decrease' ); //decreases artworks counter
-			return Database::writeDB( $database );
-		} else {
-			return false;	
+		$file = '../../galleries/'.$gallery['folder'].'/'.$filename;
+		if( file_exists( $file ) ) {
+			unlink( $file );
 		}
+		unset( $database['galleries'][$galleryid]['images'][$filename] );
+		Utilities::modifyArtworksCount( 'decrease' ); //decreases artworks counter
+		return Database::writeDB( $database );
 	}
 	
 	/* Returns all artworks in gallery */
@@ -179,6 +179,32 @@ class Artworks extends Galleries {
 			return true;
 		} else {
 			return false;
+		}
+	}
+	
+	/* Rescans all galleries directories for artworks uploaded via FTP */
+	/* UNTESTED!!! */
+	public function Rescan() {
+		$galleries = Galleries::getAll();
+		$galeriesFolder = ROOT.'gallery/';
+		$acceptedFiles = Array( 'jpg' , 'gif' , 'png' ); //Acceptable file types
+		foreach( $galleries as $galleryid => $gallery ) {
+			$galleryFiles = glob( $galeriesFolder.$gallery['folder'].'/*.*' ); //all files except '..' and '.'
+			if( count( $galleryFiles ) > count( $gallery['images'] ) ) { //if files in folder more than files in gallery DB
+				foreach( $galleryFiles as $file ) {
+					$fileInfo = pathinfo( $galeriesFolder.$gallery['folder'].$file );
+					if( in_array( $fileInfo['extension'] , $acceptedFiles ) && !in_array( $file , $gallery['images'] ) ) { //if acceptable file type and not in DB
+						$data = Array( "filename" => $file, "name" => '', "description" => '', "added" => filemtime( $galeriesFolder.$gallery['folder'].$file ) );
+						self::modifyArtwork( $galleryid , $data );
+					}
+				}
+			} count( $galleryFiles ) < count( $gallery['images'] ) ) { //if files in folder less than files in gallery DB
+				foreach( $gallery['images'] as $filename => $image ) {
+					if( !in_array( $filename , $galleryFiles ) ) { //if DB record has no existing image
+						self::removeArtwork( $galleryid , $filename );
+					}
+				}
+			}
 		}
 	}
 
