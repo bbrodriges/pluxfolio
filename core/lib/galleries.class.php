@@ -100,10 +100,12 @@ class Artworks extends Galleries {
 		$database = Database::readDB( true );
 		$filename = $data['filename'];
 		unset($data['filename']); // removing unnecessary data
-		if( !isset( $database['galleries'][$galleryid][$filename] ) ){
-			Utilities::modifyArtworksCount( 'increase' ); //increases artworks counter if appending new artwork	
+		if( !isset( $database['galleries'][$galleryid]['images'][$filename] ) ){
+			Utilities::modifyArtworksCount( 'increase' ); //increases artworks counter if appending new artwork
+			// read new base
+			$database = Database::readDB( true );
 		}
-		$database['galleries'][$galleryid][$filename] = $data;
+		$database['galleries'][$galleryid]['images'][$filename] = $data;
 		return Database::writeDB( $database );
 	}
 	
@@ -147,9 +149,9 @@ class Artworks extends Galleries {
 	}
 	
 	/* Uploads artwork to directory */
-	/* $galleryid - id of parent gallery, $file - $_FILES array */
+	/* $galleryid - id of parent gallery, $files - not needed */
 	/* UNTESTED!!! */
-	public function Upload( $galleryid , $file ) {
+	public function Upload( $galleryid ) {
 		$uploaded = 0;
 		$totalartworks = count($_FILES['img']['name']);
 		$gallery = self::getById( $galleryid );
@@ -166,11 +168,12 @@ class Artworks extends Galleries {
 					$uploaded++;
 				}
 			}
-			if( $uploaded == $totalartworks ) {
-				return true;
-			} else {
-				return false;
-			}
+		}
+		
+		if( $uploaded == $totalartworks ) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 
