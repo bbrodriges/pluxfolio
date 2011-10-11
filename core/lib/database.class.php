@@ -16,7 +16,6 @@ class Database {
 			if(	$fp = fopen( DATABASE , 'w' ) ) {
 				fwrite( $fp , $data );
 				fclose( $fp );
-				self::backupDatabase();
 				return true;
 			} else {
 				return false;
@@ -39,6 +38,7 @@ class Database {
 		json_decode($database);
 		switch ( json_last_error() ) {
 			case JSON_ERROR_NONE:
+				self::backupDatabase();
 				return true;
 				die;
 				break;
@@ -51,8 +51,12 @@ class Database {
 	
 	/* Makes backup of database */
 	public function backupDatabase() {
-		@unlink( ROOT.'core/db/database.json.bak' );
-		if( copy( ROOT.'core/db/database.json' , ROOT.'core/db/database.json.bak' ) ) {
+		$backupFiles = glob( ROOT.'core/db/backups/database-*.json' );
+		if( count( $backupFiles ) > 4 ) {
+			sort( $backupFiles );
+			unlink( $backupFiles[0] );
+		}
+		if( copy( ROOT.'core/db/database.json' , ROOT.'core/db/backups/database-'.time().'.json' ) ) {
 			return true;
 		} else {
 			return false;
