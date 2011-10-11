@@ -150,7 +150,6 @@ class Artworks extends Galleries {
 	
 	/* Uploads artwork to directory */
 	/* $galleryid - id of parent gallery, $files - not needed */
-	/* UNTESTED!!! */
 	public function Upload( $galleryid ) {
 		$uploaded = 0;
 		$totalartworks = count($_FILES['img']['name']);
