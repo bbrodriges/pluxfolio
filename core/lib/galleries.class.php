@@ -99,14 +99,20 @@ class Artworks extends Galleries {
 	public function modifyArtwork( $galleryid , $data ){
 		$database = Database::readDB( true );
 		$filename = $data['filename'];
+		$increase = false;
 		unset($data['filename']); // removing unnecessary data
 		if( !isset( $database['galleries'][$galleryid]['images'][$filename] ) ){
-			Utilities::modifyArtworksCount( 'increase' ); //increases artworks counter if appending new artwork
-			// read new base
-			$database = Database::readDB( true );
+			 $increase = true;//increases artworks counter if appending new artwork
 		}
 		$database['galleries'][$galleryid]['images'][$filename] = $data;
-		return Database::writeDB( $database );
+		if( Database::writeDB( $database ) ) {
+			if( $increase ) {
+				Utilities::modifyArtworksCount( 'increase' );
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/* Delete specific artwork */
