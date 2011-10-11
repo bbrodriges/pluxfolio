@@ -182,25 +182,24 @@ class Artworks extends Galleries {
 		}
 	}
 	
-	/* Rescans all galleries directories for artworks uploaded via FTP */
-	/* UNTESTED!!! */
+	/* Rescans all galleries directories for artworks uploaded via FTP or other non-predictable way */
 	public function Rescan() {
 		$galleries = Galleries::getAll();
-		$galeriesFolder = ROOT.'gallery/';
-		$acceptedFiles = Array( 'jpg' , 'gif' , 'png' ); //Acceptable file types
+		$galeriesFolder = ROOT.'galleries/';
+		$acceptedFiles = Array( 'jpg' , 'gif' , 'png' , 'jpeg' ); //Acceptable file types
 		foreach( $galleries as $galleryid => $gallery ) {
 			$galleryFiles = glob( $galeriesFolder.$gallery['folder'].'/*.*' ); //all files except '..' and '.'
 			if( count( $galleryFiles ) > count( $gallery['images'] ) ) { //if files in folder more than files in gallery DB
 				foreach( $galleryFiles as $file ) {
 					$fileInfo = pathinfo( $galeriesFolder.$gallery['folder'].$file );
 					if( in_array( $fileInfo['extension'] , $acceptedFiles ) && !in_array( $file , $gallery['images'] ) ) { //if acceptable file type and not in DB
-						$data = Array( "filename" => $file, "name" => '', "description" => '', "added" => filemtime( $galeriesFolder.$gallery['folder'].$file ) );
+						$data = Array( "filename" => $fileInfo['basename'], "name" => '', "description" => '', "added" => (string)filemtime( $file ) );
 						self::modifyArtwork( $galleryid , $data );
 					}
 				}
-			} count( $galleryFiles ) < count( $gallery['images'] ) ) { //if files in folder less than files in gallery DB
+			} elseif( count( $galleryFiles ) < count( $gallery['images'] ) ) { //if files in folder less than files in gallery DB
 				foreach( $gallery['images'] as $filename => $image ) {
-					if( !in_array( $filename , $galleryFiles ) ) { //if DB record has no existing image
+					if( !in_array( $galeriesFolder.$gallery['folder'].'/'.$filename , $galleryFiles ) ) { //if DB record has no existing image
 						self::removeArtwork( $galleryid , $filename );
 					}
 				}
