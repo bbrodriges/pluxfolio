@@ -15,7 +15,10 @@
 		"thumbsize": "200x150", //artwork thumb size in px
 		"articlesperpage": "5",
 		"showthumbs": "true", //enable/disable thumbs display
-		"showvotes": "true" //enable/disable artworks voting
+		"showvotes": "true", //enable/disable artworks voting
+		"showartworkscounter": "true",
+		"language": "en",
+		"theme": "pluxpress"
 	},
     "user": { //user section
         "login": "admin",

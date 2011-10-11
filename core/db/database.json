@@ -12,7 +12,10 @@
 		"thumbsize": "200x150",
 		"articlesperpage": "5",
 		"showthumbs": "true",
-		"showvotes": "true"
+		"showvotes": "true",
+		"showartworkscounter": "true",
+		"language": "en",
+		"theme": "pluxpress"
 	},
     "user": {
         "login": "",
