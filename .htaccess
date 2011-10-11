@@ -3,7 +3,7 @@ RewriteEngine On
 #add here REQUEST_URI instead /pluxfolio
 RewriteBase /pluxfolio
 
-RewriteRule ^(\w+)/(\w+)?$ index.php?type=$1&id=$2 [NC]
+RewriteRule ^(\w+)/(\w+)?$ index.php?pagetype=$1&pageid=$2 [NC]
 
 # Work needed to prettify error output
 #ErrorDocument 400            index.php?type=error&id=400
