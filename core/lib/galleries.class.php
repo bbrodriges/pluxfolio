@@ -217,7 +217,7 @@ class Artworks extends Galleries {
 	
 	/* Makes thumb from given image */
 	/* $filename - full path to image */
-	/* Optional integers: $x - px from left , $y - px from top , $resampledWidth - new width , $resampledHeight - new height. If optional given */
+	/* Optional integers: $x - px from left , $y - px from top , $resampledWidth - new width , $resampledHeight - new height. If optional given crop part of image */
 	public function makeThumb( $filename, $x = false, $y = false, $resampledWidth = false , $resampledHeight = false ) {
 		list( $width_orig , $height_orig , $type ) = getimagesize( $filename ); //Gathering source image info
 		list( $width , $height ) = explode( 'x' , Utilities::readSiteData( 'thumbsize' ) ); //Gathering thumb info
