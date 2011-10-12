@@ -10,4 +10,7 @@
 		exit;
 	}
 	
+	/* Rendering template */
+	Templates::render();
+	
 ?>
