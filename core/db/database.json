@@ -1,12 +1,12 @@
 {
     "site": {
-        "address": "",
+        "address": "http://localhost/",
         "version": "2.0",
-        "title": "",
-        "subtitle": "",
+        "title": "My blog",
+        "subtitle": "about everything",
         "GMT": "",
         "maintenance": "false",
-        "totalartworks": "6",
+        "totalartworks": "1",
         "thumbsize": "200x150",
         "articlesperpage": "5",
         "showthumbs": "true",
