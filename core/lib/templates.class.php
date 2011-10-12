@@ -24,7 +24,7 @@ class Templates extends Mustashe {
 		$renderArray['title'] = $siteDB['site']['title']; //Site title
 		$renderArray['subtitle'] = $siteDB['site']['subtitle']; //Site subtitle
 		$renderArray['artworkscounter'] = $siteDB['site']['totalartworks']; //Total artworks count
-		$renderArray['mainmenu'] = self::compileMainMenu();
+		$renderArray['mainmenu'] = self::compileMainMenu(); //Site main menu 
 		
 		/* Data from language files */
 		$renderArray['totalartworks'] = self::getTranslation( 'totalartworks' ); //Artworks counter translation
