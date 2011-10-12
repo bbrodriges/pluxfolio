@@ -107,6 +107,7 @@ class Artworks extends Galleries {
 		unset($data['filename']); // removing unnecessary data
 		if( !isset( $database['galleries'][$galleryid]['images'][$filename] ) ){
 			 $increase = true;//increases artworks counter if appending new artwork
+			 self::makeThumb( ROOT.'galleries/'.$database['galleries'][$galleryid]['folder'].'/'.$filename ); //Create thumbnail
 		}
 		$database['galleries'][$galleryid]['images'][$filename] = $data;
 		if( Database::writeDB( $database ) ) {
@@ -123,9 +124,10 @@ class Artworks extends Galleries {
 	public function removeArtwork( $galleryid , $filename ){
 		$database = Database::readDB( true );
 		$gallery = Galleries::getById( $galleryid );
-		$file = '../../galleries/'.$gallery['folder'].'/'.$filename;
+		$file = ROOT.'galleries/'.$gallery['folder'].'/'.$filename;
 		if( file_exists( $file ) ) {
 			unlink( $file );
+			@unlink( $file.'.tb' );
 		}
 		unset( $database['galleries'][$galleryid]['images'][$filename] );
 		if( Database::writeDB( $database ) ) {
@@ -174,7 +176,7 @@ class Artworks extends Galleries {
 			$name = basename( $_FILES['img']['name'][$id] );
 			if( @move_uploaded_file( $_FILES['img']['tmp_name'][$id] , $savepath.$name ) ) {
 				@chmod( $savepath.$name,0644 );
-				/* Here we will make thumb. Write function */
+				self::makeThumb( $savepath.$name ); //Create thumbnail
 				@chmod( $savepath.$name.'.tb', 0644 );
 				$data = Array( "filename" => $name, "name" => '', "description" => '', "added" => time() );
 				if( self::modifyArtwork( $galleryid , $data ) ){
@@ -213,6 +215,34 @@ class Artworks extends Galleries {
 				}
 			}
 		}
+	}
+	
+	/* Makes thumb from given image */
+	/* UNTESTED */
+	public function makeThumb( $filename, $x = false, $x = false ) {
+		list( $width_orig , $height_orig , $type ) = getimagesize( $filename ); //Gathering source image info
+		list( $width , $height ) = explode( 'x' , Utilities::readSiteData( 'thumbsize' ) ); //Gathering thumb info
+		
+		$imageTemplate = imagecreatetruecolor( $width , $height ); //Creating image template with width and height
+		if($type == 2) //if jpg
+			$image = imagecreatefromjpeg( $filename );
+		elseif($type == 3) //if png
+			$image = imagecreatefrompng( $filename );
+		elseif($type == 1) //if gif
+			$image = imagecreatefromgif( $filename );	
+
+		if( $x && $y ) { //if axis given use imagecopyresized to get part of image
+			imagecopyresized( $imageTemplate , $image, 0, 0, $x, $y, $width, $height, $width_orig, $height_orig );
+		} else { //if no axis given just resize whole image
+			imagecopyresized( $imageTemplate , $image, 0, 0, 0, 0, $width, $height );
+		}
+		
+		if($type == 2)
+			imagejpeg( $imageTemplate , $filename.'.tb' , 75 ); //third parameter is quality of jpg
+		elseif($type == 3)
+			imagepng( $imageTemplate , $filename.'.tb' );
+		elseif ($type==1) 
+			imagegif( $imageTemplate , $filename.'.tb' );
 	}
 
 }
