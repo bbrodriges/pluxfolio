@@ -24,6 +24,7 @@ class Templates extends Mustashe {
 		$renderArray['title'] = $siteDB['site']['title']; //Site title
 		$renderArray['subtitle'] = $siteDB['site']['subtitle']; //Site subtitle
 		$renderArray['artworkscounter'] = $siteDB['site']['totalartworks']; //Total artworks count
+		$renderArray['mainmenu'] = self::compileMainMenu();
 		
 		/* Data from language files */
 		$renderArray['totalartworks'] = self::getTranslation( 'totalartworks' ); //Artworks counter translation
@@ -79,6 +80,20 @@ class Templates extends Mustashe {
 	}
 	
 /* ------------- COMPILATION PART ------------- */
+
+	/* Compiles main menu */
+	private function compileMainMenu() {
+		$mainMenu = '<li><a href="./">'.getTranslation( 'blog' ).'</a></li>';
+		$galleries = Galleries::returnVisible();
+		foreach( $galleries as $galleryid => $gallery ) {
+			$mainMenu .= '<li><a href="./gallery/'.$galleryid.'">'.$gallery['name'].'</a></li>';
+		}
+		$statics = Statics::returnVisible();
+		foreach( $statics as $staticid => $static ) {
+			$mainMenu .= '<li><a href="./static/'.$staticid.'">'.$static['title'].'</a></li>';
+		}
+		return $mainMenu;
+	}
 	
 	/* Compiles article */
 	private function complileArticle( $articleid ) {
