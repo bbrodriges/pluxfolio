@@ -2,7 +2,7 @@
 
 /* THIS IS ONLY A MAJOR OVERVIEW. TOTALLY UNTESTED */
 
-class Templates extends Mustashe {
+class Templates extends Mustache {
 	
 	private $dictionary; //Contains array of words from lang files
 	private $renderArray; //Contains all data to be passed to Mustache
@@ -17,7 +17,12 @@ class Templates extends Mustashe {
 		$themeFolder = ROOT.'themes/'.$siteDB['site']['theme'].'/'; //Contains current theme folder path
 		$renderArray = Array();
 		$dictionary = json_decode( file_get_contents( ROOT.'core/lang/'.$siteDB['site']['language'].'.json' ) , TRUE ); //opens dictionary
-		$pagetype = $_GET['pagetype'];
+		
+		if( !empty( $_GET ) ) {
+			$pagetype = $_GET['pagetype'];
+		} else {
+			$pagetype = 'index';
+		}
 		
 		/* GATHERING GENERAL SITE DATA WITH CAN BE EMBEDED TO ANY PAGE */
 		/* Data from DB */
@@ -53,22 +58,26 @@ class Templates extends Mustashe {
 				die;
 				break;
 			case 'default': //Index page. Generate articles list
-				$pagetype = 'index';
 				die;
 				break;
 		}
 		
 		
 		/* Renders header, body and footer of page */
-		echo Mustache::render( file_get_contents( $themeFolder.'header.tpl' ) , $renderArray );
-		echo Mustache::render( file_get_contents( $themeFolder.$pagetype.'.tpl' ) , $renderArray );
-		echo Mustache::render( file_get_contents( $themeFolder.'footer.tpl' ) , $renderArray );
+		$renderer = new Mustache;
+		echo $renderer->render( file_get_contents( $themeFolder.'header.tpl' ) , $renderArray );
+		echo $renderer->render( file_get_contents( $themeFolder.$pagetype.'.tpl' ) , $renderArray );
+		echo $renderer->render( file_get_contents( $themeFolder.'footer.tpl' ) , $renderArray );
 			
 	}
 	
 	/* Returns translate from dictionary */
 	private function getTranslation( $id ) {
-		return $dictionary[$id];
+		if( isset( $dictionary[$id] ) && !empty( $dictionary[$id] ) ) {
+			return $dictionary[$id];
+		} else {
+			return '';
+		}
 	}
 	
 	/* Converts http and www into clickable links */
@@ -84,7 +93,7 @@ class Templates extends Mustashe {
 
 	/* Compiles main menu */
 	private function compileMainMenu() {
-		$mainMenu = '<li><a href="./">'.getTranslation( 'blog' ).'</a></li>';
+		$mainMenu = '<li><a href="./">'.self::getTranslation( 'blog' ).'</a></li>';
 		$galleries = Galleries::returnVisible();
 		foreach( $galleries as $galleryid => $gallery ) {
 			$mainMenu .= '<li><a href="./gallery/'.$galleryid.'">'.$gallery['name'].'</a></li>';
@@ -108,9 +117,9 @@ class Templates extends Mustashe {
 			$renderArray['article_author'] = $siteDB['articles'][$articleid]['author'];
 			
 			/* Translations */
-			$renderArray['tags'] = getTranslation( 'tags' );
-			$renderArray['publishedby'] = getTranslation( 'publishedby' );
-			$renderArray['publishedat'] = getTranslation( 'publishedat' );
+			$renderArray['tags'] = self::getTranslation( 'tags' );
+			$renderArray['publishedby'] = self::getTranslation( 'publishedby' );
+			$renderArray['publishedat'] = self::getTranslation( 'publishedat' );
 			
 			return true;
 		} else { //Article does not exists. Return false to redirect to error page
