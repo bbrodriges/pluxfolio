@@ -25,6 +25,7 @@
         "1": {
             "name": "test",
             "folder": "test",
+			"text": "This is test gallery",
             "visible": "true",
             "images": {
                 "yawn.jpeg": {

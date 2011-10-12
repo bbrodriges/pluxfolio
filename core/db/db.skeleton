@@ -41,6 +41,7 @@
         "0": {
 			"name": "Сайты",
 			"folder": "sites",
+			"text": "This is my first gallery",
 			"visible": "true", // is gallery shows in main menu
             "images": {
             	"509a6f75849b.png": {
