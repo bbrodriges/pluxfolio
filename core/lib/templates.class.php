@@ -39,6 +39,9 @@ class Templates extends Mustashe {
 				die;
 				break;
 			case 'static': //Static page. Get static by given pageid
+				if( !self::complileStatic( $_GET['pageid'] ) ) { //Compilation error
+					header('Location: ./error/404');
+				}
 				die;
 				break;
 			case 'tag': //Tag filtered articles. Get all articles by given tag
@@ -48,6 +51,7 @@ class Templates extends Mustashe {
 				die;
 				break;
 			case 'default': //Index page. Generate articles list
+				$pagetype = 'index';
 				die;
 				break;
 		}
@@ -79,12 +83,17 @@ class Templates extends Mustashe {
 	/* Compiles article */
 	private function complileArticle( $articleid ) {
 		if( isset( $siteDB['articles'][$articleid] ) && $siteDB['articles'][$articleid]['visible'] == 'true' ) { //Article exists and available for reading. Proceed compiling
+		
 			$renderArray['article_title'] = $siteDB['articles'][$articleid]['title'];
 			$renderArray['article_pretext'] = self::makeLinks( $siteDB['articles'][$articleid]['pretext'] );
 			$renderArray['article_text'] = self::makeLinks( $siteDB['articles'][$articleid]['text'] );
 			$renderArray['article_tags'] = self::makeTags( $siteDB['articles'][$articleid]['tags'] );
 			$renderArray['article_date'] = date( 'Y.m.d G:i' , $siteDB['articles'][$articleid]['date'] );
 			$renderArray['article_author'] = $siteDB['articles'][$articleid]['author'];
+			
+			/* Translations */
+			$renderArray['tags'] = getTranslation( 'tags' );
+			
 			return true;
 		} else { //Article does not exists. Return false to redirect to error page
 			return false;
@@ -101,6 +110,18 @@ class Templates extends Mustashe {
 			}
 			return substr( $tagString , 0 , -1 );
 		}
+	
+	/* Compiles static */	
+	private function complileStatic( $staticid ) {
+		if( isset( $siteDB['statics'][$staticid] ) && $siteDB['statics'][$staticid]['visible'] == 'true' ) { //Static exists and available for reading. Proceed compiling
+			$renderArray['static_title'] = $siteDB['statics'][$staticid]['title'];
+			$renderArray['static_text'] = self::makeLinks( $siteDB['statics'][$staticid]['text'] );
+			return true;
+		} else { //Static does not exists. Return false to redirect to error page
+			return false;
+		}
+	}
+	
 }
 
 ?>
