@@ -8,8 +8,6 @@
 		"title": "Моё портфолио",
 		"subtitle": "и многое другое",
 		"GMT": "+3",
-		"showblog": "true",
-		"index": "blog",
 		"maintenance": "false", //is site under construction
 		"totalartworks": "1", //total works in galleries
 		"thumbsize": "200x150", //artwork thumb size in px
@@ -18,7 +16,22 @@
 		"showvotes": "true", //enable/disable artworks voting
 		"showartworkscounter": "true",
 		"language": "en",
-		"theme": "pluxpress"
+		"theme": "pluxpress",
+		"showlatestartworks": "false",
+		"latestartworks": { //contains 3 latest uploaded artworks
+			"0": {
+				"gallery": "0",
+				"artwork": "509a6f75849b.png"
+			},
+			"1": {
+				"gallery": "0",
+				"artwork": "509a6f75849b.png"
+			},
+			"2": {
+				"gallery": "0",
+				"artwork": "509a6f75849b.png"
+			}
+		}
 	},
     "user": { //user section
         "login": "admin",
