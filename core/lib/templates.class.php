@@ -29,7 +29,8 @@ class Templates extends Mustache {
 		$renderArray['title'] = $siteDB['site']['title']; //Site title
 		$renderArray['subtitle'] = $siteDB['site']['subtitle']; //Site subtitle
 		$renderArray['artworkscounter'] = $siteDB['site']['totalartworks']; //Total artworks count
-		$renderArray['mainmenu'] = self::compileMainMenu(); //Site main menu 		
+		$renderArray['mainmenu'] = self::compileMainMenu(); //Site main menu 
+		$renderArray['language'] = $siteDB['site']['language']; //Site language
 		
 		/* Data from language files */
 		$renderArray['totalartworks'] = self::getTranslation( 'totalartworks' ); //Artworks counter translation
@@ -65,8 +66,8 @@ class Templates extends Mustache {
 		
 		/* Renders header, body and footer of page */
 		$renderer = new Mustache;
-		echo $renderer->render( file_get_contents( $themeFolder.'header.tpl' ) , $renderArray );
-		echo $renderer->render( file_get_contents( $themeFolder.$pagetype.'.tpl' ) , $renderArray );
+		echo $renderer->render( file_get_contents( $themeFolder.'header.tpl' ) , $renderArray )."\n";
+		echo $renderer->render( file_get_contents( $themeFolder.$pagetype.'.tpl' ) , $renderArray )."\n";
 		echo $renderer->render( file_get_contents( $themeFolder.'footer.tpl' ) , $renderArray );
 			
 	}
