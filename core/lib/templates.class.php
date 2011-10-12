@@ -24,10 +24,11 @@ class Templates extends Mustashe {
 		$renderArray['title'] = $siteDB['site']['title']; //Site title
 		$renderArray['subtitle'] = $siteDB['site']['subtitle']; //Site subtitle
 		$renderArray['artworkscounter'] = $siteDB['site']['totalartworks']; //Total artworks count
-		$renderArray['mainmenu'] = self::compileMainMenu(); //Site main menu 
+		$renderArray['mainmenu'] = self::compileMainMenu(); //Site main menu 		
 		
 		/* Data from language files */
 		$renderArray['totalartworks'] = self::getTranslation( 'totalartworks' ); //Artworks counter translation
+		$renderArray['footer'] = self::getTranslation( 'footer' ); //Site footer translation
 		
 		switch ( $pagetype ) {
 			case 'article': //Article page. Get article by given pageid
@@ -108,6 +109,8 @@ class Templates extends Mustashe {
 			
 			/* Translations */
 			$renderArray['tags'] = getTranslation( 'tags' );
+			$renderArray['publishedby'] = getTranslation( 'publishedby' );
+			$renderArray['publishedat'] = getTranslation( 'publishedat' );
 			
 			return true;
 		} else { //Article does not exists. Return false to redirect to error page
