@@ -10,7 +10,7 @@ class Templates extends Mustashe {
 	private $pagetype; //Contains page type from REQUEST_URI
 
 	/* Function to be called on templates render */
-	public function init(){
+	public function render(){
 		
 		/* GATHERING NECESSARY SITE DATA */
 		$siteDB = Database::readDB( true ); //Reads whole DB one time
