@@ -176,8 +176,6 @@ class Artworks extends Galleries {
 			$name = basename( $_FILES['img']['name'][$id] );
 			if( @move_uploaded_file( $_FILES['img']['tmp_name'][$id] , $savepath.$name ) ) {
 				@chmod( $savepath.$name,0644 );
-				self::makeThumb( $savepath.$name ); //Create thumbnail
-				@chmod( $savepath.$name.'.tb', 0644 );
 				$data = Array( "filename" => $name, "name" => '', "description" => '', "added" => time() );
 				if( self::modifyArtwork( $galleryid , $data ) ){
 					$uploaded++;
@@ -243,6 +241,7 @@ class Artworks extends Galleries {
 			imagepng( $imageTemplate , $filename.'.tb' );
 		elseif ($type==1) 
 			imagegif( $imageTemplate , $filename.'.tb' );
+		@chmod( $filename.'.tb', 0644 );
 	}
 
 }
