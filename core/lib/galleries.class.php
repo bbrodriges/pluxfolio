@@ -216,8 +216,9 @@ class Artworks extends Galleries {
 	}
 	
 	/* Makes thumb from given image */
-	/* UNTESTED */
-	public function makeThumb( $filename, $x = false, $x = false ) {
+	/* $filename - full path to image */
+	/* Optional integers: $x - px from left , $y - px from top , $resampledWidth - new width , $resampledHeight - new height. If optional given */
+	public function makeThumb( $filename, $x = false, $y = false, $resampledWidth = false , $resampledHeight = false ) {
 		list( $width_orig , $height_orig , $type ) = getimagesize( $filename ); //Gathering source image info
 		list( $width , $height ) = explode( 'x' , Utilities::readSiteData( 'thumbsize' ) ); //Gathering thumb info
 		
@@ -229,10 +230,10 @@ class Artworks extends Galleries {
 		elseif($type == 1) //if gif
 			$image = imagecreatefromgif( $filename );	
 
-		if( $x && $y ) { //if axis given use imagecopyresized to get part of image
-			imagecopyresized( $imageTemplate , $image, 0, 0, $x, $y, $width, $height, $width_orig, $height_orig );
+		if( $x !== false && $y !== false && $resampledWidth !== false && $resampledHeight !== false ) { //if axis given use imagecopy to get part of image
+			imagecopyresampled( $imageTemplate, $image, 0, 0, $x, $y, $width, $height, $resampledWidth, $resampledHeight );
 		} else { //if no axis given just resize whole image
-			imagecopyresized( $imageTemplate , $image, 0, 0, 0, 0, $width, $height );
+			imagecopyresized( $imageTemplate, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig );
 		}
 		
 		if($type == 2)
