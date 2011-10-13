@@ -19,13 +19,25 @@ class Statics extends Database {
 	/* If $id passed - edits existing static */
 	function Modify( $data, $id = false ){
 		$database = Database::readDB( true );
+		$newId = Utilities::Translit( $data['title'] ); //transliterating title to use as static key
 		if( $id ) {
-			$database['statics'][$id] = $data;
+			if( $id != $newId ) { //if title changed...
+				unset( $database['statics'][$id] ); //delete old static
+				if( !self::getById( $newId ) ) { //... and it is unique changing id
+					$database['statics'][$newId] = $data;
+				} else {
+					$newId = $newId.'-'.time(); //creating truly unique id
+					$database['statics'][$newId] = $data;
+				}
+			} else {
+				$database['statics'][$id] = $data;
+			}
 		} else {
-			krsort( $database['statics'] );
-			$keys = array_keys($database['statics']);
-			$newId = (int)$keys[0] + 1;
-			$database['statics'][$newId] = $data;
+			if( !self::getById( $newId ) ) //if key is unique write data
+				$database['statics'][$newId] = $data;
+			} else { //key is not unique
+				return false;
+			}
 		}
 		return Database::writeDB( $database );
 	}
