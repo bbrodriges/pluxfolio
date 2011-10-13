@@ -17,7 +17,7 @@ class Galleries extends Database {
 	
 	/* Creates and append new gallery to DB */
 	/* $data is Array("name" => string, "folder" => string, "visible" => 'true'/'false'); */
-	/* If $id passed - edits existing gallery */
+	/* If $id passed - edits existing gallery. */
 	public function Modify( $data, $id = false ){
 		$database = Database::readDB( true );
 		$newId = Utilities::Translit( $data['name'] ); //transliterating title to use as static key
