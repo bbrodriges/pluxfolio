@@ -6,12 +6,7 @@ RewriteBase /pluxfolio
 RewriteRule ^([^/]*)/([^/]*)$ index.php?pagetype=$1&pageid=$2 [L]
 
 # Prettify error output
-#ErrorDocument 400            /error/400
-#ErrorDocument 401            /error/401
-#ErrorDocument 403            /error/403
-#ErrorDocument 404            /error/404
-#ErrorDocument 500            /error/500
-#ErrorDocument 503            /error/503
+ErrorDocument 404            /error/404
 
 #PHP errors suppression
 php_flag display_errors on 
