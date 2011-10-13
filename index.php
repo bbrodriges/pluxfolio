@@ -5,12 +5,16 @@
 	
 	/* Verifying installation state */
 	/* If site address not persists than installation is not complete */
-	if( !Utilities::readSiteData( 'address' ) ) {
+	/* UNCOMMENT ONLY AFTER SUCCESSFUL INSTALLER TEST */
+	
+	/* if( !Utilities::readSiteData( 'address' ) ) {
 		header( 'Location: '.ROOT.'install.php' );
 		exit;
-	}
+	} else {
+		@unlink( ROOT.'install.php' );
+	} */
 	
-	/* Rendering template */
+	/* Rendering current template */
 	$template = new Templates();
 	$template->render();
 	
