@@ -19,13 +19,25 @@ class Articles extends Database {
 	/* If $id passed - edits existing article */
 	function Modify( $data, $id = false ){
 		$database = Database::readDB( true );
+		$newId = Utilities::Translit( $data['title'] ); //transliterating title to use as static key
 		if( $id ) {
-			$database['articles'][$id] = $data;
+			if( $id != $newId ) { //if title changed...
+				unset( $database['articles'][$id] ); //delete old static
+				if( !self::getById( $newId ) ) { //... and it is unique changing id
+					$database['articles'][$newId] = $data;
+				} else {
+					$newId = $newId.'-'.time(); //creating truly unique id
+					$database['articles'][$newId] = $data;
+				}
+			} else {
+				$database['articles'][$id] = $data;
+			}
 		} else {
-			krsort( $database['articles'] );
-			$keys = array_keys($database['articles']);
-			$newId = @(int)$keys[0] + 1;
-			$database['articles'][$newId] = $data;
+			if( !self::getById( $newId ) ) //if key is unique write data
+				$database['articles'][$newId] = $data;
+			} else { //key is not unique
+				return false;
+			}
 		}
 		return Database::writeDB( $database );
 	}
