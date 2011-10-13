@@ -12,7 +12,7 @@
         "showthumbs": "true",
         "showvotes": "true",
         "showartworkscounter": "true",
-        "language": "en",
+        "language": "ru",
         "theme": "pluxpress",
 		"showlatestartworks": "false",
 		"latestartworks": []
@@ -23,7 +23,7 @@
     },
     "galleries": {
         "test": {
-            "name": "test",
+            "name": "Первая галерея",
             "folder": "test",
 			"text": "This is test gallery",
             "visible": "true",
@@ -50,6 +50,15 @@
 			"text": "первая новость",
 			"tags": "news, first",
 			"date": "1317985750",
+			"author": "admin",
+			"visible": "true"
+		},
+		"Vtoraya-novost": {
+			"title": "Вторая новость",
+			"pretext": "Да-да! Это...",
+			"text": "вторая новость",
+			"tags": "news, first",
+			"date": "1317986750",
 			"author": "admin",
 			"visible": "true"
 		}
