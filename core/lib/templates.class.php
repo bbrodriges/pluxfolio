@@ -39,7 +39,7 @@ class Templates extends Mustache {
 		switch ( $pagetype ) {
 			case 'article': //Article page. Get article by given pageid
 				if( !$this->complileArticle( $_GET['pageid'] ) ) { //Compilation error
-					//header('Location: '.$this->siteDB['site']['address'].'/error/404');
+					header('Location: '.$this->siteDB['site']['address'].'/error/404');
 				}
 				break;
 			case 'gallery': //Gallery page. Get gallery by given pageid
@@ -47,7 +47,7 @@ class Templates extends Mustache {
 				break;
 			case 'static': //Static page. Get static by given pageid
 				if( !$this->complileStatic( $_GET['pageid'] ) ) { //Compilation error
-					//header('Location: '.$this->siteDB['site']['address'].'/error/404');
+					header('Location: '.$this->siteDB['site']['address'].'/error/404');
 				}
 				break;
 			case 'tag': //Tag filtered articles. Get all articles by given tag
