@@ -1,6 +1,6 @@
 {
     "site": {
-        "address": "http://localhost/",
+        "address": "http://localhost/pluxfolio",
         "version": "2.0",
         "title": "My blog",
         "subtitle": "about everything",
@@ -37,5 +37,15 @@
         }
     },
     "statics": [],
-    "articles": []
+    "articles": {
+		"1": {
+			"title": "Первая новость",
+			"pretext": "Это...",
+			"text": "первая новость",
+			"tags": "news, first",
+			"date": "1317985750",
+			"author": "admin",
+			"visible": "true"
+		}
+	}
 }
