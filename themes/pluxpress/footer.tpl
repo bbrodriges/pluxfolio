@@ -1,6 +1,6 @@
 <div>
 	<hr>
-	<small>Работает на pluxfolio версии {{version}}</small>
+	<small>{{{footer}}} {{version}}</small>
 </div>
 </body>
 </html>
