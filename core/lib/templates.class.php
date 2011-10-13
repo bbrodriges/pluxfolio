@@ -54,6 +54,9 @@ class Templates extends Mustache {
 				break;
 			case 'error': //Error page. Generate error page by given pageid, e.g. 403, 404 etc.
 				break;
+			case 'index': //Index page. Ganerate articles list
+				$this->renderArray['articles_list'] = $this->itterateArticles();
+				break;
 		}
 		
 		/* Renders header, body and footer of page */
@@ -107,6 +110,7 @@ class Templates extends Mustache {
 			$this->renderArray['article_tags'] = $this->makeTags( $this->siteDB['articles'][$articleid]['tags'] );
 			$this->renderArray['article_date'] = date( 'Y.m.d G:i' , $this->siteDB['articles'][$articleid]['date'] );
 			$this->renderArray['article_author'] = $this->siteDB['articles'][$articleid]['author'];
+			$this->renderArray['article_link'] = $this->siteDB['site']['address'].'/article/'.$articleid;
 			
 			/* Translations */
 			$this->renderArray['tags'] = $this->getTranslation( 'tags' );
@@ -139,6 +143,32 @@ class Templates extends Mustache {
 		} else { //Static does not exists. Return false to redirect to error page
 			return false;
 		}
+	}
+	
+	/* Itterates through all articles and terurn result to mustache tags */
+	public function itterateArticles() {
+		$articlesArray = Array();
+		if( !empty( $this->siteDB['articles'] ) ) { //At least one article exists
+			$articles = Articles::returnVisible();
+			foreach( $articles as $articleid => $article ) {
+				$articlesArray[] = array(
+						'article_title' => $article['title'],
+						'article_pretext' => $article['pretext'],
+						'article_text' => $article['text'],
+						'article_tags' => $this->makeTags( $this->siteDB['articles'][$articleid]['tags'] ),
+						'article_date' => date( 'Y.m.d G:i' , $this->siteDB['articles'][$articleid]['date'] ),
+						'article_author' => $this->siteDB['articles'][$articleid]['author'],
+						'tags' => $this->getTranslation( 'tags' ),
+						'publishedby' => $this->getTranslation( 'publishedby' ),
+						'publishedat' => $this->getTranslation( 'publishedat' ),
+						'article_link' => $this->siteDB['site']['address'].'/article/'.$articleid,
+						'more' => $this->getTranslation( 'more' )
+					);
+			}
+		} else {
+			$articlesArray[] = array('article_title' => $this->getTranslation( 'noarticles' ) );
+		}
+		return new ArrayIterator( $articlesArray );
 	}
 	
 }
