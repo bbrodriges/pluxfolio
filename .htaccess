@@ -10,4 +10,4 @@ ErrorDocument 404            /error/404
 
 #PHP errors suppression
 php_flag display_errors on 
-php_value error_reporting 1
+php_value error_reporting 6
