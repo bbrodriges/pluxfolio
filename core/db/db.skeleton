@@ -38,7 +38,7 @@
         "password": "c4ca4238a0b923820dcc509a6f75849b" //md5
     },
     "galleries": {
-        "0": {
+        "Saity": {
 			"name": "Сайты",
 			"folder": "sites",
 			"text": "This is my first gallery",
@@ -55,14 +55,14 @@
         }
     },
 	"statics": {
-		"0": {
+		"Kontakty": {
 			"title": "Контакты",
 			"text": "Здесь вы видите мои контакты",
 			"visible": "true" // is static shows in main menu
 		}
 	},
 	"articles": {
-		"0": {
+		"Pervaya-novost": {
 			"title": "Первая новость",
 			"pretext": "Это...", // text before cut
 			"text": "первая новость", //pretext + text

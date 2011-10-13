@@ -22,7 +22,7 @@
         "password": ""
     },
     "galleries": {
-        "1": {
+        "test": {
             "name": "test",
             "folder": "test",
 			"text": "This is test gallery",
@@ -36,9 +36,15 @@
             }
         }
     },
-    "statics": [],
+    "statics": {
+		"Kontakty": {
+			"title": "Контакты",
+			"text": "Здесь вы видите мои контакты",
+			"visible": "true"
+		}
+	},
     "articles": {
-		"1": {
+		"Pervaya-novost": {
 			"title": "Первая новость",
 			"pretext": "Это...",
 			"text": "первая новость",
