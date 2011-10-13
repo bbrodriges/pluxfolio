@@ -73,10 +73,10 @@ class Articles extends Database {
 	function returnWithTag( $tag ){ //$tag as string
 		$articles = self::returnVisible();
 		$result = Array();
-		foreach( $articles as $id => $article ) {
+		foreach( $articles as $articleid => $article ) {
 			/* Adding space to the begining of tags string to insure that our position will never be 0 */
 			if( mb_strpos( ' '.$article['tags'] , $tag ) ){
-				$result[$id] = $article;
+				$result[$articleid] = $article;
 			}
 		}
 		return $result;

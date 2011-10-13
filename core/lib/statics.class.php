@@ -61,9 +61,9 @@ class Statics extends Database {
 	function returnVisible(){
 		$statics = self::getAll();
 		$result = Array();
-		foreach( $statics as $static ) {
+		foreach( $statics as $staticid => $static ) {
 			if( $static['visible'] == 'true' ){
-				$result[] = $static;
+				$result[$staticid] = $static;
 			}
 		}
 		return $result;
