@@ -20,7 +20,7 @@ class Templates extends Mustache {
 		if( !empty( $_GET ) ) {
 			$pagetype = $_GET['pagetype'];
 		} else {
-			$pagetype = 'index';
+			$pagetype = 'index'; //if no page type given - we are on index page
 		}
 		
 		/* GATHERING GENERAL SITE DATA WITH CAN BE EMBEDED TO ANY PAGE */
@@ -53,8 +53,6 @@ class Templates extends Mustache {
 			case 'tag': //Tag filtered articles. Get all articles by given tag
 				break;
 			case 'error': //Error page. Generate error page by given pageid, e.g. 403, 404 etc.
-				break;
-			case 'default': //Index page. Generate articles list
 				break;
 		}
 		
@@ -91,11 +89,11 @@ class Templates extends Mustache {
 		$mainMenu = '<li><a href="'.$this->siteDB['site']['address'].'">'.$this->getTranslation( 'blog' ).'</a></li>';
 		$galleries = Galleries::returnVisible();
 		foreach( $galleries as $galleryid => $gallery ) {
-			$mainMenu .= '<li><a href="./gallery/'.$galleryid.'">'.$gallery['name'].'</a></li>';
+			$mainMenu .= '<li><a href="'.$this->siteDB['site']['address'].'/gallery/'.$galleryid.'">'.$gallery['name'].'</a></li>';
 		}
 		$statics = Statics::returnVisible();
 		foreach( $statics as $staticid => $static ) {
-			$mainMenu .= '<li><a href="./static/'.$staticid.'">'.$static['title'].'</a></li>';
+			$mainMenu .= '<li><a href="'.$this->siteDB['site']['address'].'/static/'.$staticid.'">'.$static['title'].'</a></li>';
 		}
 		return $mainMenu;
 	}
