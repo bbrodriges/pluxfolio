@@ -5,12 +5,13 @@
 	
 	/* Verifying installation state */
 	/* If site address not persists than installation is not complete */
-	if( !Utilities::getSiteData( 'address' ) ) {
+	if( !Utilities::readSiteData( 'address' ) ) {
 		header( 'Location: '.ROOT.'install.php' );
 		exit;
 	}
 	
 	/* Rendering template */
-	Templates::render();
+	$template = new Templates();
+	$template->render();
 	
 ?>
