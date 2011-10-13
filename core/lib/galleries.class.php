@@ -20,6 +20,7 @@ class Galleries extends Database {
 	/* If $id passed - edits existing gallery */
 	public function Modify( $data, $id = false ){
 		$database = Database::readDB( true );
+		$newId = Utilities::Translit( $data['name'] ); //transliterating title to use as static key
 		if( $id ) {
 			$oldname = $database['galleries'][(string)$id]['folder']; //old folder name
 			if( $oldname != $data['folder'] ) { //if folder name changed
@@ -30,13 +31,16 @@ class Galleries extends Database {
 				}
 			}
 			$images = $database['galleries'][(string)$id]['images']; //saving images
-			$database['galleries'][(string)$id] = $data;
-			$database['galleries'][(string)$id]['images'] = $images; //writing images back
+			if( $id != $newId ) {
+				unset( $database['galleries'][(string)$id] ); //Deleting old gallery
+				$database['galleries'][(string)$newId] = $data; //Writing under new id
+				$database['galleries'][(string)$newId]['images'] = $images; //writing images back
+			} else {
+				$database['galleries'][(string)$id] = $data;
+				$database['galleries'][(string)$id]['images'] = $images; //writing images back
+			}
 		} else {
 			if( !file_exists( ROOT.'galleries/'.$data['folder'] ) ) {
-				krsort( $database['galleries'] );
-				$keys = array_keys($database['galleries']);
-				$newId = (int)$keys[0] + 1;
 				$database['galleries'][(string)$newId] = $data;
 				$database['galleries'][(string)$newId]['images'] = Array();
 				mkdir( ROOT.'galleries/'.$data['folder'] );
