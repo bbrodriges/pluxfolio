@@ -33,7 +33,7 @@ class Articles extends Database {
 				$database['articles'][$id] = $data;
 			}
 		} else {
-			if( !self::getById( $newId ) ) //if key is unique write data
+			if( !self::getById( $newId ) ) { //if key is unique write data
 				$database['articles'][$newId] = $data;
 			} else { //key is not unique
 				return false;

@@ -33,7 +33,7 @@ class Statics extends Database {
 				$database['statics'][$id] = $data;
 			}
 		} else {
-			if( !self::getById( $newId ) ) //if key is unique write data
+			if( !self::getById( $newId ) ) { //if key is unique write data
 				$database['statics'][$newId] = $data;
 			} else { //key is not unique
 				return false;
