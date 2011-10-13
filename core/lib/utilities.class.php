@@ -64,6 +64,29 @@ class Utilities extends Database {
 	
 /* ----------- END SITE SECTION ----------- */
 
+/* ----------- ADDITIONAL ----------------- */
+
+  /* Convert russian to translit */
+  function Translit( $string ) {
+	if( preg_match('/[А-Яа-яЁё]/u', $string) ) { //if any russian chars exists
+		$string = strtr( $string , "абвгдеёзийклмнопрстуфхъыэ_" , "abvgdeeziyklmnoprstufh'iei" );
+		$string= strtr ( $string , "АБВГДЕЁЗИЙКЛМНОПРСТУФХЪЫЭ_" , "ABVGDEEZIYKLMNOPRSTUFH'IEI" );
+		$string = strtr ( $string , 
+						array(
+							"ж"=>"zh", "ц"=>"ts", "ч"=>"ch", "ш"=>"sh", 
+							"щ"=>"shch","ь"=>"", "ю"=>"yu", "я"=>"ya",
+							"Ж"=>"ZH", "Ц"=>"Ts", "Ч"=>"Ch", "Ш"=>"Sh", 
+							"Щ"=>"Shch","Ь"=>"", "Ю"=>"Yu", "Я"=>"Ya",
+							"ї"=>"i", "Ї"=>"Yi", "є"=>"ie", "Є"=>"Ye"
+							)
+				 );
+		
+	}
+	return $string;
+  }
+
+/* ----------- END ADDITIONAL ----------------- */
+  
 }
 
 ?>
