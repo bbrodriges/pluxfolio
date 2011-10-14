@@ -6,3 +6,5 @@
 	<p>{{tags}}: {{{article_tags}}}</p>
 	
 {{/ articles_list }}
+
+{{{pagination}}}
