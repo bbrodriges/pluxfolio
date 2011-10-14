@@ -25,6 +25,7 @@ class Templates extends Mustache {
 		
 		/* GATHERING GENERAL SITE DATA WITH CAN BE EMBEDED TO ANY PAGE */
 		/* Data from DB */
+		$this->renderArray['homepage'] = $this->siteDB['site']['address']; //Site index page
 		$this->renderArray['title'] = $this->siteDB['site']['title']; //Site title
 		$this->renderArray['subtitle'] = $this->siteDB['site']['subtitle']; //Site subtitle
 		$this->renderArray['artworkscounter'] = $this->siteDB['site']['totalartworks']; //Total artworks count
@@ -52,10 +53,12 @@ class Templates extends Mustache {
 				break;
 			case 'tag': //Tag filtered articles. Get all articles by given tag
 				break;
-			case 'error': //Error page. Generate error page by given pageid, e.g. 403, 404 etc.
-				break;
 			case 'index': //Index page. Ganerate articles list
 				$this->renderArray['articles_list'] = $this->itterateArticles();
+				break;
+			default: //If none of this matched - show error page
+				$this->complileError();
+				$pagetype = 'error';
 				break;
 		}
 		
@@ -143,6 +146,12 @@ class Templates extends Mustache {
 		} else { //Static does not exists. Return false to redirect to error page
 			return false;
 		}
+	}
+	
+	public function complileError() {
+		$this->renderArray['error_code'] = '404';
+		$this->renderArray['error_title'] = $this->getTranslation( 'errortitle' );
+		$this->renderArray['error_text'] = $this->getTranslation( 'errortext' );
 	}
 	
 	/* Itterates through all articles and terurn result to mustache tags */
