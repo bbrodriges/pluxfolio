@@ -180,18 +180,18 @@ class Templates extends Mustache {
 			switch ( $totalpages ) {
 				case 2:
 					if( $page == 1 ) {
-						$pagination = '<li class="current">'.$page.'</li><li>'.$totalpages.'</li><li>'.$this->getTranslation( 'nextpage' ).' >></li>';
+						$pagination = '<li class="current">'.$page.'</li><li><a href="'.$this->siteDB['site']['address'].'/page/'.$totalpages.'">'.$totalpages.'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+1).'">'.$this->getTranslation( 'nextpage' ).'</a> >></li>';
 					} else {
-						$pagination = '<li><< '.$this->getTranslation( 'prevpage' ).'</li><li>'.( $page-1 ).'</li><li class="current">'.$totalpages.'</li>';
+						$pagination = '<li><< <a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.$this->getTranslation( 'prevpage' ).'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$totalpages.'</li>';
 					}
 					break;
 				default:
 					if( $page > 1 && $page < $totalpages ) {
-						$pagination = '<li><< '.$this->getTranslation( 'prevpage' ).'</li><li>'.( $page-1 ).'</li><li class="current">'.$page.'</li><li>'. ( $page+1 ) .'</li><li>'.$this->getTranslation( 'nextpage' ).' >></li>';
+						$pagination = '<li><< <a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.$this->getTranslation( 'prevpage' ).'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$page.'</li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+1).'">'. ( $page+1 ) .'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+1).'">'.$this->getTranslation( 'nextpage' ).'</a> >></li>';
 					} elseif( $page == 1 ) {
-						$pagination = '<li class="current">'.$page.'</li><li>'.( $page+1 ).'</li><li>'. ( $page+2 ) .'</li><li>'.$this->getTranslation( 'nextpage' ).' >></li>';
+						$pagination = '<li class="current">'.$page.'</li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+1).'">'.( $page+1 ).'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+2).'">'. ( $page+2 ) .'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+1).'">'.$this->getTranslation( 'nextpage' ).'</a> >></li>';
 					} elseif( $page == $totalpages )  {
-						$pagination = '<li><< '.$this->getTranslation( 'prevpage' ).'</li><li>'.( $page-2 ).'</li><li>'.( $page-1 ).'</li><li class="current">'.$page.'</li>';
+						$pagination = '<li><< <a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.$this->getTranslation( 'prevpage' ).'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page-2).'">'.( $page-2 ).'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$page.'</li>';
 					}
 					break;
 			}
@@ -214,7 +214,7 @@ class Templates extends Mustache {
 						'article_text' => $this->siteDB['articles'][$articleKey]['text'],
 						'article_tags' => $this->makeTags( $this->siteDB['articles'][$articleKey]['tags'] ),
 						'article_date' => date( 'Y.m.d G:i' , $this->siteDB['articles'][$articleKey]['date'] ),
-						'article_author' => $this->siteDB['articles'][$articleKey],
+						'article_author' => $this->siteDB['articles'][$articleKey]['author'],
 						'tags' => $this->getTranslation( 'tags' ),
 						'publishedby' => $this->getTranslation( 'publishedby' ),
 						'publishedat' => $this->getTranslation( 'publishedat' ),
