@@ -40,7 +40,8 @@ class Templates extends Mustache {
 		switch ( $pagetype ) {
 			case 'article': //Article page. Get article by given pageid
 				if( !$this->complileArticle( $_GET['pageid'] ) ) { //Compilation error
-					header('Location: '.$this->siteDB['site']['address'].'/error/404');
+					$this->complileError();
+					$pagetype = 'error';
 				}
 				break;
 			case 'gallery': //Gallery page. Get gallery by given pageid
@@ -48,13 +49,28 @@ class Templates extends Mustache {
 				break;
 			case 'static': //Static page. Get static by given pageid
 				if( !$this->complileStatic( $_GET['pageid'] ) ) { //Compilation error
-					header('Location: '.$this->siteDB['site']['address'].'/error/404');
+					$this->complileError();
+					$pagetype = 'error';
 				}
 				break;
 			case 'tag': //Tag filtered articles. Get all articles by given tag
 				break;
 			case 'index': //Index page. Ganerate articles list
-				$this->renderArray['articles_list'] = $this->itterateArticles();
+				$this->renderArray['articles_list'] = $this->itterateArticles( '1' );
+				break;
+			case 'page': //if user opens next page of blog
+				if( (int)$_GET['pageid'] < 2 ) {
+					header('Location: '.$this->siteDB['site']['address'].'/');
+				} else {
+					$totalPages = ceil( count( Articles::returnVisible() ) / $this->siteDB['site']['articlesperpage'] );
+					if( $_GET['pageid'] <= $totalPages ) { //if pageid integer and it is less or equal numbers of total pages
+						$pagetype = 'index'; //use index page template
+						$this->renderArray['articles_list'] = $this->itterateArticles( $_GET['pageid'] );
+					} else { //return error page
+						$this->complileError();
+						$pagetype = 'error';
+					}
+				}
 				break;
 			default: //If none of this matched - show error page
 				$this->complileError();
@@ -148,29 +164,36 @@ class Templates extends Mustache {
 		}
 	}
 	
+	/* Compiles error page */
 	public function complileError() {
 		$this->renderArray['error_code'] = '404';
 		$this->renderArray['error_title'] = $this->getTranslation( 'errortitle' );
 		$this->renderArray['error_text'] = $this->getTranslation( 'errortext' );
 	}
 	
-	/* Itterates through all articles and terurn result to mustache tags */
-	public function itterateArticles() {
+	/* Compiles pagination */
+	public function compilePagination( $pageNumber ) {
+		
+	}
+	
+	/* Itterates through all visible articles and return result to mustache tags */
+	public function itterateArticles( $pageNumber ) {
 		$articlesArray = Array();
 		if( !empty( $this->siteDB['articles'] ) ) { //At least one article exists
-			$articles = Articles::returnVisible();
-			foreach( $articles as $articleid => $article ) {
+			$articleKeys = array_reverse( array_keys( Articles::returnVisible() ) ); //get all keys of visible articles
+			$articleKeys = array_slice( $articleKeys, ($pageNumber-1)*$this->siteDB['site']['articlesperpage'], $this->siteDB['site']['articlesperpage'] ); //slice articles based on page number
+			foreach( $articleKeys as $articleKey ) {
 				$articlesArray[] = array(
-						'article_title' => $article['title'],
-						'article_pretext' => $article['pretext'],
-						'article_text' => $article['text'],
-						'article_tags' => $this->makeTags( $this->siteDB['articles'][$articleid]['tags'] ),
-						'article_date' => date( 'Y.m.d G:i' , $this->siteDB['articles'][$articleid]['date'] ),
-						'article_author' => $this->siteDB['articles'][$articleid]['author'],
+						'article_title' => $this->siteDB['articles'][$articleKey]['title'],
+						'article_pretext' => $this->siteDB['articles'][$articleKey]['pretext'],
+						'article_text' => $this->siteDB['articles'][$articleKey]['text'],
+						'article_tags' => $this->makeTags( $this->siteDB['articles'][$articleKey]['tags'] ),
+						'article_date' => date( 'Y.m.d G:i' , $this->siteDB['articles'][$articleKey]['date'] ),
+						'article_author' => $this->siteDB['articles'][$articleKey],
 						'tags' => $this->getTranslation( 'tags' ),
 						'publishedby' => $this->getTranslation( 'publishedby' ),
 						'publishedat' => $this->getTranslation( 'publishedat' ),
-						'article_link' => $this->siteDB['site']['address'].'/article/'.$articleid,
+						'article_link' => $this->siteDB['site']['address'].'/article/'.$articleKey,
 						'more' => $this->getTranslation( 'more' )
 					);
 			}
