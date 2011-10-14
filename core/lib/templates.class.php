@@ -207,7 +207,7 @@ class Templates extends Mustache {
 	public function itterateArticles( $pageNumber ) {
 		$articlesArray[] = array('article_title' => $this->getTranslation( 'noarticles' ) );
 		if( !empty( $this->siteDB['articles'] ) ) { //At least one article exists
-			$articleKeys = array_reverse( array_keys( Articles::returnVisible() ) ); //get all keys of visible articles
+			$articleKeys = array_keys( Articles::returnVisible() ); //get all keys of visible articles
 			$articleKeys = array_slice( $articleKeys, ($pageNumber-1)*$this->siteDB['site']['articlesperpage'], $this->siteDB['site']['articlesperpage'] ); //slice articles based on page number
 			if( !empty( $articleKeys ) ) {
 				$articlesArray = Array();
@@ -235,7 +235,7 @@ class Templates extends Mustache {
 	public function itterateArticlesByTag( $tag ) {
 		$articlesArray[] = array('article_title' => $this->getTranslation( 'noarticleswithtag' ) );
 		if( !empty( $this->siteDB['articles'] ) ) { //At least one article exists
-			$articleKeys = array_reverse( array_keys( Articles::returnWithTag( $tag ) ) ); //get all keys of visible articles
+			$articleKeys = array_keys( Articles::returnWithTag( $tag ) ); //get all keys of visible articles
 			if( !empty( $articleKeys ) ) {
 				$articlesArray = Array();
 			}
