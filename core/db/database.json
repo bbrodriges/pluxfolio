@@ -56,7 +56,61 @@
 		"Vtoraya-novost": {
 			"title": "Вторая новость",
 			"pretext": "Да-да! Это...",
-			"text": "вторая новость",
+			"text": "вторая новость http://rodriges.org",
+			"tags": "news, first",
+			"date": "1317986750",
+			"author": "admin",
+			"visible": "true"
+		},
+		"Tret-novost": {
+			"title": "3 новость",
+			"pretext": "Да-да! Это...",
+			"text": "вторая новость http://rodriges.org",
+			"tags": "news, first",
+			"date": "1317986750",
+			"author": "admin",
+			"visible": "true"
+		},
+		"Chetv-novost": {
+			"title": "4 новость",
+			"pretext": "Да-да! Это...",
+			"text": "вторая новость http://rodriges.org",
+			"tags": "news, first",
+			"date": "1317986750",
+			"author": "admin",
+			"visible": "true"
+		},
+		"Pyat-novost": {
+			"title": "5 новость",
+			"pretext": "Да-да! Это...",
+			"text": "вторая новость http://rodriges.org",
+			"tags": "news, first",
+			"date": "1317986750",
+			"author": "admin",
+			"visible": "true"
+		},
+		"Shest-novost": {
+			"title": "6 новость",
+			"pretext": "Да-да! Это...",
+			"text": "вторая новость http://rodriges.org",
+			"tags": "news, first",
+			"date": "1317986750",
+			"author": "admin",
+			"visible": "true"
+		},
+		"Sedm-novost": {
+			"title": "7 новость",
+			"pretext": "Да-да! Это...",
+			"text": "вторая новость http://rodriges.org",
+			"tags": "news, first",
+			"date": "1317986750",
+			"author": "admin",
+			"visible": "true"
+		},
+		"Vosm-novost": {
+			"title": "8 новость",
+			"pretext": "Да-да! Это...",
+			"text": "вторая новость http://rodriges.org",
 			"tags": "news, first",
 			"date": "1317986750",
 			"author": "admin",
