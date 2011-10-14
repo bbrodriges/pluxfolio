@@ -176,7 +176,6 @@ class Templates extends Mustache {
 	
 	/* Compiles pagination */
 	function compilePagination( $page, $totalpages ) {
-		$pagination = '<< '.$this->getTranslation( 'prevpage' );
 		switch ( $totalpages ) {
 			case 1:
 				$pagination = '';
@@ -198,7 +197,9 @@ class Templates extends Mustache {
 				}
 				break;
 		}
-		$pagination .= $this->getTranslation( 'nextpage' ).' >>';
+		if( $totalpages > 1 ) {
+			$pagination = '<< '.$this->getTranslation( 'prevpage' ).' '.$pagination.' '.$this->getTranslation( 'nextpage' ).' >>';
+		}
 		$this->renderArray['pagination'] = $pagination;
 	}
 	
