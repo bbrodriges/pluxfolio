@@ -54,6 +54,8 @@ class Templates extends Mustache {
 				}
 				break;
 			case 'tag': //Tag filtered articles. Get all articles by given tag
+				$pagetype = 'index'; //use index page template
+				$this->renderArray['articles_list'] = $this->itterateArticlesByTag( $_GET['pageid'] );
 				break;
 			case 'index': //Index page. Ganerate articles list
 				$this->renderArray['articles_list'] = $this->itterateArticles( '1' );
@@ -203,10 +205,13 @@ class Templates extends Mustache {
 	
 	/* Itterates through all visible articles and return result to mustache tags */
 	public function itterateArticles( $pageNumber ) {
-		$articlesArray = Array();
+		$articlesArray[] = array('article_title' => $this->getTranslation( 'noarticles' ) );
 		if( !empty( $this->siteDB['articles'] ) ) { //At least one article exists
 			$articleKeys = array_reverse( array_keys( Articles::returnVisible() ) ); //get all keys of visible articles
 			$articleKeys = array_slice( $articleKeys, ($pageNumber-1)*$this->siteDB['site']['articlesperpage'], $this->siteDB['site']['articlesperpage'] ); //slice articles based on page number
+			if( !empty( $articleKeys ) ) {
+				$articlesArray = Array();
+			}
 			foreach( $articleKeys as $articleKey ) {
 				$articlesArray[] = array(
 						'article_title' => $this->siteDB['articles'][$articleKey]['title'],
@@ -222,8 +227,33 @@ class Templates extends Mustache {
 						'more' => $this->getTranslation( 'more' )
 					);
 			}
-		} else {
-			$articlesArray[] = array('article_title' => $this->getTranslation( 'noarticles' ) );
+		}
+		return new ArrayIterator( $articlesArray );
+	}
+	
+	/* Itterates through all visible articles and return result to mustache tags */
+	public function itterateArticlesByTag( $tag ) {
+		$articlesArray[] = array('article_title' => $this->getTranslation( 'noarticleswithtag' ) );
+		if( !empty( $this->siteDB['articles'] ) ) { //At least one article exists
+			$articleKeys = array_reverse( array_keys( Articles::returnWithTag( $tag ) ) ); //get all keys of visible articles
+			if( !empty( $articleKeys ) ) {
+				$articlesArray = Array();
+			}
+			foreach( $articleKeys as $articleKey ) {
+				$articlesArray[] = array(
+						'article_title' => $this->siteDB['articles'][$articleKey]['title'],
+						'article_pretext' => $this->siteDB['articles'][$articleKey]['pretext'],
+						'article_text' => $this->siteDB['articles'][$articleKey]['text'],
+						'article_tags' => $this->makeTags( $this->siteDB['articles'][$articleKey]['tags'] ),
+						'article_date' => date( 'Y.m.d G:i' , $this->siteDB['articles'][$articleKey]['date'] ),
+						'article_author' => $this->siteDB['articles'][$articleKey]['author'],
+						'tags' => $this->getTranslation( 'tags' ),
+						'publishedby' => $this->getTranslation( 'publishedby' ),
+						'publishedat' => $this->getTranslation( 'publishedat' ),
+						'article_link' => $this->siteDB['site']['address'].'/article/'.$articleKey,
+						'more' => $this->getTranslation( 'more' )
+					);
+			}
 		}
 		return new ArrayIterator( $articlesArray );
 	}
