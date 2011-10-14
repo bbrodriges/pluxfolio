@@ -57,6 +57,8 @@ class Templates extends Mustache {
 				break;
 			case 'index': //Index page. Ganerate articles list
 				$this->renderArray['articles_list'] = $this->itterateArticles( '1' );
+				$totalPages = ceil( count( Articles::returnVisible() ) / $this->siteDB['site']['articlesperpage'] );
+				$this->compilePagination( '1' , $totalPages );
 				break;
 			case 'page': //if user opens next page of blog
 				if( (int)$_GET['pageid'] < 2 ) {
@@ -65,6 +67,7 @@ class Templates extends Mustache {
 					$totalPages = ceil( count( Articles::returnVisible() ) / $this->siteDB['site']['articlesperpage'] );
 					if( $_GET['pageid'] <= $totalPages ) { //if pageid integer and it is less or equal numbers of total pages
 						$pagetype = 'index'; //use index page template
+						$this->compilePagination( $_GET['pageid'] , $totalPages );
 						$this->renderArray['articles_list'] = $this->itterateArticles( $_GET['pageid'] );
 					} else { //return error page
 						$this->complileError();
@@ -172,8 +175,31 @@ class Templates extends Mustache {
 	}
 	
 	/* Compiles pagination */
-	public function compilePagination( $pageNumber ) {
-		
+	function compilePagination( $page, $totalpages ) {
+		$pagination = '<< '.$this->getTranslation( 'prevpage' );
+		switch ( $totalpages ) {
+			case 1:
+				$pagination = '';
+				break;
+			case 2:
+				if( $page == 1 ) {
+					$pagination .= '['.$page.'] ['.$totalpages.']';
+				} else {
+					$pagination .= '['.$page.'] ['.$totalpages.']';
+				}
+				break;
+			default:
+				if( $page > 1 && $page < $totalpages ) {
+					$pagination .= '['.( $page-1 ).'] ['.$page.'] ['. ( $page+1 ) .']';
+				} elseif( $page == 1 ) {
+					$pagination .= '['.$page.'] ['.( $page+1 ).'] ['. ( $page+2 ) .']';
+				} elseif( $page == $totalpages )  {
+					$pagination .= '['.( $page-2 ).'] ['.( $page-1 ).'] ['.$page.']';
+				}
+				break;
+		}
+		$pagination .= $this->getTranslation( 'nextpage' ).' >>';
+		$this->renderArray['pagination'] = $pagination;
 	}
 	
 	/* Itterates through all visible articles and return result to mustache tags */
