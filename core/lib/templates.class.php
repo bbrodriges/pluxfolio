@@ -176,29 +176,27 @@ class Templates extends Mustache {
 	
 	/* Compiles pagination */
 	function compilePagination( $page, $totalpages ) {
-		switch ( $totalpages ) {
-			case 1:
-				$pagination = '';
-				break;
-			case 2:
-				if( $page == 1 ) {
-					$pagination .= '['.$page.'] ['.$totalpages.']';
-				} else {
-					$pagination .= '['.$page.'] ['.$totalpages.']';
-				}
-				break;
-			default:
-				if( $page > 1 && $page < $totalpages ) {
-					$pagination .= '['.( $page-1 ).'] ['.$page.'] ['. ( $page+1 ) .']';
-				} elseif( $page == 1 ) {
-					$pagination .= '['.$page.'] ['.( $page+1 ).'] ['. ( $page+2 ) .']';
-				} elseif( $page == $totalpages )  {
-					$pagination .= '['.( $page-2 ).'] ['.( $page-1 ).'] ['.$page.']';
-				}
-				break;
-		}
 		if( $totalpages > 1 ) {
-			$pagination = '<< '.$this->getTranslation( 'prevpage' ).' '.$pagination.' '.$this->getTranslation( 'nextpage' ).' >>';
+			switch ( $totalpages ) {
+				case 2:
+					if( $page == 1 ) {
+						$pagination = '<li class="current">'.$page.'</li><li>'.$totalpages.'</li><li>'.$this->getTranslation( 'nextpage' ).' >></li>';
+					} else {
+						$pagination = '<li><< '.$this->getTranslation( 'prevpage' ).'</li><li>'.( $page-1 ).'</li><li class="current">'.$totalpages.'</li>';
+					}
+					break;
+				default:
+					if( $page > 1 && $page < $totalpages ) {
+						$pagination = '<li><< '.$this->getTranslation( 'prevpage' ).'</li><li>'.( $page-1 ).'</li><li class="current">'.$page.'</li><li>'. ( $page+1 ) .'</li><li>'.$this->getTranslation( 'nextpage' ).' >></li>';
+					} elseif( $page == 1 ) {
+						$pagination = '<li class="current">'.$page.'</li><li>'.( $page+1 ).'</li><li>'. ( $page+2 ) .'</li><li>'.$this->getTranslation( 'nextpage' ).' >></li>';
+					} elseif( $page == $totalpages )  {
+						$pagination = '<li><< '.$this->getTranslation( 'prevpage' ).'</li><li>'.( $page-2 ).'</li><li>'.( $page-1 ).'</li><li class="current">'.$page.'</li>';
+					}
+					break;
+			}
+		} else {
+			$pagination = '';
 		}
 		$this->renderArray['pagination'] = $pagination;
 	}
