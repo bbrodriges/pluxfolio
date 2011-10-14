@@ -8,7 +8,7 @@
         "maintenance": "false",
         "totalartworks": "1",
         "thumbsize": "200x150",
-        "articlesperpage": "5",
+        "articlesperpage": "1",
         "showthumbs": "true",
         "showvotes": "true",
         "showartworkscounter": "true",
@@ -57,7 +57,7 @@
 			"title": "Вторая новость",
 			"pretext": "Да-да! Это...",
 			"text": "вторая новость http://rodriges.org",
-			"tags": "news, first",
+			"tags": "news, second",
 			"date": "1317986750",
 			"author": "admin",
 			"visible": "true"
@@ -66,7 +66,7 @@
 			"title": "3 новость",
 			"pretext": "Да-да! Это...",
 			"text": "вторая новость http://rodriges.org",
-			"tags": "news, first",
+			"tags": "news, third, test",
 			"date": "1317986750",
 			"author": "admin",
 			"visible": "true"
@@ -75,7 +75,7 @@
 			"title": "4 новость",
 			"pretext": "Да-да! Это...",
 			"text": "вторая новость http://rodriges.org",
-			"tags": "news, first",
+			"tags": "news, first, test",
 			"date": "1317986750",
 			"author": "admin",
 			"visible": "true"
@@ -84,7 +84,7 @@
 			"title": "5 новость",
 			"pretext": "Да-да! Это...",
 			"text": "вторая новость http://rodriges.org",
-			"tags": "news, first",
+			"tags": "news, test",
 			"date": "1317986750",
 			"author": "admin",
 			"visible": "true"
@@ -93,7 +93,7 @@
 			"title": "6 новость",
 			"pretext": "Да-да! Это...",
 			"text": "вторая новость http://rodriges.org",
-			"tags": "news, first",
+			"tags": "news",
 			"date": "1317986750",
 			"author": "admin",
 			"visible": "true"
