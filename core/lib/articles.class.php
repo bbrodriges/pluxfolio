@@ -15,7 +15,7 @@ class Articles extends Database {
 	}
 	
 	/* Append new article to DB */
-	/* $data is Array("title" => string, "pretext" => string, "text" => string, "tags" => string, "date" => timestamp, "author" => string, "visible" => 'true'/'false'); */
+	/* $data is Array("title" => string, "pretext" => string, "text" => string, "tags" => string, "date" => (string)timestamp, "author" => string, "visible" => 'true'/'false'); */
 	/* If $id passed - edits existing article */
 	function Modify( $data, $id = false ){
 		$database = Database::readDB( true );
@@ -23,6 +23,7 @@ class Articles extends Database {
 		if( $id ) {
 			if( $id != $newId ) { //if title changed...
 				if( !self::getById( $newId ) ) { //... and it is unique pasting new article on old article place
+					$oldDate = $database['articles'][$id]['date'];
 					$keys = array_keys( $database['articles'] ); 
 					$values = array_values( $database['articles'] ); 
 					foreach ($keys as $key => $value) {
@@ -32,6 +33,7 @@ class Articles extends Database {
 					} 
 					$database['articles'] = array_combine($keys, $values); //combining keys with values back into database
 					$database['articles'][$newId] = $data;
+					$database['articles'][$newId]['date'] = $oldDate;
 				} else {
 					return 5; //key is not unique
 				}
@@ -40,8 +42,8 @@ class Articles extends Database {
 			}
 		} else {
 			if( !self::getById( $newId ) ) { //if key is unique write data
-				$newArticle[$id] = $data;
-				$database['articles'] = array_merge( $newArticle[$id], $database['articles'] );
+				$newArticle[$newId] = $data;
+				$database['articles'] = array_merge( $newArticle, $database['articles']);
 			} else { //key is not unique
 				return 5;
 			}
