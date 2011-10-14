@@ -36,7 +36,7 @@ class Articles extends Database {
 			if( !self::getById( $newId ) ) { //if key is unique write data
 				$database['articles'][$newId] = $data;
 			} else { //key is not unique
-				return false;
+				return 5;
 			}
 		}
 		return Database::writeDB( $database );
@@ -61,9 +61,9 @@ class Articles extends Database {
 	function returnVisible(){
 		$articles = self::getAll();
 		$result = Array();
-		foreach( $articles as $id => $article ) {
+		foreach( $articles as $articleid => $article ) {
 			if( $article['visible'] == 'true' ){
-				$result[$id] = $article;
+				$result[$articleid] = $article;
 			}
 		}
 		return $result;

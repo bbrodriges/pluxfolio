@@ -88,6 +88,14 @@ class Utilities extends Database {
 	$string = preg_replace('#[^0-9a-zA-Z-]#','',$string);
 	return ucfirst( strtolower( $string ) );
   }
+  
+  /* Displays human readable error */
+  function parseError( $error ){
+	if( (int)$error > 1 ) {
+		$dictionary = json_decode( file_get_contents( ROOT.'core/lang/'.readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
+		return $dictionary['errorcodetitle'].' '.$error;
+	}
+  }
 
 /* ----------- END ADDITIONAL ----------------- */
   

@@ -27,7 +27,7 @@ class Galleries extends Database {
 				if( !file_exists( ROOT.'galleries/'.$data['folder'] ) ) { //if no existing folder has given name already
 					rename( ROOT.'galleries/'.$oldname , ROOT.'galleries/'.$data['folder'] );
 				} else {
-					return false;
+					return 6;
 				}
 			}
 			$images = $database['galleries'][(string)$id]['images']; //saving images
@@ -45,7 +45,7 @@ class Galleries extends Database {
 				$database['galleries'][(string)$newId]['images'] = Array();
 				mkdir( ROOT.'galleries/'.$data['folder'] );
 			} else {
-				return false;	
+				return 6;	
 			}
 		}
 		return Database::writeDB( $database );
@@ -66,13 +66,13 @@ class Galleries extends Database {
 					Utilities::renewArtworksCount(); //recalculating artworks count
 					return true;
 				} else {
-					return false;
+					return 3;
 				}
 			} else {
-				return false;
+				return 7;
 			}
 		} else {
-			return false;
+			return 8;
 		}
 	}
 	
@@ -120,7 +120,7 @@ class Artworks extends Galleries {
 			}
 			return true;
 		} else {
-			return false;
+			return 3;
 		}
 	}
 	
@@ -138,7 +138,7 @@ class Artworks extends Galleries {
 			Utilities::modifyArtworksCount( 'decrease' ); //decreases artworks counter
 			return true;
 		} else {
-			return false;
+			return 3;
 		}
 	}
 	
@@ -190,7 +190,7 @@ class Artworks extends Galleries {
 		if( $uploaded == $totalartworks ) {
 			return true;
 		} else {
-			return false;
+			return 9;
 		}
 	}
 	
@@ -235,9 +235,13 @@ class Artworks extends Galleries {
 			$image = imagecreatefromgif( $filename );	
 
 		if( $x !== false && $y !== false && $resampledWidth !== false && $resampledHeight !== false ) { //if axis given use imagecopy to get part of image
-			imagecopyresampled( $imageTemplate, $image, 0, 0, $x, $y, $width, $height, $resampledWidth, $resampledHeight );
+			if( !imagecopyresampled( $imageTemplate, $image, 0, 0, $x, $y, $width, $height, $resampledWidth, $resampledHeight ) ) {
+				return 10;
+			}
 		} else { //if no axis given just resize whole image
-			imagecopyresized( $imageTemplate, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig );
+			if( !imagecopyresized( $imageTemplate, $image, 0, 0, 0, 0, $width, $height, $width_orig, $height_orig ) ) {
+				return 10;
+			}
 		}
 		
 		if($type == 2)

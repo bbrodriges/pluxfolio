@@ -18,10 +18,10 @@ class Database {
 				fclose( $fp );
 				return true;
 			} else {
-				return false;
+				return 2; //error opening database file
 			}
 		} else {
-			return false;
+			return 3; //failed to write database. bad structure
 		}
 	}
 	
@@ -59,7 +59,7 @@ class Database {
 		if( copy( ROOT.'core/db/database.json' , ROOT.'core/db/backups/database-'.time().'.json' ) ) {
 			return true;
 		} else {
-			return false;
+			return 4; //error creating database backup
 		}
 	}
 	
