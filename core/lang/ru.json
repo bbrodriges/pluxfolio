@@ -1,4 +1,12 @@
 {
 	"blog": "Блог",
-	"footer": "Работает на <a href='http://pluxfolio.ru/'>pluxfolio</a> версии"
+	"publishedat": "Опубликовано",
+	"publishedby": "автор",
+	"tags": "Метки",
+	"more": "подробнее...",
+	"prevpage": "раньше",
+	"nextpage": "позже",
+	"footer": "Работает на <a href='http://pluxfolio.ru/'>pluxfolio</a> версии",
+	"errortitle": "Ошибка",
+	"errortext": "Данная страница отсутствует, а возможно её никогда и не было."
 }
