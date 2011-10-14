@@ -22,19 +22,26 @@ class Articles extends Database {
 		$newId = Utilities::Translit( $data['title'] ); //transliterating title to use as static key
 		if( $id ) {
 			if( $id != $newId ) { //if title changed...
-				unset( $database['articles'][$id] ); //delete old static
-				if( !self::getById( $newId ) ) { //... and it is unique changing id
+				if( !self::getById( $newId ) ) { //... and it is unique pasting new article on old article place
+					$keys = array_keys( $database['articles'] ); 
+					$values = array_values( $database['articles'] ); 
+					foreach ($keys as $key => $value) {
+						if ( $value == $id ){ //searching for old id in db
+							$keys[$key] = $newId; //replace it with new
+						} 
+					} 
+					$database['articles'] = array_combine($keys, $values); //combining keys with values back into database
 					$database['articles'][$newId] = $data;
 				} else {
-					$newId = $newId.'-'.time(); //creating truly unique id
-					$database['articles'][$newId] = $data;
+					return 5; //key is not unique
 				}
 			} else {
 				$database['articles'][$id] = $data;
 			}
 		} else {
 			if( !self::getById( $newId ) ) { //if key is unique write data
-				$database['articles'][$newId] = $data;
+				$newArticle[$id] = $data;
+				$database['articles'] = array_merge( $newArticle[$id], $database['articles'] );
 			} else { //key is not unique
 				return 5;
 			}
