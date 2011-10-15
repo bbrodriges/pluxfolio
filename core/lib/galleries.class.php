@@ -194,7 +194,7 @@ class Artworks extends Galleries {
 		}
 	}
 	
-	/* Rescans all galleries directories for artworks uploaded via FTP or other non-predictable way */
+	/* Rescans all galleries directories for artworks uploaded/deleted via FTP or other non-predictable way */
 	public function Rescan() {
 		$galleries = Galleries::getAll();
 		$galeriesFolder = ROOT.'galleries/';
