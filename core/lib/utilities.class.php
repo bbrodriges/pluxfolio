@@ -67,7 +67,7 @@ class Utilities extends Database {
 /* ----------- ADDITIONAL ----------------- */
 
   /* Convert russian to translit */
-  function Translit( $string ) {
+  public function Translit( $string ) {
 	$string = str_replace(' - ','-',$string);
 	$string = str_replace(' ','-',$string);
 	if( preg_match('/[А-Яа-яЁё]/u', $string) ) { //if any russian chars exists
@@ -90,12 +90,21 @@ class Utilities extends Database {
   }
   
   /* Displays human readable error */
-  function parseError( $error ){
+  public function parseError( $error ){
 	if( (int)$error > 1 ) {
-		$dictionary = json_decode( file_get_contents( ROOT.'core/lang/'.readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
-		return $dictionary['errorcodetitle'].' '.$error;
+		return self::getTranslation( 'errorcodetitle' ).' '.$error;
 	}
   }
+  
+  /* Returns translation from dictionary */
+	public function getTranslation( $id ) {
+		$dictionary = json_decode( file_get_contents( ROOT.'core/lang/'.readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
+		if( isset( $dictionary[$id] ) && !empty( $dictionary[$id] ) ) {
+			return $this->dictionary[$id];
+		} else {
+			return '%'.$id.'%';
+		}
+	}
 
 /* ----------- END ADDITIONAL ----------------- */
   

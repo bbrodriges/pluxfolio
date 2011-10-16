@@ -4,7 +4,6 @@
 
 class Templates extends Mustache {
 	
-	public $dictionary; //Contains array of words from lang files
 	public $renderArray; //Contains all data to be passed to Mustache
 	public $siteDB; //Contains whole DB
 
@@ -14,7 +13,6 @@ class Templates extends Mustache {
 		/* GATHERING NECESSARY SITE DATA */
 		$this->siteDB = Database::readDB( true ); //Reads whole DB one time
 		$this->renderArray = Array(); //Empty render array. Will contain all necessary mustache tags
-		$this->dictionary = json_decode( file_get_contents( ROOT.'core/lang/'.$this->siteDB['site']['language'].'.json' ) , TRUE ); //opens dictionary
 		$themeFolder = ROOT.'themes/'.$this->siteDB['site']['theme'].'/'; //Contains current theme folder path
 		
 		if( !empty( $_GET ) ) {
@@ -34,8 +32,8 @@ class Templates extends Mustache {
 		$this->renderArray['version'] = $this->siteDB['site']['version']; //Site language
 		
 		/* Data from language files */
-		$this->renderArray['totalartworks'] = $this->getTranslation( 'totalartworks' ); //Artworks counter translation
-		$this->renderArray['footer'] = $this->getTranslation( 'footer' ); //Site footer translation
+		$this->renderArray['totalartworks'] = Utilities::getTranslation( 'totalartworks' ); //Artworks counter translation
+		$this->renderArray['footer'] = Utilities::getTranslation( 'footer' ); //Site footer translation
 		
 		switch ( $pagetype ) {
 			case 'article': //Article page. Get article by given pageid
@@ -91,15 +89,6 @@ class Templates extends Mustache {
 			
 	}
 	
-	/* Returns translate from dictionary */
-	public function getTranslation( $id ) {
-		if( isset( $this->dictionary[$id] ) && !empty( $this->dictionary[$id] ) ) {
-			return $this->dictionary[$id];
-		} else {
-			return '%'.$id.'%';
-		}
-	}
-	
 	/* Converts http and www into clickable links */
 	public function makeLinks($text) {
 		$text = preg_replace('%(((f|ht){1}tp://)[-a-zA-^Z0-9@:\%_\+.~#?&//=]+)%i',
@@ -113,7 +102,7 @@ class Templates extends Mustache {
 
 	/* Compiles main menu */
 	public function compileMainMenu() {
-		$mainMenu = '<li><a href="'.$this->siteDB['site']['address'].'">'.$this->getTranslation( 'blog' ).'</a></li>';
+		$mainMenu = '<li><a href="'.$this->siteDB['site']['address'].'">'.Utilities::getTranslation( 'blog' ).'</a></li>';
 		$galleries = Galleries::returnVisible();
 		foreach( $galleries as $galleryid => $gallery ) {
 			$mainMenu .= '<li><a href="'.$this->siteDB['site']['address'].'/gallery/'.$galleryid.'">'.$gallery['name'].'</a></li>';
@@ -137,9 +126,9 @@ class Templates extends Mustache {
 			$this->renderArray['article_link'] = $this->siteDB['site']['address'].'/article/'.$articleid;
 			
 			/* Translations */
-			$this->renderArray['tags'] = $this->getTranslation( 'tags' );
-			$this->renderArray['publishedby'] = $this->getTranslation( 'publishedby' );
-			$this->renderArray['publishedat'] = $this->getTranslation( 'publishedat' );
+			$this->renderArray['tags'] = Utilities::getTranslation( 'tags' );
+			$this->renderArray['publishedby'] = Utilities::getTranslation( 'publishedby' );
+			$this->renderArray['publishedat'] = Utilities::getTranslation( 'publishedat' );
 			
 			return true;
 		} else { //Article does not exists. Return false to redirect to error page
@@ -172,8 +161,8 @@ class Templates extends Mustache {
 	/* Compiles error page */
 	public function complileError() {
 		$this->renderArray['error_code'] = '404';
-		$this->renderArray['error_title'] = $this->getTranslation( 'errortitle' );
-		$this->renderArray['error_text'] = $this->getTranslation( 'errortext' );
+		$this->renderArray['error_title'] = Utilities::getTranslation( 'errortitle' );
+		$this->renderArray['error_text'] = Utilities::getTranslation( 'errortext' );
 	}
 	
 	/* Compiles pagination */
@@ -182,18 +171,18 @@ class Templates extends Mustache {
 			switch ( $totalpages ) {
 				case 2:
 					if( $page == 1 ) {
-						$pagination = '<li class="current">'.$page.'</li><li><a href="'.$this->siteDB['site']['address'].'/page/'.$totalpages.'">'.$totalpages.'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+1).'">'.$this->getTranslation( 'nextpage' ).'</a> >></li>';
+						$pagination = '<li class="current">'.$page.'</li><li><a href="'.$this->siteDB['site']['address'].'/page/'.$totalpages.'">'.$totalpages.'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+1).'">'.Utilities::getTranslation( 'nextpage' ).'</a> >></li>';
 					} else {
-						$pagination = '<li><< <a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.$this->getTranslation( 'prevpage' ).'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$totalpages.'</li>';
+						$pagination = '<li><< <a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.Utilities::getTranslation( 'prevpage' ).'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$totalpages.'</li>';
 					}
 					break;
 				default:
 					if( $page > 1 && $page < $totalpages ) {
-						$pagination = '<li><< <a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.$this->getTranslation( 'prevpage' ).'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$page.'</li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+1).'">'. ( $page+1 ) .'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+1).'">'.$this->getTranslation( 'nextpage' ).'</a> >></li>';
+						$pagination = '<li><< <a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.Utilities::getTranslation( 'prevpage' ).'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$page.'</li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+1).'">'. ( $page+1 ) .'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+1).'">'.Utilities::getTranslation( 'nextpage' ).'</a> >></li>';
 					} elseif( $page == 1 ) {
-						$pagination = '<li class="current">'.$page.'</li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+1).'">'.( $page+1 ).'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+2).'">'. ( $page+2 ) .'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+1).'">'.$this->getTranslation( 'nextpage' ).'</a> >></li>';
+						$pagination = '<li class="current">'.$page.'</li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+1).'">'.( $page+1 ).'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+2).'">'. ( $page+2 ) .'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page+1).'">'.Utilities::getTranslation( 'nextpage' ).'</a> >></li>';
 					} elseif( $page == $totalpages )  {
-						$pagination = '<li><< <a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.$this->getTranslation( 'prevpage' ).'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page-2).'">'.( $page-2 ).'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$page.'</li>';
+						$pagination = '<li><< <a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.Utilities::getTranslation( 'prevpage' ).'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page-2).'">'.( $page-2 ).'</a></li><li><a href="'.$this->siteDB['site']['address'].'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$page.'</li>';
 					}
 					break;
 			}
@@ -205,7 +194,7 @@ class Templates extends Mustache {
 	
 	/* Itterates through all visible articles and return result to mustache tags */
 	public function itterateArticles( $pageNumber ) {
-		$articlesArray[] = array('article_title' => $this->getTranslation( 'noarticles' ) );
+		$articlesArray[] = array('article_title' => Utilities::getTranslation( 'noarticles' ) );
 		if( !empty( $this->siteDB['articles'] ) ) { //At least one article exists
 			$articleKeys = array_keys( Articles::returnVisible() ); //get all keys of visible articles
 			$articleKeys = array_slice( $articleKeys, ($pageNumber-1)*$this->siteDB['site']['articlesperpage'], $this->siteDB['site']['articlesperpage'] ); //slice articles based on page number
@@ -220,11 +209,11 @@ class Templates extends Mustache {
 						'article_tags' => $this->makeTags( $this->siteDB['articles'][$articleKey]['tags'] ),
 						'article_date' => date( 'Y.m.d G:i' , $this->siteDB['articles'][$articleKey]['date'] ),
 						'article_author' => $this->siteDB['articles'][$articleKey]['author'],
-						'tags' => $this->getTranslation( 'tags' ),
-						'publishedby' => $this->getTranslation( 'publishedby' ),
-						'publishedat' => $this->getTranslation( 'publishedat' ),
+						'tags' => Utilities::getTranslation( 'tags' ),
+						'publishedby' => Utilities::getTranslation( 'publishedby' ),
+						'publishedat' => Utilities::getTranslation( 'publishedat' ),
 						'article_link' => $this->siteDB['site']['address'].'/article/'.$articleKey,
-						'more' => $this->getTranslation( 'more' )
+						'more' => Utilities::getTranslation( 'more' )
 					);
 			}
 		}
@@ -233,7 +222,7 @@ class Templates extends Mustache {
 	
 	/* Itterates through all visible articles and return result to mustache tags */
 	public function itterateArticlesByTag( $tag ) {
-		$articlesArray[] = array('article_title' => $this->getTranslation( 'noarticleswithtag' ) );
+		$articlesArray[] = array('article_title' => Utilities::getTranslation( 'noarticleswithtag' ) );
 		if( !empty( $this->siteDB['articles'] ) ) { //At least one article exists
 			$articleKeys = array_keys( Articles::returnWithTag( $tag ) ); //get all keys of visible articles
 			if( !empty( $articleKeys ) ) {
@@ -247,11 +236,11 @@ class Templates extends Mustache {
 						'article_tags' => $this->makeTags( $this->siteDB['articles'][$articleKey]['tags'] ),
 						'article_date' => date( 'Y.m.d G:i' , $this->siteDB['articles'][$articleKey]['date'] ),
 						'article_author' => $this->siteDB['articles'][$articleKey]['author'],
-						'tags' => $this->getTranslation( 'tags' ),
-						'publishedby' => $this->getTranslation( 'publishedby' ),
-						'publishedat' => $this->getTranslation( 'publishedat' ),
+						'tags' => Utilities::getTranslation( 'tags' ),
+						'publishedby' => Utilities::getTranslation( 'publishedby' ),
+						'publishedat' => Utilities::getTranslation( 'publishedat' ),
 						'article_link' => $this->siteDB['site']['address'].'/article/'.$articleKey,
-						'more' => $this->getTranslation( 'more' )
+						'more' => Utilities::getTranslation( 'more' )
 					);
 			}
 		}
