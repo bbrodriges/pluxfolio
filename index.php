@@ -15,7 +15,6 @@
 	} */
 	
 	/* Rendering current template */
-	$template = new Templates();
-	$template->render();
+	$Template->render();
 	
 ?>
