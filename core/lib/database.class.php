@@ -12,7 +12,7 @@ class Database {
 	/* Opens DB an wrtie changes */
 	public function writeDB( $data ) { //input is a whole DB with changes. Array or Object.
 		$data = json_encode( (object) $data );
-		if( self::checkDatabase( $data ) ) {
+		if( $this->checkDatabase( $data ) ) {
 			if(	$fp = fopen( DATABASE , 'w' ) ) {
 				fwrite( $fp , $data );
 				fclose( $fp );
@@ -38,7 +38,7 @@ class Database {
 		json_decode($database);
 		switch ( json_last_error() ) {
 			case JSON_ERROR_NONE:
-				self::backupDatabase();
+				$this->backupDatabase();
 				return true;
 				die;
 				break;

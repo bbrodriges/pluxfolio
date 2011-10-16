@@ -37,7 +37,7 @@ class Utilities extends Database {
 	
 	/* Changes count of site's artworks  */
 	public function modifyArtworksCount( $mode ) { //mode: 'increase', 'decrease'
-		$count = (int) self::readSiteData( 'totalartworks' );
+		$count = (int) $this->readSiteData( 'totalartworks' );
 		if( $mode == 'increase' ) {
 			$count++;
 		} elseif ( $mode == 'decrease' && $count > 0 ) {
@@ -45,7 +45,7 @@ class Utilities extends Database {
 		} else {
 			return false;	
 		}
-		return self::writeSiteData( 'totalartworks', (string) $count );
+		return $this->writeSiteData( 'totalartworks', (string) $count );
 	}
 	
 	/* Compleatly recalculates count of site's artworks  */
@@ -59,7 +59,7 @@ class Utilities extends Database {
 				}
 			}
 		}
-		return self::writeSiteData( 'totalartworks', (string) $newcount );
+		return $this->writeSiteData( 'totalartworks', (string) $newcount );
 	}
 	
 /* ----------- END SITE SECTION ----------- */
@@ -92,7 +92,7 @@ class Utilities extends Database {
   /* Displays human readable error */
   public function parseError( $error ){
 	if( (int)$error > 1 ) {
-		return self::getTranslation( 'errorcodetitle' ).' '.$error;
+		return $this->getTranslation( 'errorcodetitle' ).' '.$error;
 	}
   }
   

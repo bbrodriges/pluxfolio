@@ -10,7 +10,7 @@ class Articles extends Database {
 	
 	/* Returns article as Array by id */
 	function getById( $id ){ //id as int
-		$articles = self::getAll();
+		$articles = $this->getAll();
 		return $articles[(string)$id];
 	}
 	
@@ -22,7 +22,7 @@ class Articles extends Database {
 		$newId = Utilities::Translit( $data['title'] ); //transliterating title to use as static key
 		if( $id ) {
 			if( $id != $newId ) { //if title changed...
-				if( !self::getById( $newId ) ) { //... and it is unique pasting new article on old article place
+				if( !$this->getById( $newId ) ) { //... and it is unique pasting new article on old article place
 					$oldDate = $database['articles'][$id]['date'];
 					$keys = array_keys( $database['articles'] ); 
 					$values = array_values( $database['articles'] ); 
@@ -41,7 +41,7 @@ class Articles extends Database {
 				$database['articles'][$id] = $data;
 			}
 		} else {
-			if( !self::getById( $newId ) ) { //if key is unique write data
+			if( !$this->getById( $newId ) ) { //if key is unique write data
 				$newArticle[$newId] = $data;
 				$database['articles'] = array_merge( $newArticle, $database['articles']);
 			} else { //key is not unique
@@ -68,7 +68,7 @@ class Articles extends Database {
 	/* Returns only visible article */
 	/* For more simple main menu generation */
 	function returnVisible(){
-		$articles = self::getAll();
+		$articles = $this->getAll();
 		$result = Array();
 		foreach( $articles as $articleid => $article ) {
 			if( $article['visible'] == 'true' ){
@@ -80,7 +80,7 @@ class Articles extends Database {
 	
 	/* Returns only visible article with given tag */
 	function returnWithTag( $tag ){ //$tag as string
-		$articles = self::returnVisible();
+		$articles = $this->returnVisible();
 		$result = Array();
 		foreach( $articles as $articleid => $article ) {
 			/* Adding space to the begining of tags string to insure that our position will never be 0 */
