@@ -37,7 +37,7 @@ class Utilities extends Database {
 	
 	/* Changes count of site's artworks  */
 	public function modifyArtworksCount( $mode ) { //mode: 'increase', 'decrease'
-		$count = (int) $this->readSiteData( 'totalartworks' );
+		$count = (int) self::readSiteData( 'totalartworks' );
 		if( $mode == 'increase' ) {
 			$count++;
 		} elseif ( $mode == 'decrease' && $count > 0 ) {

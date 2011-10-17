@@ -9,12 +9,12 @@
 	include_once('lib/templates.class.php');
 	
 	/* Defines major objects */
-	$Database = new Database;
-	$Utility = new Utilities;
-	$Gallery = new Galleries;
-	$Artwork = new Artwork;
-	$Static = new Statics;
-	$Article = new Articles;
-	$Template = new Templates;
+	$Database  = new Database;
+	$Utility   = new Utilities;
+	$Gallery   = new Galleries;
+	$Artwork   = new Artworks;
+	$Static    = new Statics;
+	$Article   = new Articles;
+	$Template  = new Templates;
 
 ?>
