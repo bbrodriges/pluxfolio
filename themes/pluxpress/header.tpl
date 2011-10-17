@@ -7,7 +7,9 @@
 	<meta http-equiv="Content-Language" content="{{language}}">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	
-	<link rel="stylesheet" href="{{homepage}}/themes/{{theme}}/css/style.css" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="{{homepage}}/themes/{{theme}}/css/style.css" type="text/css">
+	<script src="{{homepage}}/core/js/jquery.js" type="text/javascript"></script>
+	<script src="{{homepage}}/core/js/gallerific.js" type="text/javascript"></script>
 	
 </head>
 <body>
