@@ -6,6 +6,7 @@
 	"more": "подробнее...",
 	"prevpage": "раньше",
 	"nextpage": "позже",
+	"filteredtag": "Поиск по метке:",
 	"footer": "Работает на <a href='http://pluxfolio.ru/'>pluxfolio</a> версии",
 	"errortitle": "Ошибка",
 	"errortext": "Данная страница отсутствует, а возможно её никогда и не было."
