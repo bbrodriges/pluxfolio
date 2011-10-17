@@ -270,22 +270,18 @@ class Templates extends Mustache {
 		return new ArrayIterator( $articlesArray );
 	}
 	
+	/* Compiles gallery */
+	/* REWRITE TO ITERATOR! */
 	public function complileGallery( $galleryid ) {
 		if( isset( $this->siteDB['galleries'][$galleryid] ) && !empty( $this->siteDB['galleries'][$galleryid] ) && $this->siteDB['galleries'][$galleryid]['visible'] == 'true' ) {
 			$this->renderArray['gallery_title'] = $this->siteDB['galleries'][$galleryid]['name'];
 			$this->renderArray['gallery_text'] = $this->siteDB['galleries'][$galleryid]['text'];
 			$galleryImages = $this->siteDB['galleries'][$galleryid]['images'];
 			$thumbsList = '';
-			$firstImage = '';
 			foreach( $galleryImages as $imageFile => $imageData ) {
-				if( empty( $firstImage ) ) {
-					$firstImage = $this->siteDB['site']['address'].'/galleries/'.$this->siteDB['galleries'][$galleryid]['folder'].'/'.$imageFile;
-				}
 				$imageFilePath = $this->siteDB['site']['address'].'/galleries/'.$this->siteDB['galleries'][$galleryid]['folder'].'/'.$imageFile;
-				$thumbsList .= '<li><a href="#"><img src="'.$imageFilePath.'.tb" data-large="'.$imageFilePath.'" alt="'.$imageData['name'].'" data-description="'.$imageData['description'].'"></a></li>';
+				$thumbsList .= '<li><a href="'.$imageFilePath.'" rel="shadowbox" title="'.$imageData['description'].'"><img src="'.$imageFilePath.'.tb" alt="'.$imageData['name'].'"></a></li>';
 			}
-			$this->renderArray['gallery_thumbs'] = '<div class="rg-thumbs"><div class="es-carousel-wrapper"><div class="es-nav"><span class="es-nav-prev">'.Utilities::getTranslation( 'prev' ).'</span><span class="es-nav-next">'.Utilities::getTranslation( 'next' ).'</span></div><div class="es-carousel"><ul>'.$thumbsList.'</ul></div></div></div>';
-			$this->renderArray['gallery_imageview'] = '<div class="rg-image-wrapper"><div class="rg-image-nav"><a href="#" class="rg-image-nav-prev">'.Utilities::getTranslation( 'previmage' ).'</a><a href="#" class="rg-image-nav-next">'.Utilities::getTranslation( 'nextimage' ).'</a></div><div class="rg-image"><img src="'.$firstImage.'"></div><div class="rg-loading"></div><div class="rg-caption-wrapper"><div class="rg-caption"><p></p></div></div></div>';
 			return true;
 		} else { //no such gallery, or it is empty, or invisible
 			return false;
