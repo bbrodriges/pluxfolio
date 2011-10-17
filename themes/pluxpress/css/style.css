@@ -23,7 +23,7 @@ div.header {
 	background-image:     -ms-linear-gradient(top, #e3e3e3, #d6d6d6); /* IE10 */
 	background-image:      -o-linear-gradient(top, #e3e3e3, #d6d6d6); /* Opera 11.10+ */
 	background-image:         linear-gradient(top, #e3e3e3, #d6d6d6);
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#444444', EndColorStr='#999999'); /* IE6-IE9 */
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#e3e3e3', EndColorStr='#d6d6d6'); /* IE6-IE9 */
 	border-bottom: 1px solid #c6c6c6;
 }
 
