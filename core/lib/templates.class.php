@@ -279,9 +279,9 @@ class Templates extends Mustache {
 			$firstImage = '';
 			foreach( $galleryImages as $imageFile => $imageData ) {
 				if( empty( $firstImage ) ) {
-					$firstImage = $this->siteDB['site']['address'].'/galleries/'.$galleryid.'/'.$imageFile;
+					$firstImage = $this->siteDB['site']['address'].'/galleries/'.$this->siteDB['galleries'][$galleryid]['folder'].'/'.$imageFile;
 				}
-				$imageFilePath = $this->siteDB['site']['address'].'/galleries/'.$galleryid.'/'.$imageFile;
+				$imageFilePath = $this->siteDB['site']['address'].'/galleries/'.$this->siteDB['galleries'][$galleryid]['folder'].'/'.$imageFile;
 				$thumbsList .= '<li><a href="#"><img src="'.$imageFilePath.'.tb" data-large="'.$imageFilePath.'" alt="'.$imageData['name'].'" data-description="'.$imageData['description'].'"></a></li>';
 			}
 			$this->renderArray['gallery_thumbs'] = '<div class="rg-thumbs"><div class="es-carousel-wrapper"><div class="es-nav"><span class="es-nav-prev">'.Utilities::getTranslation( 'prev' ).'</span><span class="es-nav-next">'.Utilities::getTranslation( 'next' ).'</span></div><div class="es-carousel"><ul>'.$thumbsList.'</ul></div></div></div>';
