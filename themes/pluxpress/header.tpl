@@ -9,7 +9,7 @@
 	
 	<link rel="stylesheet" href="{{homepage}}/themes/{{theme}}/css/style.css" type="text/css">
 	<script src="{{homepage}}/core/js/jquery.js" type="text/javascript"></script>
-	<script src="{{homepage}}/core/js/gallerific.js" type="text/javascript"></script>
+	<script src="{{homepage}}/core/js/jquery.gallerific.js" type="text/javascript"></script>
 	
 </head>
 <body>
