@@ -8,13 +8,6 @@
 	include_once('lib/mustache.class.php'); //must be before templates.class.php
 	include_once('lib/templates.class.php');
 	
-	/* Defines major objects */
-	$Database  = new Database;
-	$Utility   = new Utilities;
-	$Gallery   = new Galleries;
-	$Artwork   = new Artworks;
-	$Static    = new Statics;
-	$Article   = new Articles;
 	$Template  = new Templates;
 
 ?>
