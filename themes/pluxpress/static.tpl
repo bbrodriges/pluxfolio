@@ -1,2 +1,10 @@
-<h3>{{static_title}}</h3>
-<div>{{{static_text}}}</div>
+<div class="informer">
+	<div class="container">
+		{{static_title}}
+	</div>
+</div>
+
+<div class="container">
+<div class="static">
+	{{{static_text}}}
+</div>

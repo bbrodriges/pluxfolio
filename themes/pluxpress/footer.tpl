@@ -1,6 +1,6 @@
-<div>
-	<hr>
-	<small>{{{footer}}} {{version}}</small>
-</div>
+		<div class="footer">
+			<a href="{{homepage}}/core/admin/">Admin</a> | {{{footer}}} {{version}}
+		</div>
+	</div>
 </body>
 </html>
