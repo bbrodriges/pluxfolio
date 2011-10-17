@@ -11,7 +11,7 @@ class Galleries extends Database {
 	
 	/* Returns gallery as Array by id */
 	public function getById( $id ){ //id as int
-		$galleries = $this->getAll();
+		$galleries = self::getAll();
 		return $galleries[(string)$id];
 	}
 	
@@ -53,7 +53,7 @@ class Galleries extends Database {
 		
 	/* Delete gallery */
 	public function Delete( $galleryid ){ //id of static to be deleted
-		if( $this->getById( $galleryid ) ) { //if gallery exists
+		if( self::getById( $galleryid ) ) { //if gallery exists
 			$database = Database::readDB( true );
 			$folder = ROOT.'galleries/'.$database['galleries'][$galleryid]['folder'];
 			$mask = $folder.'/*.*'; //all files except '.' and '..'
@@ -86,7 +86,7 @@ class Galleries extends Database {
 	/* Returns only visible statics */
 	/* For more simple main menu generation */
 	public function returnVisible(){
-		$galleries = $this->getAll();
+		$galleries = self::getAll();
 		$result = Array();
 		foreach( $galleries as $id => $gallery ) {
 			if( $gallery['visible'] == 'true' ){
@@ -111,7 +111,7 @@ class Artworks extends Galleries {
 		unset($data['filename']); // removing unnecessary data
 		if( !isset( $database['galleries'][$galleryid]['images'][$filename] ) ){
 			 $increase = true;//increases artworks counter if appending new artwork
-			 $this->makeThumb( ROOT.'galleries/'.$database['galleries'][$galleryid]['folder'].'/'.$filename ); //Create thumbnail
+			 self::makeThumb( ROOT.'galleries/'.$database['galleries'][$galleryid]['folder'].'/'.$filename ); //Create thumbnail
 		}
 		$database['galleries'][$galleryid]['images'][$filename] = $data;
 		if( Database::writeDB( $database ) ) {
@@ -173,7 +173,7 @@ class Artworks extends Galleries {
 	public function Upload( $galleryid ) {
 		$uploaded = 0;
 		$totalartworks = count($_FILES['img']['name']);
-		$gallery = $this->getById( $galleryid );
+		$gallery = self::getById( $galleryid );
 		
 		foreach( $_FILES['img']['name'] as $id => $file) {
 			$savepath = ROOT.'galleries/'.$gallery['folder'].'/';
@@ -181,7 +181,7 @@ class Artworks extends Galleries {
 			if( @move_uploaded_file( $_FILES['img']['tmp_name'][$id] , $savepath.$name ) ) {
 				@chmod( $savepath.$name,0644 );
 				$data = Array( "filename" => $name, "name" => '', "description" => '', "added" => time() );
-				if( $this->modifyArtwork( $galleryid , $data ) ){
+				if( self::modifyArtwork( $galleryid , $data ) ){
 					$uploaded++;
 				}
 			}
@@ -206,13 +206,13 @@ class Artworks extends Galleries {
 					$fileInfo = pathinfo( $galeriesFolder.$gallery['folder'].$file );
 					if( in_array( $fileInfo['extension'] , $acceptedFiles ) && !in_array( $file , $gallery['images'] ) ) { //if acceptable file type and not in DB
 						$data = Array( "filename" => $fileInfo['basename'], "name" => '', "description" => '', "added" => (string)filemtime( $file ) );
-						$this->modifyArtwork( $galleryid , $data );
+						self::modifyArtwork( $galleryid , $data );
 					}
 				}
 			} elseif( count( $galleryFiles ) < count( $gallery['images'] ) ) { //if files in folder less than files in gallery DB
 				foreach( $gallery['images'] as $filename => $image ) {
 					if( !in_array( $galeriesFolder.$gallery['folder'].'/'.$filename , $galleryFiles ) ) { //if DB record has no existing image
-						$this->removeArtwork( $galleryid , $filename );
+						self::removeArtwork( $galleryid , $filename );
 					}
 				}
 			}

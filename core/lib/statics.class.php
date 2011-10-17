@@ -10,7 +10,7 @@ class Statics extends Database {
 	
 	/* Returns static as Array by id */
 	function getById( $id ){ //id as int
-		$statics = $this->getAll();
+		$statics = self::getAll();
 		return $statics[(string)$id];
 	}
 	
@@ -23,17 +23,16 @@ class Statics extends Database {
 		if( $id ) {
 			if( $id != $newId ) { //if title changed...
 				unset( $database['statics'][$id] ); //delete old static
-				if( !$this->getById( $newId ) ) { //... and it is unique changing id
+				if( !self::getById( $newId ) ) { //... and it is unique changing id
 					$database['statics'][$newId] = $data;
 				} else {
-					$newId = $newId.'-'.time(); //creating truly unique id
-					$database['statics'][$newId] = $data;
+					return 5; //key is not unique
 				}
 			} else {
 				$database['statics'][$id] = $data;
 			}
 		} else {
-			if( !$this->getById( $newId ) ) { //if key is unique write data
+			if( !self::getById( $newId ) ) { //if key is unique write data
 				$database['statics'][$newId] = $data;
 			} else { //key is not unique
 				return 5;
@@ -59,7 +58,7 @@ class Statics extends Database {
 	/* Returns only visible statics */
 	/* For more simple main menu generation */
 	function returnVisible(){
-		$statics = $this->getAll();
+		$statics = self::getAll();
 		$result = Array();
 		foreach( $statics as $staticid => $static ) {
 			if( $static['visible'] == 'true' ){

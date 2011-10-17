@@ -45,7 +45,7 @@ class Utilities extends Database {
 		} else {
 			return false;	
 		}
-		return $this->writeSiteData( 'totalartworks', (string) $count );
+		return self::writeSiteData( 'totalartworks', (string) $count );
 	}
 	
 	/* Compleatly recalculates count of site's artworks  */
@@ -66,41 +66,41 @@ class Utilities extends Database {
 
 /* ----------- ADDITIONAL ----------------- */
 
-  /* Convert russian to translit */
-  public function Translit( $string ) {
-	$string = str_replace(' - ','-',$string);
-	$string = str_replace(' ','-',$string);
-	if( preg_match('/[А-Яа-яЁё]/u', $string) ) { //if any russian chars exists
-		$table=array(
-			"а" => "a", "б" => "b", "в" => "v", "г" => "g", "д" => "d", "е" => "e", "ё" => "yo",
-			"ж" => "zh", "з" => "z", "и" => "i", "й" => "y", "к" => "k", "л" => "l", "м" => "m",
-			"н" => "n", "о" => "o", "п" => "p", "р" => "r", "с" => "s", "т" => "t", "у" => "u",
-			"ф" => "f", "х" => "h", "ц" => "c", "ч" => "ch", "ш" => "sch", "щ" => "sh", "ъ" => "",
-			"ы" => "y", "ь" => "", "э" => "e", "ю" => "yu", "я" => "ya",
-			"А" => "A", "Б" => "B", "В" => "V", "Г" => "G", "Д" => "D", "Е" => "E", "Ё" => "YO",
-			"Ж" => "ZH", "З" => "Z", "И" => "I", "Й" => "Y", "К" => "K", "Л" => "L", "М" => "M",
-			"Н" => "N", "О" => "O", "П" => "P", "Р" => "R", "С" => "S", "Т" => "T", "У" => "U",
-			"Ф" => "F", "Х" => "H", "Ц" => "C", "Ч" => "CH", "Ш" => "SCH", "Щ" => "SH", "Ъ" => "",
-			"Ы" => "Y", "Ь" => "", "Э" => "E", "Ю" => "YU", "Я" => "YA"
-		);
-		$string = strtr( $string, $table );
+	/* Convert russian to translit */
+	public function Translit( $string ) {
+		$string = str_replace(' - ','-',$string);
+		$string = str_replace(' ','-',$string);
+		if( preg_match('/[А-Яа-яЁё]/u', $string) ) { //if any russian chars exists
+			$table=array(
+				"а" => "a", "б" => "b", "в" => "v", "г" => "g", "д" => "d", "е" => "e", "ё" => "yo",
+				"ж" => "zh", "з" => "z", "и" => "i", "й" => "y", "к" => "k", "л" => "l", "м" => "m",
+				"н" => "n", "о" => "o", "п" => "p", "р" => "r", "с" => "s", "т" => "t", "у" => "u",
+				"ф" => "f", "х" => "h", "ц" => "c", "ч" => "ch", "ш" => "sch", "щ" => "sh", "ъ" => "",
+				"ы" => "y", "ь" => "", "э" => "e", "ю" => "yu", "я" => "ya",
+				"А" => "A", "Б" => "B", "В" => "V", "Г" => "G", "Д" => "D", "Е" => "E", "Ё" => "YO",
+				"Ж" => "ZH", "З" => "Z", "И" => "I", "Й" => "Y", "К" => "K", "Л" => "L", "М" => "M",
+				"Н" => "N", "О" => "O", "П" => "P", "Р" => "R", "С" => "S", "Т" => "T", "У" => "U",
+				"Ф" => "F", "Х" => "H", "Ц" => "C", "Ч" => "CH", "Ш" => "SCH", "Щ" => "SH", "Ъ" => "",
+				"Ы" => "Y", "Ь" => "", "Э" => "E", "Ю" => "YU", "Я" => "YA"
+			);
+			$string = strtr( $string, $table );
+		}
+		$string = preg_replace('#[^0-9a-zA-Z-]#','',$string);
+		return ucfirst( strtolower( $string ) );
 	}
-	$string = preg_replace('#[^0-9a-zA-Z-]#','',$string);
-	return ucfirst( strtolower( $string ) );
-  }
   
-  /* Displays human readable error */
-  public function parseError( $error ){
-	if( (int)$error > 1 ) {
-		return $this->getTranslation( 'errorcodetitle' ).' '.$error;
+	/* Displays human readable error */
+	public function parseError( $error ){
+		if( (int)$error > 1 ) {
+			return $this->getTranslation( 'errorcodetitle' ).' '.$error;
+		}
 	}
-  }
   
-  /* Returns translation from dictionary */
+	/* Returns translation from dictionary */
 	public function getTranslation( $id ) {
-		$dictionary = json_decode( file_get_contents( ROOT.'core/lang/'.readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
-		if( isset( $dictionary[$id] ) && !empty( $dictionary[$id] ) ) {
-			return $this->dictionary[$id];
+		$dictionary = json_decode( file_get_contents( ROOT.'core/lang/'.self::readSiteData( 'language' ).'.json' ) ); //opens dictionary
+		if( isset( $dictionary->$id ) && !empty( $dictionary->$id ) ) {
+			return $dictionary->$id;
 		} else {
 			return '%'.$id.'%';
 		}
