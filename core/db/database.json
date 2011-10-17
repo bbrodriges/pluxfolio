@@ -1,1 +1,130 @@
-{"site":{"address":"http:\/\/localhost\/pluxfolio","version":"2.0","title":"My blog","subtitle":"about everything","GMT":"","maintenance":"false","totalartworks":"1","thumbsize":"200x150","articlesperpage":"4","showthumbs":"true","showvotes":"true","showartworkscounter":"true","language":"ru","theme":"pluxpress","showlatestartworks":"false","latestartworks":[]},"user":{"login":"","password":""},"galleries":{"test":{"name":"\u041f\u0435\u0440\u0432\u0430\u044f \u0433\u0430\u043b\u0435\u0440\u0435\u044f","folder":"test","text":"This is test gallery","visible":"true","images":{"yawn.jpeg":{"name":"","description":"","added":"1311702458"}}}},"statics":{"Kontakty":{"title":"\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u044b","text":"\u0417\u0434\u0435\u0441\u044c \u0432\u044b \u0432\u0438\u0434\u0438\u0442\u0435 \u043c\u043e\u0438 \u043a\u043e\u043d\u0442\u0430\u043a\u0442\u044b","visible":"true"}},"articles":{"Eto-test-dobavleniya":{"title":"\u042d\u0442\u043e - \u0442\u0435\u0441\u0442 \u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u0438\u044f","pretext":"\u041f\u0440\u043e\u0441\u0442\u0430\u044f \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0430","text":"\u0412\u0441\u0451 \u043b\u0438 \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u0442","tags":"test, article","date":"1318610623","author":"admin","visible":"true"},"Pervaya-novost":{"title":"\u041f\u0435\u0440\u0432\u0430\u044f \u043d\u043e\u0432\u043e\u0441\u0442\u044c","pretext":"\u042d\u0442\u043e...","text":"\u043f\u0435\u0440\u0432\u0430\u044f \u043d\u043e\u0432\u043e\u0441\u0442\u044c","tags":"news, first","date":"1317985750","author":"admin","visible":"true"},"Vtoraya-novost":{"title":"\u0412\u0442\u043e\u0440\u0430\u044f \u043d\u043e\u0432\u043e\u0441\u0442\u044c","pretext":"\u0414\u0430-\u0434\u0430! \u042d\u0442\u043e...","text":"\u0432\u0442\u043e\u0440\u0430\u044f \u043d\u043e\u0432\u043e\u0441\u0442\u044c http:\/\/rodriges.org","tags":"news, second","date":"1317986750","author":"admin","visible":"true"},"Tret-novost":{"title":"3 \u043d\u043e\u0432\u043e\u0441\u0442\u044c","pretext":"\u0414\u0430-\u0434\u0430! \u042d\u0442\u043e...","text":"\u0432\u0442\u043e\u0440\u0430\u044f \u043d\u043e\u0432\u043e\u0441\u0442\u044c http:\/\/rodriges.org","tags":"news, third, test","date":"1317986750","author":"admin","visible":"true"},"Chetv-novost":{"title":"4 \u043d\u043e\u0432\u043e\u0441\u0442\u044c","pretext":"\u0414\u0430-\u0434\u0430! \u042d\u0442\u043e...","text":"\u0432\u0442\u043e\u0440\u0430\u044f \u043d\u043e\u0432\u043e\u0441\u0442\u044c http:\/\/rodriges.org","tags":"news, first, test","date":"1317986750","author":"admin","visible":"true"},"Pyat-novost":{"title":"5 \u043d\u043e\u0432\u043e\u0441\u0442\u044c","pretext":"\u0414\u0430-\u0434\u0430! \u042d\u0442\u043e...","text":"\u0432\u0442\u043e\u0440\u0430\u044f \u043d\u043e\u0432\u043e\u0441\u0442\u044c http:\/\/rodriges.org","tags":"news, test","date":"1317986750","author":"admin","visible":"true"},"Shest-novost":{"title":"6 \u043d\u043e\u0432\u043e\u0441\u0442\u044c","pretext":"\u0414\u0430-\u0434\u0430! \u042d\u0442\u043e...","text":"\u0432\u0442\u043e\u0440\u0430\u044f \u043d\u043e\u0432\u043e\u0441\u0442\u044c http:\/\/rodriges.org","tags":"news","date":"1317986750","author":"admin","visible":"true"},"Sedm-novost":{"title":"7 \u043d\u043e\u0432\u043e\u0441\u0442\u044c","pretext":"\u0414\u0430-\u0434\u0430! \u042d\u0442\u043e...","text":"\u0432\u0442\u043e\u0440\u0430\u044f \u043d\u043e\u0432\u043e\u0441\u0442\u044c http:\/\/rodriges.org","tags":"news, first","date":"1317986750","author":"admin","visible":"true"},"Vosm-novost":{"title":"8 \u043d\u043e\u0432\u043e\u0441\u0442\u044c","pretext":"\u0414\u0430-\u0434\u0430! \u042d\u0442\u043e...","text":"\u0432\u0442\u043e\u0440\u0430\u044f \u043d\u043e\u0432\u043e\u0441\u0442\u044c http:\/\/rodriges.org","tags":"news, first","date":"1317986750","author":"admin","visible":"true"}}}
+{
+    "site": {
+        "address": "http://localhost/pluxfolio",
+        "version": "2.0",
+        "title": "Project title",
+        "subtitle": "and it's subtitle",
+        "GMT": "",
+        "maintenance": "false",
+        "totalartworks": "1",
+        "thumbsize": "200x150",
+        "articlesperpage": "4",
+        "showthumbs": "true",
+        "showvotes": "true",
+        "showartworkscounter": "true",
+        "language": "ru",
+        "theme": "pluxpress",
+        "showlatestartworks": "false",
+		"sitedescription": "This is a very important block, which can help users to understand that it is a John Doe's site.",
+        "latestartworks": []
+    },
+    "user": {
+        "login": "",
+        "password": ""
+    },
+    "galleries": {
+        "Pervaya-galereya": {
+            "name": "Первая галерея",
+            "folder": "test",
+            "text": "This is test gallery",
+            "visible": "true",
+            "images": {
+                "yawn.jpeg": {
+                    "name": "",
+                    "description": "",
+                    "added": "1311702458"
+                }
+            }
+        }
+    },
+    "statics": {
+        "Kontakty": {
+            "title": "Контакты",
+            "text": "Здесь вы видите мои контакты",
+            "visible": "true"
+        }
+    },
+    "articles": {
+        "Eto-test-dobavleniya": {
+            "title": "Это - тест добавления",
+            "pretext": "Простая проверка",
+            "text": "Всё ли работает",
+            "tags": "test, article",
+            "date": "1318610623",
+            "author": "admin",
+            "visible": "true"
+        },
+        "Pervaya-novost": {
+            "title": "Первая новость",
+            "pretext": "Это...",
+            "text": "первая новость",
+            "tags": "news, first",
+            "date": "1317985750",
+            "author": "admin",
+            "visible": "true"
+        },
+        "Vtoraya-novost": {
+            "title": "Вторая новость",
+            "pretext": "Да-да! Это...",
+            "text": "вторая новость http://rodriges.org",
+            "tags": "news, second",
+            "date": "1317986750",
+            "author": "admin",
+            "visible": "true"
+        },
+        "Tret-novost": {
+            "title": "3 новость",
+            "pretext": "Да-да! Это...",
+            "text": "вторая новость http://rodriges.org",
+            "tags": "news, third, test",
+            "date": "1317986750",
+            "author": "admin",
+            "visible": "true"
+        },
+        "Chetv-novost": {
+            "title": "4 новость",
+            "pretext": "Да-да! Это...",
+            "text": "вторая новость http://rodriges.org",
+            "tags": "news, first, test",
+            "date": "1317986750",
+            "author": "admin",
+            "visible": "true"
+        },
+        "Pyat-novost": {
+            "title": "5 новость",
+            "pretext": "Да-да! Это...",
+            "text": "вторая новость http://rodriges.org",
+            "tags": "news, test",
+            "date": "1317986750",
+            "author": "admin",
+            "visible": "true"
+        },
+        "Shest-novost": {
+            "title": "6 новость",
+            "pretext": "Да-да! Это...",
+            "text": "вторая новость http://rodriges.org",
+            "tags": "news",
+            "date": "1317986750",
+            "author": "admin",
+            "visible": "true"
+        },
+        "Sedm-novost": {
+            "title": "7 новость",
+            "pretext": "Да-да! Это...",
+            "text": "вторая новость http://rodriges.org",
+            "tags": "news, first",
+            "date": "1317986750",
+            "author": "admin",
+            "visible": "true"
+        },
+        "Vosm-novost": {
+            "title": "8 новость",
+            "pretext": "Да-да! Это...",
+            "text": "вторая новость http://rodriges.org",
+            "tags": "news, first",
+            "date": "1317986750",
+            "author": "admin",
+            "visible": "true"
+        }
+    }
+}
