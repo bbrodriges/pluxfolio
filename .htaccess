@@ -1,13 +1,11 @@
 RewriteEngine On
 
-#add here REQUEST_URI instead /pluxfolio
 RewriteBase /pluxfolio
-
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^([^/]*)/([^/]*)$ index.php?pagetype=$1&pageid=$2 [L]
 
-# Prettify error output
 ErrorDocument 404            /error/404
 
-#PHP errors suppression
 php_flag display_errors on 
 php_value error_reporting 6
