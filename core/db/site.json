@@ -7,7 +7,7 @@
     "totalartworks": "1",
     "thumbsize": "200x150",
     "articlesperpage": "2",
-    "showvotes": "true",
+    "showvotes": "false",
     "showartworkscounter": "true",
     "language": "ru",
     "theme": "pluxpress",
