@@ -99,20 +99,20 @@ class Utilities extends Database {
 	}
 	
 	/* Returns element from $database as Array by $id */
-	function getById( $database , $id ){
+	public function getById( $database , $id ){
 		$database = Database::readDB( $database , true );
 		return $database[(string)$id];
 	}
 	
 	/* Delete element from $database by $id */
-	function Delete( $database , $id ){ //id of article to be deleted
+	public function Delete( $database , $id ){ //id of article to be deleted
 		$data = Database::readDB( $database , true );
 		unset($data[(string)$id]);
 		return Database::writeDB( $database , $data );
 	}
 	
 	/* Set visibility on and off */
-	function toggleVisiblity( $database , $id, $state ){ //id as int, state as string 'true' or 'false'
+	public function toggleVisiblity( $database , $id, $state ){ //id as int, state as string 'true' or 'false'
 		$data = Database::readDB( $database , true );
 		$data[(string)$id]['visible'] = $state;
 		return Database::writeDB( $database , $data );
@@ -120,7 +120,7 @@ class Utilities extends Database {
 	
 	/* Returns only visible article */
 	/* For more simple main menu generation */
-	function returnVisible( $database ){
+	public function returnVisible( $database ){
 		$data = Database::readDB( $database , true );
 		$result = Array();
 		foreach( $data as $elementid => $element ) {
@@ -129,6 +129,50 @@ class Utilities extends Database {
 			}
 		}
 		return $result;
+	}
+	
+	/* Returns available themes list */
+	public function themesList() {
+		$themesList = '';
+		$currentTheme = self::readSiteData( 'theme' );
+		$themes = scandir( ROOT.'themes/' );
+		unset( $themes[0] , $themes[1] ); //Delete '.' and '..'
+		foreach( $themes as $theme ) {
+			if( $theme == $currentTheme ) {
+				$themesList .= '<option value="'.$theme.'" selected>'.$theme.'</option>';
+			} else {
+				$themesList .= '<option value="'.$theme.'">'.$theme.'</option>';
+			}
+		}
+		return $themesList;
+	}
+	
+	/* Returns available languages list */
+	public function languagesList() {
+		$languagesList = '';
+		$currentLanguage = self::readSiteData( 'language' );
+		$languages = scandir( ROOT.'core/lang/' );
+		unset( $languages[0] , $languages[1] ); //Delete '.' and '..'
+		foreach( $languages as $language ) {
+			$language = substr( $language , 0 , -5 );
+			if( $language == $currentLanguage ) {
+				$languagesList .= '<option value="'.$language.'" selected>'.$language.'</option>';
+			} else {
+				$languagesList .= '<option value="'.$language.'">'.$language.'</option>';
+			}
+		}
+		return $languagesList;
+	}
+	
+	/* Returns available languages list */
+	public function onOffList( $type ) {
+		$currentChoise = self::readSiteData( $type );
+		$dictionary = json_decode( file_get_contents( ROOT.'core/admin/lang/'.self::readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
+		if( $currentChoise == 'true' ) {
+			return '<option value="true" selected>'.$dictionary['enabled'].'</option><option value="false">'.$dictionary['disabled'].'</option>';
+		} else {
+			return '<option value="true">'.$dictionary['enabled'].'</option><option value="false" selected>'.$dictionary['disabled'].'</option>';
+		}
 	}
   
 }
