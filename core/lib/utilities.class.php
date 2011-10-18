@@ -2,37 +2,31 @@
 
 class Utilities extends Database {
 	
-/* ----------- USER SECTION ----------- */
-	
 	/* Returns all user credentials */
 	public function returnUser() {
-		$database = Database::readDB( true );
-		return $database['user'];
+		$database = Database::readDB( 'site' , true );
+		return array( 'login' => $database['login'] , 'password' => $database['password'] );
 	}
 	
 	/* Writes new user credentials */
 	 public function updateUser( $login , $password ) { //user credentials as Array or Object
-		$database = Database::readDB( true );
-		$database['user']['login'] = Database::clearQuery( $login );
-		$database['user']['password'] = md5( $password );
-		return Database::writeDB( $database );
+		$database = Database::readDB( 'site' , true );
+		$database['login'] = Database::clearQuery( $login );
+		$database['password'] = md5( $password );
+		return Database::writeDB( 'site' , $database );
 	}
-	
-/* ----------- END USER SECTION ----------- */
-
-/* ----------- SITE SECTION ----------- */
 	
 	/* Writes site info */
 	public function writeSiteData( $type, $data ) { //(1) type: 'title', 'subtitle' etc... ; (2) Data to write
-		$database = Database::readDB( true );
-		$database['site'][$type] = Database::sanitiseQuery( $data );
-		return Database::writeDB( $database );
+		$database = Database::readDB( 'site' , true );
+		$database[$type] = Database::sanitiseQuery( $data );
+		return Database::writeDB( 'site' , $database );
 	}
 	
 	/* Reads site info */
 	public function readSiteData( $type ) { //type: 'title', 'subtitle' etc...
-		$database = Database::readDB( true );
-		return $database['site'][$type];
+		$database = Database::readDB( 'site' , true );
+		return $database[$type];
 	}
 	
 	/* Changes count of site's artworks  */
@@ -51,20 +45,16 @@ class Utilities extends Database {
 	/* Compleatly recalculates count of site's artworks  */
 	public function renewArtworksCount() { //mode: 'increase', 'decrease'
 		$newcount = 0;
-		$database = Database::readDB( true );
-		if( count($database['galleries']) > 0 ){ //if any gallery exists
-			foreach( $database['galleries'] as $gallery ){
+		$database = Database::readDB( 'galleries' , true );
+		if( count($database) > 0 ){ //if any gallery exists
+			foreach( $database as $gallery ){
 				foreach( $gallery['images'] as $image ) {
 					$newcount++;
 				}
 			}
 		}
-		return $this->writeSiteData( 'totalartworks', (string) $newcount );
+		return self::writeSiteData( 'totalartworks', (string) $newcount );
 	}
-	
-/* ----------- END SITE SECTION ----------- */
-
-/* ----------- ADDITIONAL ----------------- */
 
 	/* Convert russian to translit */
 	public function Translit( $string ) {
@@ -92,21 +82,52 @@ class Utilities extends Database {
 	/* Displays human readable error */
 	public function parseError( $error ){
 		if( (int)$error > 1 ) {
-			return $this->getTranslation( 'errorcodetitle' ).' '.$error;
+			return self::getTranslation( 'errorcodetitle' ).' '.$error;
 		}
 	}
   
 	/* Returns translation from dictionary */
 	public function getTranslation( $id ) {
-		$dictionary = json_decode( file_get_contents( ROOT.'core/lang/'.self::readSiteData( 'language' ).'.json' ) ); //opens dictionary
-		if( isset( $dictionary->$id ) && !empty( $dictionary->$id ) ) {
-			return $dictionary->$id;
+		$dictionary = json_decode( file_get_contents( ROOT.'core/lang/'.self::readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
+		if( isset( $dictionary[$id] ) && !empty( $dictionary[$id] ) ) {
+			return $dictionary[$id];
 		} else {
 			return '%'.$id.'%';
 		}
 	}
-
-/* ----------- END ADDITIONAL ----------------- */
+	
+	/* Returns element from $database as Array by $id */
+	function getById( $database , $id ){
+		$database = Database::readDB( $database , true );
+		return $database[(string)$id];
+	}
+	
+	/* Delete element from $database by $id */
+	function Delete( $database , $id ){ //id of article to be deleted
+		$data = Database::readDB( $database , true );
+		unset($data[(string)$id]);
+		return Database::writeDB( $database , $data );
+	}
+	
+	/* Set visibility on and off */
+	function toggleVisiblity( $database , $id, $state ){ //id as int, state as string 'true' or 'false'
+		$data = Database::readDB( $database , true );
+		$data[(string)$id]['visible'] = $state;
+		return Database::writeDB( $database , $data );
+	}
+	
+	/* Returns only visible article */
+	/* For more simple main menu generation */
+	function returnVisible( $database ){
+		$data = Database::readDB( $database , true );
+		$result = Array();
+		foreach( $data as $elementid => $element ) {
+			if( $element['visible'] == 'true' ){
+				$result[$elementid] = $element;
+			}
+		}
+		return $result;
+	}
   
 }
 

@@ -1,19 +1,17 @@
 <?php
 
-define( 'DATABASE' , ROOT.'core/db/database.json' );
-
 class Database {
 	
 	/* Opens DB file and returns all data */
-	public function readDB( $type = false ) { //if TRUE - Array, if FALSE - Object.
-		return json_decode( file_get_contents( DATABASE ) , $type );
+	public function readDB( $database, $type = false ) { //if TRUE - Array, if FALSE - Object.
+		return json_decode( file_get_contents( ROOT.'core/db/'.$database.'.json' ) , $type );
 	}
 	
 	/* Opens DB an wrtie changes */
-	public function writeDB( $data ) { //input is a whole DB with changes. Array or Object.
+	public function writeDB( $database, $data ) { //input is a whole DB with changes. Array or Object.
 		$data = json_encode( (object) $data );
 		if( self::checkDatabase( $data ) ) {
-			if(	$fp = fopen( DATABASE , 'w' ) ) {
+			if(	$fp = fopen( ROOT.'core/db/'.$database.'.json' , 'w' ) ) {
 				fwrite( $fp , $data );
 				fclose( $fp );
 				return true;
@@ -34,11 +32,10 @@ class Database {
 	}
 
 	/* Checks for database errors */
-	public function checkDatabase( $database ) {
-		json_decode($database);
+	public function checkDatabase( $data ) {
+		json_decode( $data );
 		switch ( json_last_error() ) {
 			case JSON_ERROR_NONE:
-				self::backupDatabase();
 				return true;
 				die;
 				break;
@@ -46,20 +43,6 @@ class Database {
 				return false;
 				die;
 				break;
-		}
-	}
-	
-	/* Makes backup of database */
-	public function backupDatabase() {
-		$backupFiles = glob( ROOT.'core/db/backups/database-*.json' );
-		if( count( $backupFiles ) > 4 ) {
-			sort( $backupFiles );
-			unlink( $backupFiles[0] );
-		}
-		if( copy( ROOT.'core/db/database.json' , ROOT.'core/db/backups/database-'.time().'.json' ) ) {
-			return true;
-		} else {
-			return 4; //error creating database backup
 		}
 	}
 	

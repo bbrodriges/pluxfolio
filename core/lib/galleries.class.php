@@ -3,26 +3,14 @@
 /* Galleries control */
 class Galleries extends Database {
 	
-	/* Returns all galleries as Array */
-	public function getAll(){
-		$database = Database::readDB( true );
-		return $database['galleries'];
-	}
-	
-	/* Returns gallery as Array by id */
-	public function getById( $id ){ //id as int
-		$galleries = self::getAll();
-		return $galleries[(string)$id];
-	}
-	
 	/* Creates and append new gallery to DB */
 	/* $data is Array("name" => string, "folder" => string, "visible" => 'true'/'false'); */
 	/* If $id passed - edits existing gallery. */
 	public function Modify( $data, $id = false ){
-		$database = Database::readDB( true );
+		$database = Database::readDB( 'galleries' , true );
 		$newId = Utilities::Translit( $data['name'] ); //transliterating title to use as static key
 		if( $id ) {
-			$oldname = $database['galleries'][(string)$id]['folder']; //old folder name
+			$oldname = $database[(string)$id]['folder']; //old folder name
 			if( $oldname != $data['folder'] ) { //if folder name changed
 				if( !file_exists( ROOT.'galleries/'.$data['folder'] ) ) { //if no existing folder has given name already
 					rename( ROOT.'galleries/'.$oldname , ROOT.'galleries/'.$data['folder'] );
@@ -30,39 +18,39 @@ class Galleries extends Database {
 					return 6;
 				}
 			}
-			$images = $database['galleries'][(string)$id]['images']; //saving images
+			$images = $database[(string)$id]['images']; //saving images
 			if( $id != $newId ) {
-				unset( $database['galleries'][(string)$id] ); //Deleting old gallery
-				$database['galleries'][(string)$newId] = $data; //Writing under new id
-				$database['galleries'][(string)$newId]['images'] = $images; //writing images back
+				unset( $database[(string)$id] ); //Deleting old gallery
+				$database[(string)$newId] = $data; //Writing under new id
+				$database[(string)$newId]['images'] = $images; //writing images back
 			} else {
-				$database['galleries'][(string)$id] = $data;
-				$database['galleries'][(string)$id]['images'] = $images; //writing images back
+				$database[(string)$id] = $data;
+				$database[(string)$id]['images'] = $images; //writing images back
 			}
 		} else {
 			if( !file_exists( ROOT.'galleries/'.$data['folder'] ) ) {
-				$database['galleries'][(string)$newId] = $data;
-				$database['galleries'][(string)$newId]['images'] = Array();
+				$database[(string)$newId] = $data;
+				$database[(string)$newId]['images'] = Array();
 				mkdir( ROOT.'galleries/'.$data['folder'] );
 			} else {
 				return 6;	
 			}
 		}
-		return Database::writeDB( $database );
+		return Database::writeDB( 'galleries' , $database );
 	}
 		
 	/* Delete gallery */
 	public function Delete( $galleryid ){ //id of static to be deleted
-		if( self::getById( $galleryid ) ) { //if gallery exists
-			$database = Database::readDB( true );
-			$folder = ROOT.'galleries/'.$database['galleries'][$galleryid]['folder'];
+		if( Utilities::getById( 'galleries' , $galleryid ) ) { //if gallery exists
+			$database = Database::readDB( 'galleries' , true );
+			$folder = ROOT.'galleries/'.$database[$galleryid]['folder'];
 			$mask = $folder.'/*.*'; //all files except '.' and '..'
 			if( ( $files = scandir( $folder ) ) && ( count( $files ) > 2 ) ) { //if any files exists delete them
 				array_map( "unlink", glob( $mask ) );
 			}
 			if( rmdir( $folder ) ){ //if folder deleted
-				unset($database['galleries'][$galleryid]);
-				if( Database::writeDB( $database ) ){
+				unset( $database[$galleryid] );
+				if( Database::writeDB( 'galleries' , $database ) ){
 					Utilities::renewArtworksCount(); //recalculating artworks count
 					return true;
 				} else {
@@ -75,26 +63,6 @@ class Galleries extends Database {
 			return 8;
 		}
 	}
-	
-	/* Set visibility of gallery on and off */
-	public function toggleVisiblity( $id, $state ){ //id as int, state as string 'true' or 'false'
-		$database = Database::readDB( true );
-		$database['galleries'][$id]['visible'] = $state;
-		return Database::writeDB( $database );
-	}
-	
-	/* Returns only visible statics */
-	/* For more simple main menu generation */
-	public function returnVisible(){
-		$galleries = self::getAll();
-		$result = Array();
-		foreach( $galleries as $id => $gallery ) {
-			if( $gallery['visible'] == 'true' ){
-				$result[$id] = $gallery;
-			}
-		}
-		return $result;
-	}
 
 }
 
@@ -105,16 +73,16 @@ class Artworks extends Galleries {
 	/* $galleryid is id of artwork's parent gallery */
 	/* $data is Array("filename" => string, "name" => string, "description" => string, "added" => timestamp); */
 	public function modifyArtwork( $galleryid , $data ){
-		$database = Database::readDB( true );
+		$database = Database::readDB( 'galleries' , true );
 		$filename = $data['filename'];
 		$increase = false;
 		unset($data['filename']); // removing unnecessary data
-		if( !isset( $database['galleries'][$galleryid]['images'][$filename] ) ){
+		if( !isset( $database[$galleryid]['images'][$filename] ) ){
 			 $increase = true;//increases artworks counter if appending new artwork
-			 self::makeThumb( ROOT.'galleries/'.$database['galleries'][$galleryid]['folder'].'/'.$filename ); //Create thumbnail
+			 self::makeThumb( ROOT.'galleries/'.$database[$galleryid]['folder'].'/'.$filename ); //Create thumbnail
 		}
-		$database['galleries'][$galleryid]['images'][$filename] = $data;
-		if( Database::writeDB( $database ) ) {
+		$database[$galleryid]['images'][$filename] = $data;
+		if( Database::writeDB( 'galleries' , $database ) ) {
 			if( $increase ) {
 				Utilities::modifyArtworksCount( 'increase' );
 			}
@@ -126,15 +94,17 @@ class Artworks extends Galleries {
 	
 	/* Delete specific artwork */
 	public function removeArtwork( $galleryid , $filename ){
-		$database = Database::readDB( true );
-		$gallery = Galleries::getById( $galleryid );
+		$database = Database::readDB( 'galleries' , true );
+		$gallery = $database[$galleryid];
 		$file = ROOT.'galleries/'.$gallery['folder'].'/'.$filename;
 		if( file_exists( $file ) ) {
 			unlink( $file );
-			@unlink( $file.'.tb' );
 		}
-		unset( $database['galleries'][$galleryid]['images'][$filename] );
-		if( Database::writeDB( $database ) ) {
+		if( file_exists( $file.'.tb' ) ) {
+			unlink( $file.'.tb' );
+		}
+		unset( $database[$galleryid]['images'][$filename] );
+		if( Database::writeDB( 'galleries' , $database ) ) {
 			Utilities::modifyArtworksCount( 'decrease' ); //decreases artworks counter
 			return true;
 		} else {
@@ -144,14 +114,14 @@ class Artworks extends Galleries {
 	
 	/* Returns all artworks in gallery */
 	public function allArtworks( $galleryid ){
-		$database = Database::readDB( true );
-		return $database['galleries'][$galleryid]['images'];
+		$database = Database::readDB( 'galleries' , true );
+		return $database[$galleryid]['images'];
 	}
 	
 	/* Returns specific artwork from gallery */
 	public function returnArtwork( $galleryid , $filename ){
-		$database = Database::readDB( true );
-		return $database['galleries'][$galleryid]['images'][$filename];
+		$database = Database::readDB( 'galleries' , true );
+		return $database[$galleryid]['images'][$filename];
 	}
 	
 	/* Returns artwork age in days */
@@ -162,10 +132,10 @@ class Artworks extends Galleries {
 
 	/* Perform artwork vote */
 	public function Vote( $galleryid , $filename , $mode ){ //$mode: 'good', 'bad'
-		$database = Database::readDB( true );
-		$votes = (int)$database['galleries'][$galleryid]['images'][$filename][$mode];
-		$database['galleries'][$galleryid]['images'][$filename][$mode] = $votes + 1;
-		return Database::writeDB( $database );
+		$database = Database::readDB( 'galleries' , true );
+		$votes = (int)$database[$galleryid]['images'][$filename][$mode];
+		$database[$galleryid]['images'][$filename][$mode] = (string)(++$votes);
+		return Database::writeDB( 'galleries' , $database );
 	}
 	
 	/* Uploads artwork to directory */
@@ -173,8 +143,7 @@ class Artworks extends Galleries {
 	public function Upload( $galleryid ) {
 		$uploaded = 0;
 		$totalartworks = count($_FILES['img']['name']);
-		$gallery = self::getById( $galleryid );
-		
+		$gallery = Utilities::getById( 'galleries' , $galleryid );
 		foreach( $_FILES['img']['name'] as $id => $file) {
 			$savepath = ROOT.'galleries/'.$gallery['folder'].'/';
 			$name = basename( $_FILES['img']['name'][$id] );
@@ -186,7 +155,6 @@ class Artworks extends Galleries {
 				}
 			}
 		}
-		
 		if( $uploaded == $totalartworks ) {
 			return true;
 		} else {
@@ -196,7 +164,7 @@ class Artworks extends Galleries {
 	
 	/* Rescans all galleries directories for artworks uploaded/deleted via FTP or other non-predictable way */
 	public function Rescan() {
-		$galleries = Galleries::getAll();
+		$galleries = Database::readDB( 'galleries' , true );
 		$galeriesFolder = ROOT.'galleries/';
 		$acceptedFiles = Array( 'jpg' , 'gif' , 'png' , 'jpeg' ); //Acceptable file types
 		foreach( $galleries as $galleryid => $gallery ) {
@@ -227,12 +195,17 @@ class Artworks extends Galleries {
 		list( $width , $height ) = explode( 'x' , Utilities::readSiteData( 'thumbsize' ) ); //Gathering thumb info
 		
 		$imageTemplate = imagecreatetruecolor( $width , $height ); //Creating image template with width and height
-		if($type == 2) //if jpg
-			$image = imagecreatefromjpeg( $filename );
-		elseif($type == 3) //if png
-			$image = imagecreatefrompng( $filename );
-		elseif($type == 1) //if gif
-			$image = imagecreatefromgif( $filename );	
+		switch( $type ) {
+			case 1: //if gif
+				$image = imagecreatefromgif( $filename );
+				break;
+			case 2: //if jpg
+				$image = imagecreatefromjpeg( $filename );
+				break;
+			case 3: //if png
+				$image = imagecreatefrompng( $filename );
+				break;
+		}
 
 		if( $x !== false && $y !== false && $resampledWidth !== false && $resampledHeight !== false ) { //if axis given use imagecopy to get part of image
 			if( !imagecopyresampled( $imageTemplate, $image, 0, 0, $x, $y, $width, $height, $resampledWidth, $resampledHeight ) ) {
@@ -244,13 +217,18 @@ class Artworks extends Galleries {
 			}
 		}
 		
-		if($type == 2)
-			imagejpeg( $imageTemplate , $filename.'.tb' , 75 ); //third parameter is quality of jpg
-		elseif($type == 3)
-			imagepng( $imageTemplate , $filename.'.tb' );
-		elseif ($type==1) 
-			imagegif( $imageTemplate , $filename.'.tb' );
-		@chmod( $filename.'.tb', 0644 );
+		switch( $type ) {
+			case 1: //if gif
+				imagegif( $imageTemplate , $filename.'.tb' );
+				break;
+			case 2: //if jpg
+				imagejpeg( $imageTemplate , $filename.'.tb' , 75 ); //third parameter is quality of jpg
+				break;
+			case 3: //if png
+				imagepng( $imageTemplate , $filename.'.tb' );
+				break;
+		}
+		chmod( $filename.'.tb', 0644 );
 	}
 
 }

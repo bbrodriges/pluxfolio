@@ -1,7 +1,7 @@
 <?php
 
 	define( 'ROOT' , './' ); //defining root directory for user
-	include_once( ROOT.'core/includer.php' );
+	include_once( ROOT.'core/lib/includer.php' );
 	
 	/* Verifying installation state */
 	/* If site address not persists than installation is not complete */
@@ -15,6 +15,7 @@
 	} */
 	
 	/* Rendering current template */
-	$Template->render();
+	$Template = new Templates;
+	$Template->render( $_GET['pagetype'] );
 	
 ?>
