@@ -7,7 +7,7 @@ class Templates extends Mustache {
     public $siteSettings;
 
 	/* Function to be called on templates render */
-	public function render( $page ){
+	public function render( $page = 'error' ){
 		
 		$this->renderArray = Array(); //Empty render array. Will contain all necessary mustache tags
 		$this->pagetype = $page;
@@ -57,7 +57,12 @@ class Templates extends Mustache {
 				$this->renderArray['site_description'] = $this->siteSettings['sitedescription']; //Site description
 				break;
 			case '':
-				header('Location: '.$this->siteSettings['address'].'/');
+				$this->pagetype = 'index'; //use index page template
+				$this->renderArray['articles_list'] = $this->itterateArticles( '1' );
+				$totalPages = ceil( count( Utilities::returnVisible( 'articles' ) ) / $this->siteSettings['articlesperpage'] );
+				$this->compilePagination( '1' , $totalPages );
+				$this->renderArray['site_description'] = $this->siteSettings['sitedescription']; //Site description
+				break;
 			case 'page': //if user opens next page of blog
 				if( (int)$_GET['pageid'] < 2 ) {
 					header('Location: '.$this->siteSettings['address'].'/');
@@ -258,14 +263,14 @@ class Templates extends Mustache {
 	
 	/* Compiles gallery */
 	public function complileGallery( $galleryid ) {
-        $galleryData = Utilities::getById( 'gallery' , $galleryid );
+        $galleryData = Utilities::getById( 'galleries' , $galleryid );
 		if( $galleryData && $galleryData['visible'] == 'true' ) {
-			$this->renderArray['gallery_title'] = $galleryData[$galleryid]['name'];
-			$this->renderArray['gallery_text'] = $galleryData[$galleryid]['text'];
-			$galleryImages = $galleryData[$galleryid]['images'];
+			$this->renderArray['gallery_title'] = $galleryData['name'];
+			$this->renderArray['gallery_text'] = $galleryData['text'];
+			$galleryImages = $galleryData['images'];
 			foreach( $galleryImages as $imageFile => $imageData ) {
-				$imageFilePath = $this->siteSettings['address'].'/galleries/'.$galleryData[$galleryid]['folder'].'/'.$imageFile;
-				$thumbsList[] = array( 'gallery_thumb' => '<a href="'.$imageFilePath.'" rel="shadowbox" title="'.$imageData['description'].'"><img src="'.$imageFilePath.'.tb" alt="'.$imageData['name'].'"></a>' );
+				$imageFilePath = $this->siteSettings['address'].'/galleries/'.$galleryData['folder'].'/'.$imageFile;
+				$thumbsList[] = array( 'gallery_thumb' => '<a href="'.$imageFilePath.'" rel="shadowbox" title="'.$imageData['description'].'"><img src="'.$imageFilePath.'.tb" alt="'.$imageData['name'].'"></a>', 'thumb_name' => $imageData['name'], 'thumb_description' => $imageData['description'] );
 			}
 			$this->renderArray['thumbs_list'] = new ArrayIterator( $thumbsList );
 			return true;
