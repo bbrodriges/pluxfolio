@@ -1,0 +1,19 @@
+{
+    "address": "http://localhost/pluxfolio",
+    "version": "2.0",
+    "title": "Project title",
+    "subtitle": "and it's subtitle",
+    "maintenance": "false",
+    "totalartworks": "1",
+    "thumbsize": "200x150",
+    "articlesperpage": "2",
+    "showvotes": "true",
+    "showartworkscounter": "true",
+    "language": "ru",
+    "theme": "pluxpress",
+    "showlatestartworks": "false",
+	"sitedescription": "This is a very important block, which can help users to understand that it is a John Doe's site.",
+    "latestartworks": [],
+	"login": "",
+    "password": ""
+}

@@ -1,0 +1,17 @@
+{
+        "Pervaya-galereya": {
+            "name": "Первая галерея",
+            "folder": "test",
+            "text": "This is test gallery",
+            "visible": "true",
+            "images": {
+                "yawn.jpeg": {
+                    "name": "",
+                    "description": "",
+                    "added": "1311702458",
+					"good": "0",
+					"bad": "0"
+                }
+            }
+        }
+}
