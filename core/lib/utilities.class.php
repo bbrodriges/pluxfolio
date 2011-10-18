@@ -48,7 +48,7 @@ class Utilities extends Database {
 		$database = Database::readDB( 'galleries' , true );
 		if( count($database) > 0 ){ //if any gallery exists
 			foreach( $database as $gallery ){
-				foreach( $gallery['images'] ) {
+				foreach( $gallery['images'] as $image ) {
 					$newcount++;
 				}
 			}
