@@ -6,7 +6,8 @@
 
 <div class="container">
 <div class="gallery">
-	{{{gallery_thumbs}}}
-	{{{gallery_imageview}}}
+	{{# thumbs_list }}
+		{{{gallery_thumb}}}<br>{{thumb_name}}
+	{{/ thumbs_list }}
 	<p>{{{gallery_text}}}</p>
 </div>
