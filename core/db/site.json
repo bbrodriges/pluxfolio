@@ -14,6 +14,6 @@
     "showlatestartworks": "false",
 	"sitedescription": "This is a very important block, which can help users to understand that it is a John Doe's site.",
     "latestartworks": [],
-	"login": "",
+	"login": "admin",
     "password": ""
 }
