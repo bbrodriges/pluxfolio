@@ -1,11 +1,10 @@
 <?php
 
-/* THIS IS ONLY A MAJOR OVERVIEW. TOTALLY UNTESTED */
-
 class Templates extends Mustache {
 	
 	public $renderArray; //Contains all data to be passed to Mustache
 	public $pagetype;
+    public $siteSettings;
 
 	/* Function to be called on templates render */
 	public function render( $page ){
@@ -13,14 +12,14 @@ class Templates extends Mustache {
 		$this->renderArray = Array(); //Empty render array. Will contain all necessary mustache tags
 		$this->pagetype = $page;
 		
-		$siteSettings = Database::readDB( 'site' , true );
-		$this->renderArray['homepage'] = $siteSettings['address']; //Site index page
-		$this->renderArray['theme'] = $siteSettings['theme']; //Site theme
-		$this->renderArray['title'] = $siteSettings['title']; //Site title
-		$this->renderArray['subtitle'] = $siteSettings['subtitle']; //Site subtitle
-		$this->renderArray['artworkscounter'] = $siteSettings['totalartworks']; //Total artworks count
-		$this->renderArray['language'] = $siteSettings['language']; //Site language
-		$this->renderArray['version'] = $siteSettings['version']; //Site language
+		$this->siteSettings = Database::readDB( 'site' , true );
+		$this->renderArray['homepage'] = $this->siteSettings['address']; //Site index page
+		$this->renderArray['theme'] = $this->siteSettings['theme']; //Site theme
+		$this->renderArray['title'] = $this->siteSettings['title']; //Site title
+		$this->renderArray['subtitle'] = $this->siteSettings['subtitle']; //Site subtitle
+		$this->renderArray['artworkscounter'] = $this->siteSettings['totalartworks']; //Total artworks count
+		$this->renderArray['language'] = $this->siteSettings['language']; //Site language
+		$this->renderArray['version'] = $this->siteSettings['version']; //Site language
 		
 		/* Data from language files */
 		$this->renderArray['totalartworks'] = Utilities::getTranslation( 'totalartworks' ); //Artworks counter translation
@@ -53,22 +52,22 @@ class Templates extends Mustache {
 				break;
 			case 'index': //Index page. Ganerate articles list
 				$this->renderArray['articles_list'] = $this->itterateArticles( '1' );
-				$totalPages = ceil( count( Utilities::returnVisible( 'articles' ) ) / $siteSettings['articlesperpage'] );
+				$totalPages = ceil( count( Utilities::returnVisible( 'articles' ) ) / $this->siteSettings['articlesperpage'] );
 				$this->compilePagination( '1' , $totalPages );
-				$this->renderArray['site_description'] = $siteSettings['sitedescription']; //Site description
+				$this->renderArray['site_description'] = $this->siteSettings['sitedescription']; //Site description
 				break;
 			case '':
-				header('Location: '.$siteSettings['address'].'/');
+				header('Location: '.$this->siteSettings['address'].'/');
 			case 'page': //if user opens next page of blog
 				if( (int)$_GET['pageid'] < 2 ) {
-					header('Location: '.$siteSettings['address'].'/');
+					header('Location: '.$this->siteSettings['address'].'/');
 				} else {
-					$totalPages = ceil( count( Utilities::returnVisible( 'articles' ) ) / $siteSettings['articlesperpage'] );
+					$totalPages = ceil( count( Utilities::returnVisible( 'articles' ) ) / $this->siteSettings['articlesperpage'] );
 					if( $_GET['pageid'] <= $totalPages ) { //if pageid integer and it is less or equal numbers of total pages
 						$this->pagetype = 'index'; //use index page template
 						$this->compilePagination( $_GET['pageid'] , $totalPages );
 						$this->renderArray['articles_list'] = $this->itterateArticles( $_GET['pageid'] );
-						$this->renderArray['site_description'] = $siteSettings['sitedescription']; //Site description
+						$this->renderArray['site_description'] = $this->siteSettings['sitedescription']; //Site description
 					} else { //return error page
 						$this->complileError();
 						$this->pagetype = 'error';
@@ -84,11 +83,10 @@ class Templates extends Mustache {
 		$this->renderArray['mainmenu'] = $this->compileMainMenu(); //Site main menu 
 		
 		/* Renders header, body and footer of page */
-		$themeFolder = ; //Contains current theme folder path
 		$renderer = new Mustache;
-		echo $renderer->render( file_get_contents( ROOT.'themes/'.$siteSettings['theme'].'/header.tpl' ) , $this->renderArray )."\n";
-		echo $renderer->render( file_get_contents( ROOT.'themes/'.$siteSettings['theme'].'/'.$this->pagetype.'.tpl' ) , $this->renderArray )."\n";
-		echo $renderer->render( file_get_contents( ROOT.'themes/'.$siteSettings['theme'].'/footer.tpl' ) , $this->renderArray );
+		echo $renderer->render( file_get_contents( ROOT.'themes/'.$this->siteSettings['theme'].'/header.tpl' ) , $this->renderArray )."\n";
+		echo $renderer->render( file_get_contents( ROOT.'themes/'.$this->siteSettings['theme'].'/'.$this->pagetype.'.tpl' ) , $this->renderArray )."\n";
+		echo $renderer->render( file_get_contents( ROOT.'themes/'.$this->siteSettings['theme'].'/footer.tpl' ) , $this->renderArray );
 			
 	}
 	
@@ -100,23 +98,23 @@ class Templates extends Mustache {
 		$statics = Utilities::returnVisible( 'statics' );
 		foreach( $statics as $staticid => $static ) {
 			if( $this->pagetype == 'static' && $staticid == $_GET['pageid'] ) {
-				$mainMenu .= '<li class="current"><a href="'.$siteSettings['address'].'/static/'.$staticid.'">'.$static['title'].'</a></li>';
+				$mainMenu .= '<li class="current"><a href="'.$this->siteSettings['address'].'/static/'.$staticid.'">'.$static['title'].'</a></li>';
 			} else {
-				$mainMenu .= '<li><a href="'.$siteSettings['address'].'/static/'.$staticid.'">'.$static['title'].'</a></li>';
+				$mainMenu .= '<li><a href="'.$this->siteSettings['address'].'/static/'.$staticid.'">'.$static['title'].'</a></li>';
 			}
 		}
 		$galleries = Utilities::returnVisible( 'galleries' );
 		foreach( $galleries as $galleryid => $gallery ) {
 			if( $this->pagetype == 'gallery' && $galleryid == $_GET['pageid'] ) {
-				$mainMenu .= '<li class="current"><a href="'.$siteSettings['address'].'/gallery/'.$galleryid.'">'.$gallery['name'].'</a></li>';
+				$mainMenu .= '<li class="current"><a href="'.$this->siteSettings['address'].'/gallery/'.$galleryid.'">'.$gallery['name'].'</a></li>';
 			} else {
-				$mainMenu .= '<li><a href="'.$siteSettings['address'].'/gallery/'.$galleryid.'">'.$gallery['name'].'</a></li>';
+				$mainMenu .= '<li><a href="'.$this->siteSettings['address'].'/gallery/'.$galleryid.'">'.$gallery['name'].'</a></li>';
 			}
 		}
 		if( $this->pagetype == 'index' || $this->pagetype == 'article' ) {
-			$mainMenu .= '<li class="current"><a href="'.$siteSettings['address'].'">'.Utilities::getTranslation( 'blog' ).'</a></li>';
+			$mainMenu .= '<li class="current"><a href="'.$this->siteSettings['address'].'">'.Utilities::getTranslation( 'blog' ).'</a></li>';
 		} else {
-			$mainMenu .= '<li><a href="'.$siteSettings['address'].'">'.Utilities::getTranslation( 'blog' ).'</a></li>';
+			$mainMenu .= '<li><a href="'.$this->siteSettings['address'].'">'.Utilities::getTranslation( 'blog' ).'</a></li>';
 		}
 		return $mainMenu;
 	}
@@ -131,7 +129,7 @@ class Templates extends Mustache {
 			$this->renderArray['article_tags'] = $this->makeTags( $articleData['tags'] );
 			$this->renderArray['article_date'] = date( 'Y.m.d G:i' , $articleData['date'] );
 			$this->renderArray['article_author'] = $articleData['author'];
-			$this->renderArray['article_link'] = $siteSettings['address'].'/article/'.$articleid;
+			$this->renderArray['article_link'] = $this->siteSettings['address'].'/article/'.$articleid;
 			
 			/* Translations */
 			$this->renderArray['tags'] = Utilities::getTranslation( 'tags' );
@@ -150,7 +148,7 @@ class Templates extends Mustache {
 			$tags = explode( ',' , $tags );
 			foreach( $tags as $tag ){
 				$tag = trim( $tag );
-				$tagString .= '<a href="'.$siteSettings['address'].'/tag/'.$tag.'">'.$tag.'</a>, ';
+				$tagString .= '<a href="'.$this->siteSettings['address'].'/tag/'.$tag.'">'.$tag.'</a>, ';
 			}
 			return substr( $tagString , 0 , -2 );
 		}
@@ -180,18 +178,18 @@ class Templates extends Mustache {
 			switch ( $totalpages ) {
 				case 2:
 					if( $page == 1 ) {
-						$pagination = '<li class="current">'.$page.'</li><li><a href="'.$siteSettings['address'].'/page/'.$totalpages.'">'.$totalpages.'</a></li><li><a href="'.$siteSettings['address'].'/page/'.($page+1).'">'.Utilities::getTranslation( 'nextpage' ).'</a> &raquo;</li>';
+						$pagination = '<li class="current">'.$page.'</li><li><a href="'.$this->siteSettings['address'].'/page/'.$totalpages.'">'.$totalpages.'</a></li><li><a href="'.$this->siteSettings['address'].'/page/'.($page+1).'">'.Utilities::getTranslation( 'nextpage' ).'</a> &raquo;</li>';
 					} else {
-						$pagination = '<li>&laquo; <a href="'.$siteSettings['address'].'/page/'.($page-1).'">'.Utilities::getTranslation( 'prevpage' ).'</a></li><li><a href="'.$siteSettings['address'].'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$totalpages.'</li>';
+						$pagination = '<li>&laquo; <a href="'.$this->siteSettings['address'].'/page/'.($page-1).'">'.Utilities::getTranslation( 'prevpage' ).'</a></li><li><a href="'.$this->siteSettings['address'].'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$totalpages.'</li>';
 					}
 					break;
 				default:
 					if( $page > 1 && $page < $totalpages ) {
-						$pagination = '<li>&laquo; <a href="'.$siteSettings['address'].'/page/'.($page-1).'">'.Utilities::getTranslation( 'prevpage' ).'</a></li><li><a href="'.$siteSettings['address'].'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$page.'</li><li><a href="'.$siteSettings['address'].'/page/'.($page+1).'">'. ( $page+1 ) .'</a></li><li><a href="'.$siteSettings['address'].'/page/'.($page+1).'">'.Utilities::getTranslation( 'nextpage' ).'</a> &raquo;</li>';
+						$pagination = '<li>&laquo; <a href="'.$this->siteSettings['address'].'/page/'.($page-1).'">'.Utilities::getTranslation( 'prevpage' ).'</a></li><li><a href="'.$this->siteSettings['address'].'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$page.'</li><li><a href="'.$this->siteSettings['address'].'/page/'.($page+1).'">'. ( $page+1 ) .'</a></li><li><a href="'.$this->siteSettings['address'].'/page/'.($page+1).'">'.Utilities::getTranslation( 'nextpage' ).'</a> &raquo;</li>';
 					} elseif( $page == 1 ) {
-						$pagination = '<li class="current">'.$page.'</li><li><a href="'.$siteSettings['address'].'/page/'.($page+1).'">'.( $page+1 ).'</a></li><li><a href="'.$siteSettings['address'].'/page/'.($page+2).'">'. ( $page+2 ) .'</a></li><li><a href="'.$siteSettings['address'].'/page/'.($page+1).'">'.Utilities::getTranslation( 'nextpage' ).'</a> &raquo;</li>';
+						$pagination = '<li class="current">'.$page.'</li><li><a href="'.$this->siteSettings['address'].'/page/'.($page+1).'">'.( $page+1 ).'</a></li><li><a href="'.$this->siteSettings['address'].'/page/'.($page+2).'">'. ( $page+2 ) .'</a></li><li><a href="'.$this->siteSettings['address'].'/page/'.($page+1).'">'.Utilities::getTranslation( 'nextpage' ).'</a> &raquo;</li>';
 					} elseif( $page == $totalpages )  {
-						$pagination = '<li>&laquo; <a href="'.$siteSettings['address'].'/page/'.($page-1).'">'.Utilities::getTranslation( 'prevpage' ).'</a></li><li><a href="'.$siteSettings['address'].'/page/'.($page-2).'">'.( $page-2 ).'</a></li><li><a href="'.$siteSettings['address'].'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$page.'</li>';
+						$pagination = '<li>&laquo; <a href="'.$this->siteSettings['address'].'/page/'.($page-1).'">'.Utilities::getTranslation( 'prevpage' ).'</a></li><li><a href="'.$this->siteSettings['address'].'/page/'.($page-2).'">'.( $page-2 ).'</a></li><li><a href="'.$this->siteSettings['address'].'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$page.'</li>';
 					}
 					break;
 			}
@@ -207,21 +205,21 @@ class Templates extends Mustache {
 		$articlesData = Utilities::returnVisible( 'articles' );
 		if( !empty( $articlesData ) ) { //At least one visible article exists
 			$articleKeys = array_keys( $articlesData ); //get all keys of visible articles
-			$articleKeys = array_slice( $articleKeys, ($pageNumber-1)*$siteSettings['articlesperpage'], $siteSettings['articlesperpage'] ); //slice articles based on page number
+			$articleKeys = array_slice( $articleKeys, ($pageNumber-1)*$this->siteSettings['articlesperpage'], $this->siteSettings['articlesperpage'] ); //slice articles based on page number
 			if( !empty( $articleKeys ) ) {
 				$articlesArray = Array();
 				foreach( $articleKeys as $articleKey ) {
 					$articlesArray[] = array(
-							'article_title' => $this->siteDB['articles'][$articleKey]['title'],
-							'article_pretext' => $this->siteDB['articles'][$articleKey]['pretext'],
-							'article_text' => $this->siteDB['articles'][$articleKey]['text'],
-							'article_tags' => $this->makeTags( $this->siteDB['articles'][$articleKey]['tags'] ),
-							'article_date' => date( 'Y.m.d G:i' , $this->siteDB['articles'][$articleKey]['date'] ),
-							'article_author' => $this->siteDB['articles'][$articleKey]['author'],
+							'article_title' => $articlesData[$articleKey]['title'],
+							'article_pretext' => $articlesData[$articleKey]['pretext'],
+							'article_text' => $articlesData[$articleKey]['text'],
+							'article_tags' => $this->makeTags( $articlesData[$articleKey]['tags'] ),
+							'article_date' => date( 'Y.m.d G:i' , $articlesData[$articleKey]['date'] ),
+							'article_author' => $articlesData[$articleKey]['author'],
 							'tags' => Utilities::getTranslation( 'tags' ),
 							'publishedby' => Utilities::getTranslation( 'publishedby' ),
 							'publishedat' => Utilities::getTranslation( 'publishedat' ),
-							'article_link' => $siteSettings['address'].'/article/'.$articleKey,
+							'article_link' => $this->siteSettings['address'].'/article/'.$articleKey,
 							'more' => Utilities::getTranslation( 'more' )
 						);
 				}
@@ -240,16 +238,16 @@ class Templates extends Mustache {
 				$articlesArray = Array();
 				foreach( $articleKeys as $articleKey ) {
 					$articlesArray[] = array(
-							'article_title' => $this->siteDB['articles'][$articleKey]['title'],
-							'article_pretext' => $this->siteDB['articles'][$articleKey]['pretext'],
-							'article_text' => $this->siteDB['articles'][$articleKey]['text'],
-							'article_tags' => $this->makeTags( $this->siteDB['articles'][$articleKey]['tags'] ),
-							'article_date' => date( 'Y.m.d G:i' , $this->siteDB['articles'][$articleKey]['date'] ),
-							'article_author' => $this->siteDB['articles'][$articleKey]['author'],
+							'article_title' => $articlesData[$articleKey]['title'],
+							'article_pretext' => $articlesData[$articleKey]['pretext'],
+							'article_text' => $articlesData[$articleKey]['text'],
+							'article_tags' => $this->makeTags( $articlesData[$articleKey]['tags'] ),
+							'article_date' => date( 'Y.m.d G:i' , $articlesData[$articleKey]['date'] ),
+							'article_author' => $articlesData[$articleKey]['author'],
 							'tags' => Utilities::getTranslation( 'tags' ),
 							'publishedby' => Utilities::getTranslation( 'publishedby' ),
 							'publishedat' => Utilities::getTranslation( 'publishedat' ),
-							'article_link' => $siteSettings['address'].'/article/'.$articleKey,
+							'article_link' => $this->siteSettings['address'].'/article/'.$articleKey,
 							'more' => Utilities::getTranslation( 'more' )
 						);
 				}
@@ -259,17 +257,17 @@ class Templates extends Mustache {
 	}
 	
 	/* Compiles gallery */
-	/* REWRITE TO ITERATOR! */
 	public function complileGallery( $galleryid ) {
-		if( isset( $this->siteDB['galleries'][$galleryid] ) && !empty( $this->siteDB['galleries'][$galleryid] ) && $this->siteDB['galleries'][$galleryid]['visible'] == 'true' ) {
-			$this->renderArray['gallery_title'] = $this->siteDB['galleries'][$galleryid]['name'];
-			$this->renderArray['gallery_text'] = $this->siteDB['galleries'][$galleryid]['text'];
-			$galleryImages = $this->siteDB['galleries'][$galleryid]['images'];
-			$thumbsList = '';
+        $galleryData = Utilities::getById( 'gallery' , $galleryid );
+		if( $galleryData && $galleryData['visible'] == 'true' ) {
+			$this->renderArray['gallery_title'] = $galleryData[$galleryid]['name'];
+			$this->renderArray['gallery_text'] = $galleryData[$galleryid]['text'];
+			$galleryImages = $galleryData[$galleryid]['images'];
 			foreach( $galleryImages as $imageFile => $imageData ) {
-				$imageFilePath = $siteSettings['address'].'/galleries/'.$this->siteDB['galleries'][$galleryid]['folder'].'/'.$imageFile;
-				$thumbsList .= '<li><a href="'.$imageFilePath.'" rel="shadowbox" title="'.$imageData['description'].'"><img src="'.$imageFilePath.'.tb" alt="'.$imageData['name'].'"></a></li>';
+				$imageFilePath = $this->siteSettings['address'].'/galleries/'.$galleryData[$galleryid]['folder'].'/'.$imageFile;
+				$thumbsList[] = array( 'gallery_thumb' => '<a href="'.$imageFilePath.'" rel="shadowbox" title="'.$imageData['description'].'"><img src="'.$imageFilePath.'.tb" alt="'.$imageData['name'].'"></a>' );
 			}
+			$this->renderArray['thumbs_list'] = new ArrayIterator( $thumbsList );
 			return true;
 		} else { //no such gallery, or it is empty, or invisible
 			return false;

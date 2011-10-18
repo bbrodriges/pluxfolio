@@ -37,12 +37,8 @@ class Database {
 		switch ( json_last_error() ) {
 			case JSON_ERROR_NONE:
 				return true;
-				die;
-				break;
 			default:
 				return false;
-				die;
-				break;
 		}
 	}
 	

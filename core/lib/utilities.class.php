@@ -48,7 +48,7 @@ class Utilities extends Database {
 		$database = Database::readDB( 'galleries' , true );
 		if( count($database) > 0 ){ //if any gallery exists
 			foreach( $database as $gallery ){
-				foreach( $gallery['images'] as $image ) {
+				foreach( $gallery['images'] ) {
 					$newcount++;
 				}
 			}
@@ -83,7 +83,9 @@ class Utilities extends Database {
 	public function parseError( $error ){
 		if( (int)$error > 1 ) {
 			return self::getTranslation( 'errorcodetitle' ).' '.$error;
-		}
+		} else {
+            return 1;
+        }
 	}
   
 	/* Returns translation from dictionary */

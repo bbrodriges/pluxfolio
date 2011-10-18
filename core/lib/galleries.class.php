@@ -229,6 +229,7 @@ class Artworks extends Galleries {
 				break;
 		}
 		chmod( $filename.'.tb', 0644 );
+        return true;
 	}
 
 }
