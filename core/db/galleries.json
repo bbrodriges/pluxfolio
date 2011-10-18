@@ -2,12 +2,12 @@
         "Pervaya-galereya": {
             "name": "Первая галерея",
             "folder": "test",
-            "text": "This is test gallery",
+            "text": "Это - простая тестовая галерея",
             "visible": "true",
             "images": {
                 "yawn.jpeg": {
-                    "name": "",
-                    "description": "",
+                    "name": "Мальчик",
+                    "description": "Эта картинка всех заставляет зевать",
                     "added": "1311702458",
 					"good": "0",
 					"bad": "0"
