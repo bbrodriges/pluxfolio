@@ -1,0 +1,22 @@
+{
+	"adminpanel": "Панель администратора",
+	"savechanges": "Сохранить изменения",
+	"settings": "Настройки",
+	"settings-help": "На странице настроек вы можете привести сайт к тому виду, который вас устраивает.",
+	"base-settings": "Общие настройки",
+	"site-address": "Адрес сайта",
+	"site-address-help": "не изменяйте адрес без необходимости",
+	"site-title": "Заголовок сайта",
+	"site-subtitle": "Подзаголовок сайта",
+	"site-description": "Краткое описание сайта",
+	"visual-settings": "Настройки отображения",
+	"user-settings": "Настройки пользователя",
+	"yourusername": "Ваше имя пользователя",
+	"oldpassword": "Старый пароль",
+	"newpassword": "Новый пароль",
+	"confirmpassword": "Подтверждение",
+	"galleries": "Галереи",
+	"statics": "Страницы",
+	"blog": "Блог",
+	"poweredby": "Работает на <a href='http://pluxfolio.ru/'>pluxfolio</a> версии"
+}
