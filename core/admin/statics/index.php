@@ -9,9 +9,9 @@
 	$errorText = '';
 	
 	
-	if( !empty( $_POST ) && isset( $_POST['new-gallery-name'] ) ) {
-		$data = Array("name" => $_POST['new-gallery-name'], "folder" => Utilities::Translit( $_POST['new-gallery-name'] ), "visible" => 'true');
-		$returnCode = Utilities::parseError( Galleries::Modify( $data ) ); //capturing errors
+	if( !empty( $_POST ) && isset( $_POST['new-static-name'] ) ) {
+		$data = Array("title" => $_POST['new-static-name'], "text" => $_POST['new-static-text'], "visible" => 'true');
+		$returnCode = Utilities::parseError( Statics::Modify( $data ) ); //capturing errors
 		if( $returnCode == 1 ) {
 			header('Location: ./');
 		} else {
