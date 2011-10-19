@@ -8,8 +8,8 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	
 	<link rel="stylesheet" href="{{homepage}}/themes/{{theme}}/css/style.css" type="text/css">
-	<script src="{{homepage}}/core/js/jquery.js" type="text/javascript"></script>
-	<script src="{{homepage}}/core/js/jquery.gallerific.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="{{homepage}}/core/gallery/shadowbox.css" type="text/css">
+	<script src="{{homepage}}/core/gallery/shadowbox.js" type="text/javascript"></script>
 	
 </head>
 <body>
