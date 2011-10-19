@@ -7,10 +7,10 @@ class Templates extends Mustache {
     public $siteSettings;
 
 	/* Function to be called on templates render */
-	public function render( $page = 'error' ){
+	public function render(){
 		
 		$this->renderArray = Array(); //Empty render array. Will contain all necessary mustache tags
-		$this->pagetype = ( ( $page ) ? $page : 'index' ); // If passed, but it is empty, set - index
+		$this->pagetype = ( ( $_GET['pagetype'] ) ? $_GET['pagetype'] : 'index' ); // If passed, but it is empty, set - index
 		
 		$this->siteSettings = Database::readDB( 'site' , true );
 		$this->renderArray['homepage'] = $this->siteSettings['address']; //Site index page

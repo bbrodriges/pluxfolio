@@ -16,6 +16,6 @@
 	
 	/* Rendering current template */
 	$Template = new Templates;
-	$Template->render( $_GET['pagetype'] );
+	$Template->render();
 	
 ?>
