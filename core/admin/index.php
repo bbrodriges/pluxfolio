@@ -30,10 +30,10 @@
 				<div class="subtitle"><?php echo $dictionary['adminpanel']; ?></div>
 			</div>
 			<div class="main-menu">
-				<li><a><?php echo $dictionary['blog']; ?></a></li>
-				<li><a><?php echo $dictionary['statics']; ?></a></li>
-				<li><a><?php echo $dictionary['galleries']; ?></a></li>
-				<li class="current"><a><?php echo $dictionary['settings']; ?></a></li>
+				<li><a href="<?php echo $database['address']; ?>/core/admin/blog/"><?php echo $dictionary['blog']; ?></a></li>
+				<li><a href="<?php echo $database['address']; ?>/core/admin/statics/"><?php echo $dictionary['statics']; ?></a></li>
+				<li><a href="<?php echo $database['address']; ?>/core/admin/galleries/"><?php echo $dictionary['galleries']; ?></a></li>
+				<li class="current"><a href="<?php echo $database['address']; ?>/core/admin/"><?php echo $dictionary['settings']; ?></a></li>
 			</div>
 		</div>
 	</div>

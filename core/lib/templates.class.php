@@ -93,13 +93,10 @@ class Templates extends Mustache {
 	/* Compiles main menu */
 	public function compileMainMenu() {
 		$mainMenu = '';
-		$statics = Utilities::returnVisible( 'statics' );
-		foreach( $statics as $staticid => $static ) {
-			if( $this->pagetype == 'static' && $staticid == $_GET['pageid'] ) {
-				$mainMenu .= '<li class="current"><a href="'.$this->siteSettings['address'].'/static/'.$staticid.'">'.$static['title'].'</a></li>';
-			} else {
-				$mainMenu .= '<li><a href="'.$this->siteSettings['address'].'/static/'.$staticid.'">'.$static['title'].'</a></li>';
-			}
+		if( $this->pagetype == 'index' || $this->pagetype == 'article' ) {
+			$mainMenu .= '<li class="current"><a href="'.$this->siteSettings['address'].'">'.Utilities::getTranslation( 'blog' ).'</a></li>';
+		} else {
+			$mainMenu .= '<li><a href="'.$this->siteSettings['address'].'">'.Utilities::getTranslation( 'blog' ).'</a></li>';
 		}
 		$galleries = Utilities::returnVisible( 'galleries' );
 		foreach( $galleries as $galleryid => $gallery ) {
@@ -109,10 +106,13 @@ class Templates extends Mustache {
 				$mainMenu .= '<li><a href="'.$this->siteSettings['address'].'/gallery/'.$galleryid.'">'.$gallery['name'].'</a></li>';
 			}
 		}
-		if( $this->pagetype == 'index' || $this->pagetype == 'article' ) {
-			$mainMenu .= '<li class="current"><a href="'.$this->siteSettings['address'].'">'.Utilities::getTranslation( 'blog' ).'</a></li>';
-		} else {
-			$mainMenu .= '<li><a href="'.$this->siteSettings['address'].'">'.Utilities::getTranslation( 'blog' ).'</a></li>';
+		$statics = Utilities::returnVisible( 'statics' );
+		foreach( $statics as $staticid => $static ) {
+			if( $this->pagetype == 'static' && $staticid == $_GET['pageid'] ) {
+				$mainMenu .= '<li class="current"><a href="'.$this->siteSettings['address'].'/static/'.$staticid.'">'.$static['title'].'</a></li>';
+			} else {
+				$mainMenu .= '<li><a href="'.$this->siteSettings['address'].'/static/'.$staticid.'">'.$static['title'].'</a></li>';
+			}
 		}
 		return $mainMenu;
 	}
@@ -261,9 +261,13 @@ class Templates extends Mustache {
 			$this->renderArray['gallery_title'] = $galleryData['name'];
 			$this->renderArray['gallery_text'] = $galleryData['text'];
 			$galleryImages = $galleryData['images'];
-			foreach( $galleryImages as $imageFile => $imageData ) {
-				$imageFilePath = $this->siteSettings['address'].'/galleries/'.$galleryData['folder'].'/'.$imageFile;
-				$thumbsList[] = array( 'gallery_thumb' => '<a href="'.$imageFilePath.'" rel="shadowbox" title="'.$imageData['description'].'"><img src="'.$imageFilePath.'.tb" alt="'.$imageData['name'].'"></a>', 'thumb_name' => $imageData['name'], 'thumb_description' => $imageData['description'] );
+			if( !empty( $galleryImages ) ) {
+				foreach( $galleryImages as $imageFile => $imageData ) {
+					$imageFilePath = $this->siteSettings['address'].'/galleries/'.$galleryData['folder'].'/'.$imageFile;
+					$thumbsList[] = array( 'gallery_thumb' => '<a href="'.$imageFilePath.'" rel="shadowbox" title="'.$imageData['description'].'"><img src="'.$imageFilePath.'.tb" alt="'.$imageData['name'].'"></a>', 'thumb_name' => $imageData['name'], 'thumb_description' => $imageData['description'] );
+				}
+			} else {
+				$thumbsList[] = array();
 			}
 			$this->renderArray['thumbs_list'] = new ArrayIterator( $thumbsList );
 			return true;

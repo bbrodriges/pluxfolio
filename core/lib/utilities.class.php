@@ -82,7 +82,7 @@ class Utilities extends Database {
 	/* Displays human readable error */
 	public function parseError( $error ){
 		if( (int)$error > 1 ) {
-			return self::getTranslation( 'errorcodetitle' ).' '.$error;
+			return self::getTranslation( 'errorcodetitle' ).' <strong>'.$error.'</strong>';
 		} else {
             return 1;
         }

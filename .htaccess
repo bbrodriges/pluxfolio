@@ -8,4 +8,4 @@ RewriteRule ^([^/]*)/([^/]*)$ index.php?pagetype=$1&pageid=$2 [L]
 ErrorDocument 404            /error/404
 
 php_flag display_errors on 
-php_value error_reporting 6
+php_value error_reporting 30711

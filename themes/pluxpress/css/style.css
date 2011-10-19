@@ -59,13 +59,13 @@ div.header {
 	
 	div.header div.main-menu {
 		width: 600px;
-		float: left;
+		float: right;
 		margin-top: 60px;
 	}
-
+		
 		div.header div.main-menu li {
 			list-style-type: none;
-			float: right;
+			float: left;
 			padding: 5px 10px;
 		}
 			
