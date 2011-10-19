@@ -67,7 +67,7 @@
 			<p><label for="articles-per-page"><?php echo $dictionary['articles-per-page']; ?>: </label><input name="articles-per-page" id="articles-per-page" value="<?php echo $database['articlesperpage']; ?>" size="2"></p>
 			
 			<p><strong><?php echo $dictionary['galleries-settings']; ?></strong></p>
-			<p><label for="artworks-vote"><?php echo $dictionary['artworks-vote']; ?>: </label><select name="" id=""><?php echo Utilities::onOffList( 'showvotes' );?></select></p>
+			<p><label for="artworks-vote"><?php echo $dictionary['artworks-vote']; ?>: </label><select name="artworks-vote" id="artworks-vote"><?php echo Utilities::onOffList( 'showvotes' );?></select> &nbsp; <label for="artworks-counter"><?php echo $dictionary['artworks-counter']; ?>: </label><select name="artworks-counter" id="artworks-counter"><?php echo Utilities::onOffList( 'showartworkscounter' );?></select> &nbsp; <label for="latest-artworks"><?php echo $dictionary['latest-artworks']; ?>: </label><select name="latest-artworks" id="latest-artworks"><?php echo Utilities::onOffList( 'showlatestartworks' );?></select></p>
 			
 			<p><strong><?php echo $dictionary['thumbs-dimensions']; ?></strong></p>
 			<p><label for="thumb-width"><?php echo $dictionary['thumb-width']; ?>: </label><input name="thumb-width" id="thumb-width" value="<?php echo $thumbWidth; ?>" size="4"><span class="help">px</span> &nbsp;&nbsp; <label for="thumb-height"><?php echo $dictionary['thumb-height']; ?>: </label><input name="thumb-height" id="thumb-height" value="<?php echo $thumbHeight; ?>" size="4"><span class="help">px</span></p>

@@ -8,7 +8,7 @@
     "thumbsize": "200x150",
     "articlesperpage": "2",
     "showvotes": "false",
-    "showartworkscounter": "true",
+    "showartworkscounter": "false",
     "language": "ru",
     "theme": "pluxpress",
     "showlatestartworks": "false",

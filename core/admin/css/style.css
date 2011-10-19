@@ -137,6 +137,11 @@ p.confirm-button {
 		background: #d6d6d6;
 		color: #555;
 	}
+	
+	p.confirm-button input[type="submit"]:hover {
+		background: #555;
+		color: #d6d6d6;
+	}
 
 div.footer {
 	width: 100%;
