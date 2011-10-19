@@ -10,10 +10,6 @@ body {
 	color: #555;
 }
 
-textarea {
-    resize: none;
-}
-
 div.container {
 	width: 900px;
 	margin: 0 auto;
@@ -150,6 +146,10 @@ li.gallery-item {
 	width: 33%;
 	text-align: center;
 }
+
+	li.gallery-item a{
+		color: #555;
+	}
 
 div.footer {
 	width: 100%;

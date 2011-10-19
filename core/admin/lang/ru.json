@@ -18,9 +18,6 @@
 	"site-theme": "Тема оформления",
 	"site-language": "Язык сайта",
 	"galleries-settings": "Галереи",
-	"new-gallery": "Новая галерея",
-	"new-gallery-name": "Название",
-	"existing-galleries": "Галереи",
 	"artworks-vote": "Оценивание работ",
 	"artworks-counter": "Счетчик работ",
 	"latest-artworks": "Последние работы на главной",
@@ -34,7 +31,13 @@
 	"newpassword": "Новый пароль",
 	"confirmpassword": "Подтверждение",
 	"galleries": "Галереи",
+	"new-gallery": "Новая галерея",
+	"new-gallery-name": "Название",
+	"existing-galleries": "Галереи",
 	"statics": "Страницы",
+	"new-static": "Новая страница",
+	"existing-statics": "Страницы",
+	"new-static-text": "Содержание страницы",
 	"blog": "Блог",
 	"poweredby": "Работает на <a href='http://pluxfolio.ru/'>pluxfolio</a> версии"
 }

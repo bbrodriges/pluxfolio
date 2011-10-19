@@ -5,7 +5,7 @@
 	
 	$dictionary = $dictionary = json_decode( file_get_contents( ROOT.'core/admin/lang/'.Utilities::readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
 	$database = Database::readDB( 'site' , true ); //reads site info
-	$galleries = Database::readDB( 'galleries' , true ); //reads galleries
+	$statics = Database::readDB( 'statics' , true ); //reads statics
 	$errorText = '';
 	
 	
@@ -43,8 +43,8 @@
 			</div>
 			<div class="main-menu">
 				<li><a href="<?php echo $database['address']; ?>/core/admin/blog/"><?php echo $dictionary['blog']; ?></a></li>
-				<li><a href="<?php echo $database['address']; ?>/core/admin/statics/"><?php echo $dictionary['statics']; ?></a></li>
-				<li class="current"><a href="<?php echo $database['address']; ?>/core/admin/galleries/"><?php echo $dictionary['galleries']; ?></a></li>
+				<li class="current"><a href="<?php echo $database['address']; ?>/core/admin/statics/"><?php echo $dictionary['statics']; ?></a></li>
+				<li><a href="<?php echo $database['address']; ?>/core/admin/galleries/"><?php echo $dictionary['galleries']; ?></a></li>
 				<li><a href="<?php echo $database['address']; ?>/core/admin/"><?php echo $dictionary['settings']; ?></a></li>
 			</div>
 		</div>
@@ -58,25 +58,25 @@
 	<div class="container">
 	
 		<fieldset>
-			<legend><h3><?php echo $dictionary['new-gallery']; ?></h3></legend>
+			<legend><h3><?php echo $dictionary['new-static']; ?></h3></legend>
 			<form method="post">
-				<p><label for="new-gallery-name"><?php echo $dictionary['new-gallery-name']; ?>: </label><input name="new-gallery-name" id="new-gallery-name" size="55"></span> <?php echo $errorText;?></p>
-				<p class="confirm-button"><input type="submit" value="<?php echo $dictionary['savechanges']; ?>"></p>
+				<p><label for="new-static-name"><?php echo $dictionary['new-gallery-name']; ?>: </label><input name="new-static-name" id="new-static-name" size="55"></span> </p>
+				
+				<p><label for="new-static-text"><?php echo $dictionary['new-static-text']; ?>: </label><br><textarea name="new-static-text" cols="100" rows="12"></textarea></p>
+				
+				<p class="confirm-button"> <?php echo $errorText;?> <input type="submit" value="<?php echo $dictionary['savechanges']; ?>"></p>
 			</form>
 		</fieldset>
 		
 		<fieldset>
-			<legend><h3><?php echo $dictionary['existing-galleries']; ?></h3></legend>
+			<legend><h3><?php echo $dictionary['existing-statics']; ?></h3></legend>
 			
 			<?php
 			
-				foreach( $galleries as $galleryid => $gallery ) {
-					echo '<li class="gallery-item"><a href="edit.php?id='.$galleryid.'">';
-					foreach( $gallery['images'] as $filename => $fileinfo ) {
-						echo '<img src="'.$database['address'].'/galleries/'.$gallery['folder'].'/'.$filename.'.tb">';
-						break;
-					}
-					echo '<br>'.$gallery['name'].'</a></li>';
+				foreach( $statics as $staticid => $static ) {
+					echo '<li class="gallery-item"><a href="edit.php?id='.$staticid.'">';
+					echo $static['title'];
+					echo '</a></li>';
 				}
 				
 			?>

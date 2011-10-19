@@ -71,12 +71,12 @@
 			<?php
 			
 				foreach( $galleries as $galleryid => $gallery ) {
-					echo '<li class="gallery-item"><a href="edit.php?id='.$galleryid.'">';
+					echo '<li class="gallery-item">';
 					foreach( $gallery['images'] as $filename => $fileinfo ) {
 						echo '<img src="'.$database['address'].'/galleries/'.$gallery['folder'].'/'.$filename.'.tb">';
 						break;
 					}
-					echo '<br>'.$gallery['name'].'</a></li>';
+					echo '<br>'.$gallery['name'].'</li>';
 				}
 				
 			?>
