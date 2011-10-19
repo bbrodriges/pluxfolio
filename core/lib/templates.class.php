@@ -10,7 +10,7 @@ class Templates extends Mustache {
 	public function render(){
 		
 		$this->renderArray = Array(); //Empty render array. Will contain all necessary mustache tags
-		$this->pagetype = $_GET['pagetype'];
+		$this->pagetype = ( ( $_GET['pagetype'] ) ? $_GET['pagetype'] : 'index' ); // If passed, but it is empty, set - index
 		
 		$this->siteSettings = Database::readDB( 'site' , true );
 		$this->renderArray['homepage'] = $this->siteSettings['address']; //Site index page
@@ -51,13 +51,6 @@ class Templates extends Mustache {
 				$this->renderArray['filteredtagtitle'] = Utilities::getTranslation( 'filteredtag' );
 				break;
 			case 'index': //Index page. Ganerate articles list
-				$this->renderArray['articles_list'] = $this->itterateArticles( '1' );
-				$totalPages = ceil( count( Utilities::returnVisible( 'articles' ) ) / $this->siteSettings['articlesperpage'] );
-				$this->compilePagination( '1' , $totalPages );
-				$this->renderArray['site_description'] = $this->siteSettings['sitedescription']; //Site description
-				break;
-			case '':
-				$this->pagetype = 'index'; //use index page template
 				$this->renderArray['articles_list'] = $this->itterateArticles( '1' );
 				$totalPages = ceil( count( Utilities::returnVisible( 'articles' ) ) / $this->siteSettings['articlesperpage'] );
 				$this->compilePagination( '1' , $totalPages );
