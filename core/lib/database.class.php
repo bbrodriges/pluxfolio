@@ -8,8 +8,9 @@ class Database {
 	}
 	
 	/* Opens DB an wrtie changes */
+	/* $data must be array! */
 	public function writeDB( $database, $data ) { //input is a whole DB with changes. Array or Object.
-		$data = json_encode( (object) $data );
+		$data = self::jsonEncode( $data );
 		if( self::checkDatabase( $data ) ) {
 			if(	$fp = fopen( ROOT.'core/db/'.$database.'.json' , 'w' ) ) {
 				fwrite( $fp , $data );
@@ -40,6 +41,16 @@ class Database {
 			default:
 				return false;
 		}
+	}
+	
+	/* JSON encode with JSON_UNESCAPED_UNICODE */
+	function jsonEncode($arr) {
+        array_walk_recursive($arr, function (&$item, $key) { 
+			if (is_string($item)) 
+				$item = mb_encode_numericentity($item, array (0x80, 0xffff, 0, 0xffff), 'UTF-8'); 
+			}
+		);
+        return mb_decode_numericentity(json_encode($arr), array (0x80, 0xffff, 0, 0xffff), 'UTF-8');
 	}
 	
 }
