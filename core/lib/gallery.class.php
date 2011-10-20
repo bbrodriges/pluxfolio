@@ -8,7 +8,7 @@ class CGallery extends Database {
 		$galleryData = Utilities::getById( 'galleries' , $_GET['pageid'] );
 		if( $galleryData && $galleryData['visible'] == 'true' ) {
 			$renderArray['gallery_title'] = $galleryData['name'];
-			$renderArray['gallery_text'] = Utilities::makeLinks( $galleryData['text'] );
+			$renderArray['gallery_text'] = $galleryData['text'];
 			$galleryImages = $galleryData['images'];
 			if( !empty( $galleryImages ) ) {
 				foreach( $galleryImages as $imageFile => $imageData ) {

@@ -260,21 +260,6 @@ class Utilities extends Database {
 		return new ArrayIterator( $articlesArray );
 	}
 	
-	/* Compiles article tags */
-	public function makeTags( $tags ) {
-		if( !empty( $tags ) ) {
-			$tagString = '';
-			$tags = explode( ',' , $tags );
-			foreach( $tags as $tag ){
-				$tag = trim( $tag );
-				$tagString .= '<a href="'.self::readSiteData( 'address' ).'/tag/'.$tag.'">'.$tag.'</a>, ';
-			}
-			return substr( $tagString , 0 , -2 );
-		} else {
-			return self::getTranslation( 'notags' );
-		}
-	}
-	
 	/* Converts http and www into clickable links */
 	public function makeLinks($text) {
 		$text = preg_replace('%(((f|ht){1}tp://)[-a-zA-^Z0-9@:\%_\+.~#?&//=]+)%i',

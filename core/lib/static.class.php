@@ -8,7 +8,7 @@ class CStatic extends Database {
 		$staticData = Utilities::getById( 'statics' , $_GET['pageid'] );
 		if( $staticData && $staticData['visible'] == 'true' ) { //Static exists and available for reading. Proceed compiling
 			$renderArray['static_title'] = $staticData['title'];
-			$renderArray['static_text'] = Utilities::makeLinks( $staticData['text'] );
+			$renderArray['static_text'] = $staticData['text'];
 			$renderer->renderPage( 'static' , $renderArray );
 		} else { //Static does not exists. Return redirect to error page
 			$renderer->complileError();

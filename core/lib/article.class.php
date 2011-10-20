@@ -7,8 +7,8 @@ class CArticle extends Database {
 		$articleData = Utilities::getById( 'articles' , $_GET['pageid'] );
 		if( $articleData && $articleData['visible'] == 'true' ) { //Article exists and available for reading. Proceed compiling
 			$renderArray['article_title'] = $articleData['title'];
-			$renderArray['article_pretext'] = Utilities::makeLinks( $articleData['pretext'] );
-			$renderArray['article_text'] = Utilities::makeLinks( $articleData['text'] );
+			$renderArray['article_pretext'] = $articleData['pretext'];
+			$renderArray['article_text'] = $articleData['text'];
 			$renderArray['article_tags'] = Utilities::makeTags( $articleData['tags'] );
 			$renderArray['article_date'] = date( 'Y.m.d G:i' , $articleData['date'] );
 			$renderArray['article_author'] = $articleData['author'];
