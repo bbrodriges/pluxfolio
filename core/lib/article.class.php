@@ -13,6 +13,7 @@ class CArticle extends Database {
 			$renderArray['article_date'] = date( 'Y.m.d G:i' , $articleData['date'] );
 			$renderArray['article_author'] = $articleData['author'];
 			$renderArray['article_link'] = Utilities::readSiteData( 'address' ).'/article/'.$articleid;
+			$renderArray['site_description'] = Utilities::readSiteData( 'sitedescription' );
 			
 			/* Translations */
 			$renderArray['tags'] = Utilities::getTranslation( 'tags' );
@@ -70,6 +71,10 @@ class CIndex {
 	public function init() {
 		$renderArray['articles_list'] = Utilities::itterateArticles( 1 );
 		$renderArray['pagination'] = Utilities::Pagination( 1 );
+		$renderArray['toptags'] = Utilities::makeTags( implode( ',' , Utilities::readSiteData( 'toptags' ) ) , true );
+		$renderArray['toptagstitle'] = Utilities::getTranslation( 'toptagstitle' );
+		$renderArray['site_description'] = Utilities::readSiteData( 'sitedescription' );
+		
 		$renderer = new Mustache;
 		$renderer->renderPage( 'index' , $renderArray );
 	}
@@ -103,6 +108,11 @@ class CTag {
 			}
 		}
 		$renderArray['articles_list'] = new ArrayIterator( $articlesArray );
+		$renderArray['toptags'] = Utilities::makeTags( implode( ',' , Utilities::readSiteData( 'toptags' ) ) , true );
+		$renderArray['toptagstitle'] = Utilities::getTranslation( 'toptagstitle' );
+		$renderArray['filteredtagtitle'] = Utilities::getTranslation( 'filteredtag' );
+		$renderArray['filtered_tag'] = $_GET['pageid'];
+		
 		$renderer = new Mustache;
 		$renderer->renderPage( 'index' , $renderArray );
 	}
@@ -131,6 +141,10 @@ class CPage {
 			$pageNumber = ( ( $_GET['pageid'] ) ? $_GET['pageid'] : 1 ); //if no page given - it is first page
 			$renderArray['articles_list'] = Utilities::itterateArticles( $pageNumber );
 			$renderArray['pagination'] = Utilities::Pagination( $_GET['pageid'] );
+			$renderArray['toptags'] = Utilities::makeTags( implode( ',' , Utilities::readSiteData( 'toptags' ) ) , true );
+			$renderArray['toptagstitle'] = Utilities::getTranslation( 'toptagstitle' );
+			$renderArray['site_description'] = Utilities::readSiteData( 'sitedescription' );
+			
 			$renderer->renderPage( 'index' , $renderArray );
 		} else {
 			$renderer->complileError();

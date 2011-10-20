@@ -15,6 +15,12 @@ div.container {
 	margin: 0 auto;
 }
 
+.clearer {
+	width: 100%;
+	clear: both;
+	visibility: hidden;
+}
+
 div.header {
 	background: #CACACA;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#e3e3e3), to(#d6d6d6)); /* Saf4+, Chrome */
@@ -105,6 +111,16 @@ div.informer {
 		font-size: 1.2em;
 	}
 	
+	div.informer div.container strong {
+		color: #21759B;
+	}
+	
+div.articleslist {
+	width: 600px;
+	margin-right: 30px;
+	float: left;
+}
+	
 div.article {
 	padding-bottom: 20px;
 }
@@ -145,6 +161,25 @@ div.article {
 			color: #BBB;
 			text-decoration: underline;
 		}
+		
+div.toptags {
+	width: 270px;
+	float: right;
+}
+
+	div.toptags h4 {
+		color: #BBB;
+		padding-bottom: 5px;
+		margin-bottom: 5px;
+		border-bottom: 1px solid #BBB;
+	}
+
+	div.toptags a {
+		width: 100%;
+		float: left;
+		padding: 5px 10px 5px 20px;
+		color: #21759B;
+	}
 	
 div.pagination {
 	padding-bottom: 50px;
@@ -172,7 +207,7 @@ div.static, div.gallery, div.error {
 
 div.footer {
 	width: 100%;
-	clear: both;
+	float: left;
 	border-top: 1px solid #DEDEDE;
 	color: #BBB;
 	font-size: 0.7em;

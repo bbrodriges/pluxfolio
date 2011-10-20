@@ -195,7 +195,7 @@ class Utilities extends Database {
 		$renderArray['subtitle'] = $siteSettings['subtitle']; //Site subtitle
 		$renderArray['artworkscounter'] = $siteSettings['totalartworks']; //Total artworks count
 		$renderArray['language'] = $siteSettings['language']; //Site language
-		$renderArray['version'] = $siteSettings['version']; //Site language
+		$renderArray['version'] = file_get_contents( $siteSettings['address'].'/core/db/version' );
 		
 		/* Data from language files */
 		$renderArray['totalartworks'] = self::getTranslation( 'totalartworks' ); //Artworks counter translation
@@ -261,13 +261,17 @@ class Utilities extends Database {
 	}
 	
 	/* Compiles article tags */
-	public function makeTags( $tags ) {
+	/* If $toptags = true removes commas between tags */
+	public function makeTags( $tags , $toptags = false ) {
 		if( !empty( $tags ) ) {
 			$tagString = '';
 			$tags = explode( ',' , $tags );
 			foreach( $tags as $tag ){
 				$tag = trim( $tag );
-				$tagString .= '<a href="'.self::readSiteData( 'address' ).'/tag/'.$tag.'">'.$tag.'</a>, ';
+				$tagString .= '<a href="'.self::readSiteData( 'address' ).'/tag/'.$tag.'">'.$tag.'</a>';
+				if( !$toptags ) {
+					$tagString .= ', ';
+				}
 			}
 			return substr( $tagString , 0 , -2 );
 		} else {
