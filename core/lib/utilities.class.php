@@ -174,6 +174,149 @@ class Utilities extends Database {
 			return '<option value="true">'.$dictionary['enabled'].'</option><option value="false" selected>'.$dictionary['disabled'].'</option>';
 		}
 	}
+	
+	/* Returns page type */
+	public function getPageType() {
+		$acceptable = array( 'index' , 'page' , 'tag' , 'article' , 'gallery' , 'static' ); //acceptable page types
+		$page = ( ( $_GET['pagetype'] ) ? $_GET['pagetype'] : 'index' );
+		if( !in_array( $page , $acceptable ) ) {
+			return 'error';
+		} else {
+			return $page;
+		}
+	}
+	
+	/* Returns templates tags for all pages */
+	public function renderDefault() {
+		$siteSettings = Database::readDB( 'site' , true );
+		$renderArray['homepage'] = $siteSettings['address']; //Site index page
+		$renderArray['theme'] = $siteSettings['theme']; //Site theme
+		$renderArray['title'] = $siteSettings['title']; //Site title
+		$renderArray['subtitle'] = $siteSettings['subtitle']; //Site subtitle
+		$renderArray['artworkscounter'] = $siteSettings['totalartworks']; //Total artworks count
+		$renderArray['language'] = $siteSettings['language']; //Site language
+		$renderArray['version'] = $siteSettings['version']; //Site language
+		
+		/* Data from language files */
+		$renderArray['totalartworks'] = self::getTranslation( 'totalartworks' ); //Artworks counter translation
+		$renderArray['footer'] = self::getTranslation( 'footer' ); //Site footer translation
+		
+		/* Compiles main menu */
+		$renderArray['mainmenu'] = '';
+		$current = ' class="current"';
+		
+		$renderArray['mainmenu'] .= '<li';
+		if( in_array( self::getPageType() , array( 'index' , 'page' , 'article' , 'tag' ) ) ) {
+			$renderArray['mainmenu'] .= $current;
+		}
+		$renderArray['mainmenu'] .= '><a href="'.$siteSettings['address'].'">'.self::getTranslation( 'blog' ).'</a></li>';
+		$galleries = self::returnVisible( 'galleries' );
+		foreach( $galleries as $galleryid => $gallery ) {
+			$renderArray['mainmenu'] .= '<li';
+			if( self::getPageType() == 'gallery' && $galleryid == $_GET['pageid'] ) {
+				$renderArray['mainmenu'] .= $current;
+			}
+			$renderArray['mainmenu'] .= '><a href="'.$siteSettings['address'].'/gallery/'.$galleryid.'">'.$gallery['name'].'</a></li>';
+		}
+		$statics = self::returnVisible( 'statics' );
+		foreach( $statics as $staticid => $static ) {
+			$renderArray['mainmenu'] .= '<li';
+			if( self::getPageType() == 'static' && $staticid == $_GET['pageid'] ) {
+				$renderArray['mainmenu'] .= $current;
+			}
+			$renderArray['mainmenu'] .= '><a href="'.$siteSettings['address'].'/static/'.$staticid.'">'.$static['title'].'</a></li>';
+		}
+		
+		return $renderArray;
+	}
+	
+	/* Itterates through all visible articles and return result to mustache tags */
+	public function itterateArticles( $pageNumber ) {
+		$siteSettings = Database::readDB( 'site' , true );
+		$articlesArray[] = array('article_title' => self::getTranslation( 'noarticles' ) );
+		$articlesData = self::returnVisible( 'articles' );
+		if( !empty( $articlesData ) ) { //At least one visible article exists
+			$articleKeys = array_keys( $articlesData ); //get all keys of visible articles
+			$articleKeys = array_slice( $articleKeys, ($pageNumber-1)*$siteSettings['articlesperpage'], $siteSettings['articlesperpage'] ); //slice articles based on page number
+			if( !empty( $articleKeys ) ) {
+				$articlesArray = Array();
+				foreach( $articleKeys as $articleKey ) {
+					$articlesArray[] = array(
+							'article_title' => $articlesData[$articleKey]['title'],
+							'article_pretext' => $articlesData[$articleKey]['pretext'],
+							'article_text' => $articlesData[$articleKey]['text'],
+							'article_tags' => self::makeTags( $articlesData[$articleKey]['tags'] ),
+							'article_date' => date( 'Y.m.d G:i' , $articlesData[$articleKey]['date'] ),
+							'article_author' => $articlesData[$articleKey]['author'],
+							'tags' => self::getTranslation( 'tags' ),
+							'publishedby' => self::getTranslation( 'publishedby' ),
+							'publishedat' => self::getTranslation( 'publishedat' ),
+							'article_link' => $siteSettings['address'].'/article/'.$articleKey,
+							'more' => self::getTranslation( 'more' )
+						);
+				}
+			}
+		}
+		return new ArrayIterator( $articlesArray );
+	}
+	
+	/* Compiles article tags */
+	public function makeTags( $tags ) {
+		if( !empty( $tags ) ) {
+			$tagString = '';
+			$tags = explode( ',' , $tags );
+			foreach( $tags as $tag ){
+				$tag = trim( $tag );
+				$tagString .= '<a href="'.self::readSiteData( 'address' ).'/tag/'.$tag.'">'.$tag.'</a>, ';
+			}
+			return substr( $tagString , 0 , -2 );
+		} else {
+			return self::getTranslation( 'notags' );
+		}
+	}
+	
+	/* Converts http and www into clickable links */
+	public function makeLinks($text) {
+		$text = preg_replace('%(((f|ht){1}tp://)[-a-zA-^Z0-9@:\%_\+.~#?&//=]+)%i',
+		'<a href="\\1">\\1</a>', $text);
+		$text = preg_replace('%([[:space:]()[{}])(www.[-a-zA-Z0-9@:\%_\+.~#?&//=]+)%i',
+		'\\1<a href="http://\\2">\\2</a>', $text);
+		return $text;
+	}
+	
+	/* Compiles pagination */
+	function Pagination( $page ) {
+		$totalpages = self::paginationPages();
+		if( $totalpages > 1 ) {
+			$address = self::readSiteData( 'address' );
+			switch ( $totalpages ) {
+				case 2:
+					if( $page == 1 ) {
+						$pagination = '<li class="current">'.$page.'</li><li><a href="'.$address.'/page/'.$totalpages.'">'.$totalpages.'</a></li><li><a href="'.$address.'/page/'.($page+1).'">'.self::getTranslation( 'nextpage' ).'</a> &raquo;</li>';
+					} else {
+						$pagination = '<li>&laquo; <a href="'.$address.'/page/'.($page-1).'">'.self::getTranslation( 'prevpage' ).'</a></li><li><a href="'.$address.'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$totalpages.'</li>';
+					}
+					break;
+				default:
+					if( $page > 1 && $page < $totalpages ) {
+						$pagination = '<li>&laquo; <a href="'.$address.'/page/'.($page-1).'">'.self::getTranslation( 'prevpage' ).'</a></li><li><a href="'.$address.'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$page.'</li><li><a href="'.$address.'/page/'.($page+1).'">'. ( $page+1 ) .'</a></li><li><a href="'.$address.'/page/'.($page+1).'">'.self::getTranslation( 'nextpage' ).'</a> &raquo;</li>';
+					} elseif( $page == 1 ) {
+						$pagination = '<li class="current">'.$page.'</li><li><a href="'.$address.'/page/'.($page+1).'">'.( $page+1 ).'</a></li><li><a href="'.$address.'/page/'.($page+2).'">'. ( $page+2 ) .'</a></li><li><a href="'.$address.'/page/'.($page+1).'">'.self::getTranslation( 'nextpage' ).'</a> &raquo;</li>';
+					} elseif( $page == $totalpages )  {
+						$pagination = '<li>&laquo; <a href="'.$address.'/page/'.($page-1).'">'.self::getTranslation( 'prevpage' ).'</a></li><li><a href="'.$address.'/page/'.($page-2).'">'.( $page-2 ).'</a></li><li><a href="'.$address.'/page/'.($page-1).'">'.( $page-1 ).'</a></li><li class="current">'.$page.'</li>';
+					}
+					break;
+			}
+		} else {
+			$pagination = '';
+		}
+		return $pagination;
+	}
+	
+	/* Counts number of total pages in pagination */
+	public function paginationPages() {
+		return ceil( count( self::returnVisible( 'articles' ) ) / self::readSiteData( 'articlesperpage' ) );
+	}
   
 }
 

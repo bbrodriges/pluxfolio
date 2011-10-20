@@ -857,6 +857,22 @@ class Mustache {
 	protected function _varIsCallable($var) {
 	  return !is_string($var) && is_callable($var);
 	}
+	
+	/* Compiles error page */
+	public function complileError() {
+		$renderArray['error_code'] = '404';
+		$renderArray['error_title'] = Utilities::getTranslation( 'errortitle' );
+		$renderArray['error_text'] = Utilities::getTranslation( 'errortext' );
+		$this->renderPage( 'error' , $renderArray );
+		die;
+	}
+	
+	public function renderPage( $page , $array ){
+		$array = array_merge( Utilities::renderDefault() , $array ); //appending defaul tags
+		echo $this->render( file_get_contents( ROOT.'themes/'.Utilities::readSiteData( 'theme' ).'/header.tpl' ) , $array )."\n";
+		echo $this->render( file_get_contents( ROOT.'themes/'.Utilities::readSiteData( 'theme' ).'/'.$page.'.tpl' ) , $array )."\n";
+		echo $this->render( file_get_contents( ROOT.'themes/'.Utilities::readSiteData( 'theme' ).'/footer.tpl' ) , $array );
+	}
 }
 
 

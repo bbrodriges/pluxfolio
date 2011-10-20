@@ -15,7 +15,8 @@
 	} */
 	
 	/* Rendering current template */
-	$Template = new Templates;
-	$Template->render();
+	$Class = 'C'.ucfirst( Utilities::getPageType() );
+	$Page = new $Class;
+	$Page->init();
 	
 ?>
