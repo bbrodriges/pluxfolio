@@ -260,13 +260,19 @@ class Utilities extends Database {
 		return new ArrayIterator( $articlesArray );
 	}
 	
-	/* Converts http and www into clickable links */
-	public function makeLinks($text) {
-		$text = preg_replace('%(((f|ht){1}tp://)[-a-zA-^Z0-9@:\%_\+.~#?&//=]+)%i',
-		'<a href="\\1">\\1</a>', $text);
-		$text = preg_replace('%([[:space:]()[{}])(www.[-a-zA-Z0-9@:\%_\+.~#?&//=]+)%i',
-		'\\1<a href="http://\\2">\\2</a>', $text);
-		return $text;
+	/* Compiles article tags */
+	public function makeTags( $tags ) {
+		if( !empty( $tags ) ) {
+			$tagString = '';
+			$tags = explode( ',' , $tags );
+			foreach( $tags as $tag ){
+				$tag = trim( $tag );
+				$tagString .= '<a href="'.self::readSiteData( 'address' ).'/tag/'.$tag.'">'.$tag.'</a>, ';
+			}
+			return substr( $tagString , 0 , -2 );
+		} else {
+			return self::getTranslation( 'notags' );
+		}
 	}
 	
 	/* Compiles pagination */
@@ -301,6 +307,26 @@ class Utilities extends Database {
 	/* Counts number of total pages in pagination */
 	public function paginationPages() {
 		return ceil( count( self::returnVisible( 'articles' ) ) / self::readSiteData( 'articlesperpage' ) );
+	}
+	
+	/* Collects most popular tags */ 
+	/* Writes top 5 tags into 'site' table and all of unique tags into 'tags' table*/
+	public function collectTags() {
+		$articles = self::returnVisible( 'articles' );
+		$allTags = array();
+		foreach( $articles as $article ) {
+			$tags = explode( ',' , $article['tags'] );
+			foreach( $tags as $tag ) {
+				$allTags[] = trim( Database::sanitiseQuery( $tag ) );
+			}
+		}
+		$database = Database::readDB( 'site' , true );
+		$database['toptags'] = array_slice( array_keys( array_count_values( $allTags ) ) , 0 , 5 );
+		if( Database::writeDB( 'site' , $database ) && Database::writeDB( 'tags' , array_unique( $allTags ) ) ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
   
 }
