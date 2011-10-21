@@ -40,5 +40,15 @@
 	"edit-static": "Редактирование страницы",
 	"new-static-text": "Содержание страницы",
 	"blog": "Блог",
+	"new-article": "Новая статья",
+	"new-article-name": "Заголовок",
+	"new-article-pretext": "Анонс статьи",
+	"article-name-help": "должен быть уникален",
+	"article-pretext-help": "будет отбражаться на главной",
+	"new-article-text": "Текст статьи",
+	"new-article-tags": "Метки статьи",
+	"article-tags-help": "ключевые слова, разделенные запятыми",
+	"existing-articles": "Статьи",
+	"article-author": "Автор",
 	"poweredby": "Работает на <a href='http://pluxfolio.ru/'>pluxfolio</a> версии"
 }

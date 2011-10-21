@@ -150,6 +150,14 @@ li.gallery-item {
 	li.gallery-item a{
 		color: #555;
 	}
+	
+table.articles td.info {
+	padding: 5px 20px;
+}
+
+	table.articles td a {
+		color: #555;
+	}
 
 div.footer {
 	width: 100%;
