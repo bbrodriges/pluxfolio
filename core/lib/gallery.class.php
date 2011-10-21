@@ -102,6 +102,7 @@ class Artwork extends CGallery {
 		if( !isset( $database[$galleryid]['images'][$filename] ) ){
 			 $increase = true;//increases artworks counter if appending new artwork
 			 self::makeThumb( ROOT.'galleries/'.$database[$galleryid]['folder'].'/'.$filename ); //Create thumbnail
+			 self::rotateLatestArtworks( array( 'filename' => $filename , 'folder' => $database[$galleryid]['folder'] , 'gallery' => $database[$galleryid]['name'] , 'name' => $data['filename'] ) );
 		}
 		$database[$galleryid]['images'][$filename] = $data;
 		if( Database::writeDB( 'galleries' , $database ) ) {
@@ -252,6 +253,14 @@ class Artwork extends CGallery {
 		}
 		chmod( $filename.'.tb', 0644 );
         return true;
+	}
+	
+	/* Rotates 3 latest artworks */
+	/* $artworkinfo = array( 'filename' => string , 'folder' => string , 'gallery' => string , 'name' => string ) */
+	public function rotateLatestArtworks( $artworkinfo ) {
+		$data = Database::readDB( 'site' , true );
+		$data['latestartworks'] = array_slice( array_merge( $artworkinfo , $data['latestartworks'] ) , 0 , 3 );
+		Database::writeDB( 'site' , $data );
 	}
 
 }
