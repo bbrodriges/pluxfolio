@@ -5,8 +5,18 @@
 	
 	$dictionary = $dictionary = json_decode( file_get_contents( ROOT.'core/admin/lang/'.Utilities::readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
 	$database = Database::readDB( 'site' , true ); //reads site info
-	$galleries = Database::readDB( 'statics' , true ); //reads galleries
+	$statics = Database::readDB( 'statics' , true ); //reads galleries
 	$errorText = '';
+	
+	if( !empty( $_POST ) && isset( $_POST['new-static-name'] ) ) {
+		$data = Array("title" => Database::clearQuery( $_POST['new-static-name'] ), "text" => $_POST['new-static-text'] , "visible" => 'true');
+		$returnCode = Utilities::parseError( CStatic::Modify( $data , $_GET['id'] ) ); //capturing errors
+		if( $returnCode == 1 ) {
+			header('Location: ./edit.php?id='.Utilities::Translit( $_POST['new-static-name'] ));
+		} else {
+			$errorText = $returnCode.'. '.$dictionary['error-table'];
+		}
+	}
 	
 ?>
 
@@ -47,7 +57,14 @@
 	<div class="container">
 	
 		<fieldset>
-			<legend><h3><?php echo $dictionary['new-static']; ?></h3></legend>
+			<legend><h3><?php echo $dictionary['edit-static']; ?></h3></legend>
+			<form method="post">
+				<p><label for="new-static-name"><?php echo $dictionary['new-gallery-name']; ?>: </label><input name="new-static-name" id="new-static-name" size="55" value="<?php echo $statics[ $_GET['id'] ]['title']; ?>"></span> </p>
+					
+				<p><label for="new-static-text"><?php echo $dictionary['new-static-text']; ?>: </label><br><textarea name="new-static-text" cols="100" rows="12"><?php echo $statics[ $_GET['id'] ]['text']; ?></textarea></p>
+					
+				<p class="confirm-button"> <?php echo $errorText;?> <input type="submit" value="<?php echo $dictionary['savechanges']; ?>"></p>
+			</form>
 		</fieldset>
 	
 		<div class="footer">
