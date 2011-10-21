@@ -121,20 +121,20 @@ fieldset {
 		padding-left: 10px;
 	}
 	
-p.confirm-button {
+.confirm-button {
 	padding-top: 10px;
 	text-align: right;
 	width: 100%;
 }
 
-	p.confirm-button input[type="submit"] {
+	.confirm-button input[type="submit"] {
 		padding: 10px;
 		border: 1px solid #999;
 		background: #d6d6d6;
 		color: #555;
 	}
 	
-	p.confirm-button input[type="submit"]:hover {
+	.confirm-button input[type="submit"]:hover {
 		background: #555;
 		color: #d6d6d6;
 	}
@@ -166,6 +166,10 @@ table.articles tr:hover {
 	table.articles td a {
 		color: #555;
 	}
+	
+table.translation td{
+	padding: 5px 10px;
+}
 
 div.footer {
 	width: 100%;

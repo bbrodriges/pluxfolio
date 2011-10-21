@@ -3,7 +3,7 @@
 	define( 'ROOT' , '../../' ); //defining root directory for admin
 	include( ROOT.'core/lib/includer.php' );
 	
-	$dictionary = $dictionary = json_decode( file_get_contents( ROOT.'core/admin/lang/'.Utilities::readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
+	$dictionary = json_decode( file_get_contents( ROOT.'core/admin/lang/'.Utilities::readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
 	$database = Database::readDB( 'site' , true ); //reads site info
 	list( $thumbWidth , $thumbHeight ) = explode( 'x' , $database['thumbsize'] );
 	
@@ -30,6 +30,7 @@
 				<div class="subtitle"><?php echo $dictionary['adminpanel']; ?></div>
 			</div>
 			<div class="main-menu">
+				<li><a href="<?php echo $database['address']; ?>/core/admin/language/"><?php echo $dictionary['lang']; ?></a></li>
 				<li><a href="<?php echo $database['address']; ?>/core/admin/blog/"><?php echo $dictionary['blog']; ?></a></li>
 				<li><a href="<?php echo $database['address']; ?>/core/admin/statics/"><?php echo $dictionary['statics']; ?></a></li>
 				<li><a href="<?php echo $database['address']; ?>/core/admin/galleries/"><?php echo $dictionary['galleries']; ?></a></li>

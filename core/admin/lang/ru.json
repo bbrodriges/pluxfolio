@@ -51,5 +51,7 @@
 	"article-tags-help": "ключевые слова, разделенные запятыми",
 	"existing-articles": "Статьи",
 	"article-author": "Автор",
+	"lang": "Язык",
+	"language-title": "Перевод",
 	"poweredby": "Работает на <a href='http://pluxfolio.ru/'>pluxfolio</a> версии"
 }
