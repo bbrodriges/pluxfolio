@@ -86,7 +86,7 @@
 		</fieldset>
 	
 		<div class="footer">
-			<?php echo $dictionary['poweredby']; ?> <?php echo $database['version']; ?>
+			<?php echo $dictionary['poweredby']; ?> <?php echo file_get_contents( ROOT.'core/db/version' ); ?>
 		</div>
 	</div>
 </body>

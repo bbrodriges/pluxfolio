@@ -10,8 +10,8 @@
 	
 	
 	if( !empty( $_POST ) && isset( $_POST['new-static-name'] ) ) {
-		$data = Array("title" => $_POST['new-static-name'], "text" => $_POST['new-static-text'], "visible" => 'true');
-		$returnCode = Utilities::parseError( Statics::Modify( $data ) ); //capturing errors
+		$data = Array("title" => Database::sanitiseQuery( $_POST['new-static-name'] ), "text" => Database::sanitiseQuery( $_POST['new-static-text'] ), "visible" => 'true');
+		$returnCode = Utilities::parseError( CStatics::Modify( $data ) ); //capturing errors
 		if( $returnCode == 1 ) {
 			header('Location: ./');
 		} else {
@@ -84,7 +84,7 @@
 		</fieldset>
 	
 		<div class="footer">
-			<?php echo $dictionary['poweredby']; ?> <?php echo $database['version']; ?>
+			<?php echo $dictionary['poweredby']; ?> <?php echo file_get_contents( ROOT.'core/db/version' ); ?>
 		</div>
 	</div>
 </body>

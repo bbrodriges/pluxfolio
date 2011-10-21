@@ -10,8 +10,8 @@
 	
 	
 	if( !empty( $_POST ) && isset( $_POST['new-gallery-name'] ) ) {
-		$data = Array("name" => $_POST['new-gallery-name'], "folder" => Utilities::Translit( $_POST['new-gallery-name'] ), "visible" => 'true');
-		$returnCode = Utilities::parseError( Galleries::Modify( $data ) ); //capturing errors
+		$data = Array("name" => Database::clearQuery( $_POST['new-gallery-name'] ), "folder" => Utilities::Translit( Database::clearQuery( $_POST['new-gallery-name'] ) ), "visible" => 'true');
+		$returnCode = Utilities::parseError( CGallery::Modify( $data ) ); //capturing errors
 		if( $returnCode == 1 ) {
 			header('Location: ./');
 		} else {
@@ -84,7 +84,7 @@
 		</fieldset>
 	
 		<div class="footer">
-			<?php echo $dictionary['poweredby']; ?> <?php echo $database['version']; ?>
+			<?php echo $dictionary['poweredby']; ?> <?php echo file_get_contents( ROOT.'core/db/version' ); ?>
 		</div>
 	</div>
 </body>
