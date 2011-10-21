@@ -33,6 +33,7 @@ class CStatic extends Database {
 				$database[$id] = $data;
 			}
 		} else {
+			echo '1';
 			if( !Utilities::getById( 'statics' , $newId ) ) { //if key is unique write data
 				$database[$newId] = $data;
 			} else { //key is not unique

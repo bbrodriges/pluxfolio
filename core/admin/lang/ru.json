@@ -1,6 +1,7 @@
 {
 	"adminpanel": "Панель администратора",
 	"savechanges": "Сохранить",
+	"delete": "Удалить",
 	"enabled": "Включить",
 	"disabled": "Выключить",
 	"error-table": "За справкой обратитесь к <a href='https://github.com/bbrodriges/pluxfolio/wiki/%D0%9A%D0%BE%D0%B4%D1%8B-%D0%BE%D1%88%D0%B8%D0%B1%D0%BE%D0%BA'>списку ошибок</a>.",

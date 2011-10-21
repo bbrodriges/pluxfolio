@@ -19,6 +19,17 @@
 		}
 	}
 	
+	if( !empty( $_GET ) ) {
+		if( isset( $_GET['delete'] ) && !empty( $_GET['delete'] ) ) {
+			$returnCode = Utilities::parseError( Utilities::Delete( 'articles' , $_GET['delete'] ) );
+			if( $returnCode == 1 ) {
+			header('Location: ./');
+			} else {
+				$errorText = $returnCode.'. '.$dictionary['error-table'];
+			}
+		}
+	}
+	
 ?>
 
 <!doctype html>
@@ -78,9 +89,9 @@
 			<?php
 			
 				foreach( $articles as $articleid => $article ) {
-					echo '<tr><td class="info">'.$dictionary['article-author'].': '.$article['author'].', '.date( 'Y.m.d G:i' , $article['date'] ).'</td><td><a href="edit.php?id='.$articleid.'">';
+					echo '<tr><td class="info">'.$dictionary['article-author'].': '.$article['author'].', '.date( 'Y.m.d G:i' , $article['date'] ).'</td><td class="name"><a href="edit.php?id='.$articleid.'">';
 					echo $article['title'];
-					echo '</a></td></tr>';
+					echo '</a></td><td><a href="?delete='.$articleid.'">'.$dictionary['delete'].'</a></td></tr>';
 				}
 				
 			?>

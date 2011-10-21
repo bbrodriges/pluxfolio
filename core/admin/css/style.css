@@ -151,8 +151,16 @@ li.gallery-item {
 		color: #555;
 	}
 	
-table.articles td.info {
+table.articles td {
 	padding: 5px 20px;
+}
+
+table.articles td.name {
+	width: 450px;
+}
+
+table.articles tr:hover {
+	background: #d6d6d6;
 }
 
 	table.articles td a {

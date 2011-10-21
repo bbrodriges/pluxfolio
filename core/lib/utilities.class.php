@@ -108,7 +108,12 @@ class Utilities extends Database {
 	public function Delete( $database , $id ){ //id of article to be deleted
 		$data = Database::readDB( $database , true );
 		unset($data[(string)$id]);
-		return Database::writeDB( $database , $data );
+		if( Database::writeDB( $database , $data ) ) {
+			if( $database == 'articles' ) {
+				self::collectTags();
+			}
+			return 1;
+		}
 	}
 	
 	/* Set visibility on and off */
