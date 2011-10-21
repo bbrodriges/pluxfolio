@@ -321,7 +321,7 @@ class Utilities extends Database {
 		foreach( $articles as $article ) {
 			$tags = explode( ',' , $article['tags'] );
 			foreach( $tags as $tag ) {
-				$allTags[] = trim( Database::sanitiseQuery( $tag ) );
+				$allTags[] = trim( $tag );
 			}
 		}
 		$database = Database::readDB( 'site' , true );

@@ -60,7 +60,10 @@ class CArticle extends Database {
 				return 5;
 			}
 		}
-		return Database::writeDB( 'articles' , $database );
+		if( Database::writeDB( 'articles' , $database ) ){
+			var_dump( Utilities::collectTags() );
+			return 1;
+		}
 	}
 
 }
