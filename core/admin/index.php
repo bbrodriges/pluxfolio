@@ -55,6 +55,14 @@
 			
 			<p><label for="site-description"><?php echo $dictionary['site-description']; ?>:</label><br><textarea name="site-description" id="site-description" rows="7" cols="80"><?php echo $database['sitedescription']; ?></textarea></p>
 			
+			<p><label for="site-time"><?php echo $dictionary['site-time']; ?>: </label><select name="site-time" id="site-time">
+				<?php
+					for( $time = -12; $time < 13; $time++ ) {
+						echo '<option value="'.$time.'">'.$time.':00</option>';
+					}
+				?>
+			</select></p>
+			
 			<p class="confirm-button"><input type="submit" value="<?php echo $dictionary['savechanges']; ?>"></p>
 		</fieldset>
 		
