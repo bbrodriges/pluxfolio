@@ -24,10 +24,6 @@ class Database {
 		}
 	}
 	
-	public function sanitiseQuery( $data ) { //replace unexepatable chars
-		return str_replace( '"' , '\\"' , $data );
-	}
-	
 	public function clearQuery( $data ) { //delete unexepatable chars
 		return str_replace( '"' , '' , $data );
 	}

@@ -10,8 +10,8 @@
 	
 	
 	if( !empty( $_POST ) && isset( $_POST['new-static-name'] ) ) {
-		$data = Array("title" => Database::sanitiseQuery( $_POST['new-static-name'] ), "text" => Database::sanitiseQuery( $_POST['new-static-text'] ), "visible" => 'true');
-		$returnCode = Utilities::parseError( CStatics::Modify( $data ) ); //capturing errors
+		$data = Array("title" => Database::clearQuery( $_POST['new-static-name'] ), "text" => $_POST['new-static-text'] , "visible" => 'true');
+		$returnCode = Utilities::parseError( CStatic::Modify( $data ) ); //capturing errors
 		if( $returnCode == 1 ) {
 			header('Location: ./');
 		} else {

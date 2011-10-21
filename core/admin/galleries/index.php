@@ -10,7 +10,7 @@
 	
 	
 	if( !empty( $_POST ) && isset( $_POST['new-gallery-name'] ) ) {
-		$data = Array("name" => Database::clearQuery( $_POST['new-gallery-name'] ), "folder" => Utilities::Translit( Database::clearQuery( $_POST['new-gallery-name'] ) ), "visible" => 'true');
+		$data = Array("name" => Database::clearQuery( $_POST['new-gallery-name'] ), "folder" => Utilities::Translit( Database::clearQuery( $_POST['new-gallery-name'] ) ) , "visible" => 'true');
 		$returnCode = Utilities::parseError( CGallery::Modify( $data ) ); //capturing errors
 		if( $returnCode == 1 ) {
 			header('Location: ./');
