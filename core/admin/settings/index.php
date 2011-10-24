@@ -26,6 +26,22 @@
 				Utilities::writeSiteData( 'GMT' , $_POST['site-time'] );
 				break;
 			case 'visual':
+				Utilities::writeSiteData( 'theme' , $_POST['site-theme'] );
+				Utilities::writeSiteData( 'language' , $_POST['site-language'] );
+				if( empty( $_POST['articles-per-page'] )  || (int)$_POST['articles-per-page'] < 1 || !is_numeric( $_POST['articles-per-page'] ) ) { //if there's something strange in the input field...
+					$_POST['articles-per-page'] = 1; //...who you gonna call?
+				}
+				Utilities::writeSiteData( 'articlesperpage' , (string)$_POST['articles-per-page'] );
+				Utilities::writeSiteData( 'showvotes' , $_POST['artworks-vote'] );
+				Utilities::writeSiteData( 'showartworkscounter' , $_POST['artworks-counter'] );
+				Utilities::writeSiteData( 'showlatestartworks' , $_POST['latest-artworks'] );
+				if( empty( $_POST['thumb-width'] )  || (int)$_POST['thumb-width'] < 1 || !is_numeric( $_POST['thumb-width'] ) ) {
+					$_POST['thumb-width'] = 200;
+				}
+				if( empty( $_POST['thumb-height'] )  || (int)$_POST['thumb-height'] < 1 || !is_numeric( $_POST['thumb-height'] ) ) {
+					$_POST['thumb-height'] = 150;
+				}
+				Utilities::writeSiteData( 'thumbsize' , $_POST['thumb-width'].'x'.$_POST['thumb-height'] );
 				break;
 			case 'user':
 				if(	md5( $_POST['old-password'] ) == $database['password'] ) {
