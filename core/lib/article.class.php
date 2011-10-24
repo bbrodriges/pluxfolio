@@ -50,7 +50,9 @@ class CArticle extends Database {
 					return 5; //key is not unique
 				}
 			} else {
+				$oldDate = $database[$id]['date'];
 				$database[$id] = $data;
+				$database[$id]['date'] = $oldDate;
 			}
 		} else {
 			if( !Utilities::getById( 'articles' , $newId ) ) { //if key is unique write data
@@ -61,7 +63,7 @@ class CArticle extends Database {
 			}
 		}
 		if( Database::writeDB( 'articles' , $database ) ){
-			var_dump( Utilities::collectTags() );
+			Utilities::collectTags();
 			return 1;
 		}
 	}
