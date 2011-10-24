@@ -7,6 +7,15 @@
 	$language = json_decode( file_get_contents( ROOT.'core/lang/'.Utilities::readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
 	$database = Database::readDB( 'site' , true );
 	
+	if( !empty( $_POST ) && !empty( $_POST['language'] ) ) {
+		$returnCode = Utilities::parseError( Database::writeDB( '' , $_POST['language'] , Utilities::readSiteData( 'language' ) ) );
+		if( $returnCode == 1 ) {
+			header('Location: ./');
+		} else {
+			$errorText = $returnCode.'. '.$dictionary['error-table'];
+		}
+	}
+	
 ?>
 
 <!doctype html>
@@ -18,7 +27,8 @@
 	<meta http-equiv="Content-Language" content="<?php echo $database['language']; ?>">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	
-	<link rel="stylesheet" href="<?php echo $database['address']; ?>/core/admin/css/style.css" type="text/css">
+	<link rel="stylesheet" href="<?php echo $database['address']; ?>/core/admin/files/style.css" type="text/css">
+	<script src="<?php echo $database['address']; ?>/core/admin/files/nicEdit.js" type="text/javascript"></script>
 	
 </head>
 <body>
@@ -49,19 +59,21 @@
 	
 		<fieldset>
 			<legend><h3><?php echo $dictionary['language-title']; ?></h3></legend>
-			<table class="translation">
-			<?php
-				$step = 1;
-				foreach( $language as $id => $translation ) {
-					echo '<tr><td class="id">%'.$id.'%</td><td><input type="text" name="language[\''.$id.'\']" size="115" value="'.$translation.'"></td></tr>';
-					if( ($step % 5) == 0 ) {
-						echo '<tr><td colspan="2" class="confirm-button"><input type="submit" value="'.$dictionary['savechanges'].'"></td></tr>';
+			<form method="post">
+				<table class="translation">
+				<?php
+					$step = 1;
+					foreach( $language as $id => $translation ) {
+						echo '<tr><td class="id">%'.$id.'%</td><td><input type="text" name="language['.$id.']" size="115" value="'.$translation.'"></td></tr>';
+						if( ($step % 5) == 0 ) {
+							echo '<tr><td colspan="2" class="confirm-button"><input type="submit" value="'.$dictionary['savechanges'].'"></td></tr>';
+						}
+						$step++;
 					}
-					$step++;
-				}
-			?>
-			</table>
-			<p class="confirm-button"><input type="submit" value="<?php echo $dictionary['savechanges']; ?>"></p>
+				?>
+				</table>
+				<p class="confirm-button"><input type="submit" value="<?php echo $dictionary['savechanges']; ?>"></p>
+			</form>
 		</fieldset>
 	
 		<div class="footer">

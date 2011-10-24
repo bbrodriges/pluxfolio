@@ -8,11 +8,15 @@ class Database {
 	}
 	
 	/* Opens DB an wrtie changes */
-	/* $data must be array! */
-	public function writeDB( $database, $data ) { //input is a whole DB with changes. Array or Object.
+	/* $data must be array! If $language = true - writes changes to language file */
+	public function writeDB( $database, $data, $language = false ) { //input is a whole DB with changes.
+		$dbFile = ROOT.'core/db/'.$database.'.json';
+		if( $language ) { //if editing language file - rewrite default file path
+			$dbFile = ROOT.'core/lang/'.$language.'.json';
+		}
 		$data = self::jsonEncode( $data );
 		if( self::checkDatabase( $data ) ) {
-			if(	$fp = fopen( ROOT.'core/db/'.$database.'.json' , 'w' ) ) {
+			if(	$fp = fopen( $dbFile , 'w' ) ) {
 				fwrite( $fp , $data );
 				fclose( $fp );
 				return true;

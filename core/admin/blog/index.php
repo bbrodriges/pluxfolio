@@ -41,7 +41,8 @@
 	<meta http-equiv="Content-Language" content="<?php echo $database['language']; ?>">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	
-	<link rel="stylesheet" href="<?php echo $database['address']; ?>/core/admin/css/style.css" type="text/css">
+	<link rel="stylesheet" href="<?php echo $database['address']; ?>/core/admin/files/style.css" type="text/css">
+	<script src="<?php echo $database['address']; ?>/core/admin/files/nicEdit.js" type="text/javascript"></script>
 	
 </head>
 <body>
@@ -74,9 +75,9 @@
 			<form method="post">
 				<p><label for="new-article-name"><?php echo $dictionary['new-article-name']; ?>: </label><input name="new-article-name" id="new-article-name" size="55"></span> <span class="help">(<?php echo $dictionary['article-name-help']; ?>)</span></p>
 				
-				<p><label for="new-article-pretext"><?php echo $dictionary['new-article-pretext']; ?>:  <span class="help">(<?php echo $dictionary['article-pretext-help']; ?>)</span></label><br><textarea name="new-article-pretext" id="new-article-pretext" cols="100" rows="6"></textarea></p>
+				<p><label for="new-article-pretext"><?php echo $dictionary['new-article-pretext']; ?>:  <span class="help">(<?php echo $dictionary['article-pretext-help']; ?>)</span></label><br><textarea name="new-article-pretext" id="new-article-pretext" cols="139" rows="6"></textarea></p>
 				
-				<p><label for="new-article-text"><?php echo $dictionary['new-article-text']; ?>:</label><br><textarea name="new-article-text" id="new-article-text" cols="100" rows="12"></textarea></p>
+				<p><label for="new-article-text"><?php echo $dictionary['new-article-text']; ?>:</label><br><textarea name="new-article-text" id="new-article-text" cols="139" rows="12"></textarea></p>
 				
 				<p><label for="new-article-tags"><?php echo $dictionary['new-article-tags']; ?>: </label><input name="new-article-tags" id="new-article-tags" size="55"> <span class="help">(<?php echo $dictionary['article-tags-help']; ?>)</span></p>
 				
