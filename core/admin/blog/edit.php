@@ -8,11 +8,11 @@
 	$article = Utilities::getById( 'articles' , $_GET['id'] ); //reads article
 	$errorText = '';
 	
-	if( !empty( $_POST ) && isset( $_POST['new-static-name'] ) ) {
-		$data = Array("title" => Database::clearQuery( $_POST['new-static-name'] ), "text" => $_POST['new-static-text'] , "visible" => 'true');
-		$returnCode = Utilities::parseError( CStatic::Modify( $data , $_GET['id'] ) ); //capturing errors
+	if( !empty( $_POST ) && isset( $_POST['new-article-name'] ) ) {
+		$data = Array("title" => $_POST['new-article-name'], "pretext" => $_POST['new-article-pretext'], "text" => $_POST['new-article-text'], "tags" => $_POST['new-article-tags'], "date" => '', "author" => $database['login'], "visible" => (string)$_POST['new-article-visibility'] );
+		$returnCode = Utilities::parseError( CArticle::Modify( $data , $_GET['id'] ) ); //capturing errors
 		if( $returnCode == 1 ) {
-			header('Location: ./edit.php?id='.Utilities::Translit( $_POST['new-static-name'] ));
+			header('Location: ./edit.php?id='.Utilities::Translit( $_POST['new-article-name'] ));
 		} else {
 			$errorText = $returnCode.'. '.$dictionary['error-table'];
 		}
