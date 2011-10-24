@@ -49,9 +49,11 @@
 	"article-pretext-help": "будет отбражаться на главной",
 	"new-article-text": "Текст статьи",
 	"new-article-tags": "Метки статьи",
+	"new-article-visibility": "Отображать статью",
 	"article-tags-help": "ключевые слова, разделенные запятыми",
 	"existing-articles": "Статьи",
 	"article-author": "Автор",
+	"edit-article": "Редактирование статьи",
 	"lang": "Язык",
 	"language-title": "Перевод",
 	"poweredby": "Работает на <a href='http://pluxfolio.ru/'>pluxfolio</a> версии"

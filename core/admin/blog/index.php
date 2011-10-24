@@ -23,7 +23,7 @@
 		if( isset( $_GET['delete'] ) && !empty( $_GET['delete'] ) ) {
 			$returnCode = Utilities::parseError( Utilities::Delete( 'articles' , $_GET['delete'] ) );
 			if( $returnCode == 1 ) {
-			header('Location: ./');
+				header('Location: ./');
 			} else {
 				$errorText = $returnCode.'. '.$dictionary['error-table'];
 			}
@@ -53,6 +53,7 @@
 				<div class="subtitle"><?php echo $dictionary['adminpanel']; ?></div>
 			</div>
 			<div class="main-menu">
+				<li><a href="<?php echo $database['address']; ?>/core/admin/language/"><?php echo $dictionary['lang']; ?></a></li>
 				<li  class="current"><a href="<?php echo $database['address']; ?>/core/admin/blog/"><?php echo $dictionary['blog']; ?></a></li>
 				<li><a href="<?php echo $database['address']; ?>/core/admin/statics/"><?php echo $dictionary['statics']; ?></a></li>
 				<li><a href="<?php echo $database['address']; ?>/core/admin/galleries/"><?php echo $dictionary['galleries']; ?></a></li>
@@ -77,7 +78,7 @@
 				
 				<p><label for="new-article-text"><?php echo $dictionary['new-article-text']; ?>:</label><br><textarea name="new-article-text" id="new-article-text" cols="100" rows="12"></textarea></p>
 				
-				<p><label for="new-article-tags"><?php echo $dictionary['new-article-tags']; ?>: </label><input name="new-article-tags" id="new-article-tags" size="55"></span> <span class="help">(<?php echo $dictionary['article-tags-help']; ?>)</span></p>
+				<p><label for="new-article-tags"><?php echo $dictionary['new-article-tags']; ?>: </label><input name="new-article-tags" id="new-article-tags" size="55"> <span class="help">(<?php echo $dictionary['article-tags-help']; ?>)</span></p>
 				
 				<p class="confirm-button"> <?php echo $errorText;?> <input type="submit" value="<?php echo $dictionary['savechanges']; ?>"></p>
 			</form>
