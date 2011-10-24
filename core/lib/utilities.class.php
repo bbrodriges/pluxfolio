@@ -170,9 +170,15 @@ class Utilities extends Database {
 	}
 	
 	/* Returns available languages list */
-	public function onOffList( $type ) {
-		$currentChoise = self::readSiteData( $type );
+	/* If database and id given - returns bool value from specified record */
+	public function onOffList( $type , $database = false , $id = false ) {
 		$dictionary = json_decode( file_get_contents( ROOT.'core/admin/lang/'.self::readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
+		if( !$database && !$id ) {
+			$currentChoise = self::readSiteData( $type );
+		} else {
+			$data = self::getById( $database , $id );
+			$currentChoise = $data[ $type ];
+		}
 		if( $currentChoise == 'true' ) {
 			return '<option value="true" selected>'.$dictionary['enabled'].'</option><option value="false">'.$dictionary['disabled'].'</option>';
 		} else {
