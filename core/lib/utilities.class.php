@@ -8,19 +8,15 @@ class Utilities extends Database {
 		return array( 'login' => $database['login'] , 'password' => $database['password'] );
 	}
 	
-	/* Writes new user credentials */
-	 public function updateUser( $login , $password ) { //user credentials as Array or Object
-		$database = Database::readDB( 'site' , true );
-		$database['login'] = Database::clearQuery( $login );
-		$database['password'] = md5( $password );
-		return Database::writeDB( 'site' , $database );
-	}
-	
 	/* Writes site info */
 	public function writeSiteData( $type, $data ) { //(1) type: 'title', 'subtitle' etc... ; (2) Data to write
 		$database = Database::readDB( 'site' , true );
-		$database[$type] = Database::sanitiseQuery( $data );
-		return Database::writeDB( 'site' , $database );
+		if( isset( $database[$type] ) ) {
+			$database[$type] = $data;
+			return Database::writeDB( 'site' , $database );
+		} else {
+			return 5;
+		}
 	}
 	
 	/* Reads site info */
