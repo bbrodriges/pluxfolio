@@ -23,18 +23,19 @@
 				Utilities::writeSiteData( 'title' , $_POST['site-title'] );
 				Utilities::writeSiteData( 'subtitle' , $_POST['site-subtitle'] );
 				Utilities::writeSiteData( 'sitedescription' , $_POST['site-description'] );
+				Utilities::writeSiteData( 'GMT' , $_POST['site-time'] );
 				break;
 			case 'visual':
 				break;
 			case 'user':
 				if(	md5( $_POST['old-password'] ) == $database['password'] ) {
 					if( $_POST['new-password'] == $_POST['confirm-password'] ) {
-						Utilities::writeSiteData( 'password' , $_POST['new-password'] );
+						Utilities::writeSiteData( 'password' , md5( $_POST['new-password'] ) );
 					}
 				}
 				break;
 		}
-		//header('Location: ./');
+		header('Location: ./');
 	}
 	
 ?>
@@ -90,7 +91,19 @@
 				<p><label for="site-time"><?php echo $dictionary['site-time']; ?>: </label><select name="site-time" id="site-time">
 					<?php
 						for( $time = -12; $time < 13; $time++ ) {
-							echo '<option value="'.$time.'">';
+							echo '<option value="';
+							if( $time >= 0 ) {
+								echo '+';
+							}
+							echo $time;
+							if( $time == $database['GMT'] ){
+								echo '" selected>';
+							} else {
+								echo '">';								
+							}
+							if( $time >= 0 ) {
+								echo '+';
+							}
 							if( $time >= 0 && $time < 10 ) {
 								echo '0'.$time.':00</option>';
 							} elseif ( $time >= -9 && $time < 0 ) {
