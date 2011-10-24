@@ -5,7 +5,7 @@
 	
 	$dictionary = $dictionary = json_decode( file_get_contents( ROOT.'core/admin/lang/'.Utilities::readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
 	$database = Database::readDB( 'site' , true ); //reads site info
-	$statics = Database::readDB( 'statics' , true ); //reads galleries
+	$static = Utilities::getById( 'statics' , $_GET['id'] ); //reads galleries
 	$errorText = '';
 	
 	if( !empty( $_POST ) && isset( $_POST['new-static-name'] ) ) {
@@ -15,6 +15,17 @@
 			header('Location: ./edit.php?id='.Utilities::Translit( $_POST['new-static-name'] ));
 		} else {
 			$errorText = $returnCode.'. '.$dictionary['error-table'];
+		}
+	}
+	
+	if( !empty( $_GET ) ) {
+		if( isset( $_GET['delete'] ) && !empty( $_GET['delete'] ) ) {
+			$returnCode = Utilities::parseError( Utilities::Delete( 'statics' , $_GET['delete'] ) );
+			if( $returnCode == 1 ) {
+				header('Location: ./');
+			} else {
+				$errorText = $returnCode.'. '.$dictionary['error-table'];
+			}
 		}
 	}
 	
@@ -59,11 +70,11 @@
 		<fieldset>
 			<legend><h3><?php echo $dictionary['edit-static']; ?></h3></legend>
 			<form method="post">
-				<p><label for="new-static-name"><?php echo $dictionary['new-gallery-name']; ?>: </label><input name="new-static-name" id="new-static-name" size="55" value="<?php echo $statics[ $_GET['id'] ]['title']; ?>"></span> </p>
+				<p><label for="new-static-name"><?php echo $dictionary['new-gallery-name']; ?>: </label><input name="new-static-name" id="new-static-name" size="55" value="<?php echo $static['title']; ?>"></span> </p>
 					
-				<p><label for="new-static-text"><?php echo $dictionary['new-static-text']; ?>: </label><br><textarea name="new-static-text" cols="100" rows="12"><?php echo $statics[ $_GET['id'] ]['text']; ?></textarea></p>
+				<p><label for="new-static-text"><?php echo $dictionary['new-static-text']; ?>: </label><br><textarea name="new-static-text" cols="139" rows="12"><?php echo $static['text']; ?></textarea></p>
 					
-				<p class="confirm-button"> <?php echo $errorText;?> <input type="submit" value="<?php echo $dictionary['savechanges']; ?>"></p>
+				<p class="confirm-button"> <?php echo $errorText;?> <a href="edit.php?delete=<?php echo Utilities::Translit( $_GET['id'] ); ?>"><input type="button" value="<?php echo $dictionary['delete']; ?>"></a> &nbsp;&nbsp;  <input type="submit" value="<?php echo $dictionary['savechanges']; ?>"></p>
 			</form>
 		</fieldset>
 	

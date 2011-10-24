@@ -127,14 +127,14 @@ fieldset {
 	width: 100%;
 }
 
-	.confirm-button input[type="submit"] {
+	.confirm-button input {
 		padding: 10px;
 		border: 1px solid #999;
 		background: #d6d6d6;
 		color: #555;
 	}
 	
-	.confirm-button input[type="submit"]:hover {
+	.confirm-button input:hover {
 		background: #555;
 		color: #d6d6d6;
 	}
