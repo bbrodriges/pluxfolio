@@ -72,7 +72,6 @@
 					}
 				?>
 				</table>
-				<p class="confirm-button"><input type="submit" value="<?php echo $dictionary['savechanges']; ?>"></p>
 			</form>
 		</fieldset>
 	
