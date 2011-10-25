@@ -4,18 +4,9 @@
 	include( ROOT.'core/lib/includer.php' );
 	
 	$dictionary = json_decode( file_get_contents( ROOT.'core/admin/lang/'.Utilities::readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
-	$language = json_decode( file_get_contents( ROOT.'core/lang/'.Utilities::readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
-	$database = Database::readDB( 'site' , true );
-	
-	if( !empty( $_POST ) && !empty( $_POST['language'] ) ) {
-		$returnCode = Utilities::parseError( Database::writeDB( '' , $_POST['language'] , Utilities::readSiteData( 'language' ) ) );
-		if( $returnCode == 1 ) {
-			header('Location: ./');
-		} else {
-			$errorText = $returnCode.'. '.$dictionary['error-table'];
-		}
-	}
-	
+	$database = Database::readDB( 'site' , true ); //reads site info
+	$currentVersion = file_get_contents( ROOT.'core/db/version' );
+	$updaterData = json_decode( file_get_contents( 'http://pluxfolio.ru/update/descriptor' ) );
 ?>
 
 <!doctype html>
@@ -40,8 +31,8 @@
 				<div class="subtitle"><?php echo $dictionary['adminpanel']; ?></div>
 			</div>
 			<div class="main-menu">
-				<li><a href="<?php echo $database['address']; ?>/core/admin/update/"><?php echo $dictionary['update']; ?></a></li>
-				<li class="current"><a href="<?php echo $database['address']; ?>/core/admin/language/"><?php echo $dictionary['lang']; ?></a></li>
+				<li class="current"><a href="<?php echo $database['address']; ?>/core/admin/update/"><?php echo $dictionary['update']; ?></a></li>
+				<li><a href="<?php echo $database['address']; ?>/core/admin/language/"><?php echo $dictionary['lang']; ?></a></li>
 				<li><a href="<?php echo $database['address']; ?>/core/admin/blog/"><?php echo $dictionary['blog']; ?></a></li>
 				<li><a href="<?php echo $database['address']; ?>/core/admin/statics/"><?php echo $dictionary['statics']; ?></a></li>
 				<li><a href="<?php echo $database['address']; ?>/core/admin/galleries/"><?php echo $dictionary['galleries']; ?></a></li>
@@ -52,27 +43,28 @@
 	
 	<div class="informer">
 		<div class="container">
-			<?php echo $dictionary['settings-help']; ?>
+			<?php echo $dictionary['update-help']; ?>
 		</div>
 	</div>
 	
 	<div class="container">
 	
 		<fieldset>
-			<legend><h3><?php echo $dictionary['language-title']; ?></h3></legend>
-			<form method="post">
-				<table class="translation">
-				<?php
-					$step = 1;
-					foreach( $language as $id => $translation ) {
-						echo '<tr><td class="id">%'.$id.'%</td><td><input type="text" name="language['.$id.']" size="115" value="'.$translation.'"></td></tr>';
-						if( ($step % 5) == 0 ) {
-							echo '<tr><td colspan="2" class="confirm-button"><input type="submit" value="'.$dictionary['savechanges'].'"></td></tr>';
-						}
-						$step++;
-					}
-				?>
-				</table>
+			<legend><h3><?php echo $dictionary['update']; ?></h3></legend>
+			<form action="./update.php" method="post">
+				<?php if( $currentVersion >= $updaterData->version ) {?>
+				
+					<h3 class="update-title"><?php echo $dictionary['latest-version']; ?></h3>
+				
+				<?php } else { ?>
+				<h3 class="update-title"><?php echo $dictionary['new-version-available']; ?> <strong><?php echo $updaterData->version; ?></strong></h3>
+				<p><?php echo $dictionary['whats-new']; ?></p>
+				<p><?php echo $updaterData->changelog; ?></p>
+				<p class="confirm-update">
+					<input type="submit" value="<?php echo $dictionary['proceed-update']; ?>">
+					<br><br><input type="checkbox" checked name="send-statistics"> <?php echo $dictionary['send-statistics']; ?>
+				</p>
+				<?php } ?>
 			</form>
 		</fieldset>
 	

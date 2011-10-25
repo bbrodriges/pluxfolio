@@ -139,6 +139,17 @@ fieldset {
 		color: #d6d6d6;
 	}
 	
+.confirm-update, h3.update-title {
+	text-align: center;
+}
+
+	.confirm-update input[type="submit"] {
+		padding: 10px;
+		border: 1px solid #999;
+		background: #d6d6d6;
+		color: #555;
+	}
+	
 li.gallery-item {
 	display: block;
 	list-style-type: none;
