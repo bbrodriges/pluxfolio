@@ -1,1 +1,23 @@
-{"Pervaya-galereya":{"name":"Первая галерея","folder":"test","text":"Это - простая тестовая галерея","visible":"true","images":{"yawn.jpeg":{"name":"Мальчик","description":"Эта картинка всех заставляет зевать","added":"1311702458","good":"0","bad":"0"}}}}
+{
+	"Promdizayn": {
+		"name": "Промдизайн",
+		"description": "Здесь собраны все работы по промдизайну",
+		"galleries": {
+			"Pervaya-galereya": {
+				"name": "Первая галерея",
+				"folder": "test",
+				"text": "Это - простая тестовая галерея",
+				"visible": "true",
+				"images": {
+					"yawn.jpeg": {
+						"name": "Мальчик",
+						"description": "Эта картинка всех заставляет зевать",
+						"added": "1311702458",
+						"good": "0",
+						"bad": "0"
+					}
+				}
+			}
+		}
+	}
+}
