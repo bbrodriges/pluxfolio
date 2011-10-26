@@ -6,11 +6,12 @@
 	$dictionary = $dictionary = json_decode( file_get_contents( ROOT.'core/admin/lang/'.Utilities::readSiteData( 'language' ).'.json' ) , TRUE ); //opens dictionary
 	$database = Database::readDB( 'site' , true ); //reads site info
 	$galleries = Database::readDB( 'galleries' , true ); //reads galleries
+	$categories = Database::readDB( 'categories' , true ); //reads categories
 	$errorText = '';
 	
 	
 	if( !empty( $_POST ) && isset( $_POST['new-gallery-name'] ) ) {
-		$data = Array("name" => Database::clearQuery( $_POST['new-gallery-name'] ), "folder" => Utilities::Translit( Database::clearQuery( $_POST['new-gallery-name'] ) ) , "visible" => 'true');
+		$data = Array("name" => Database::clearQuery( $_POST['new-gallery-name'] ), "folder" => Utilities::Translit( Database::clearQuery( $_POST['new-gallery-name'] ) ) , 'text' => '' , 'description' => '' , "visible" => 'true');
 		$returnCode = Utilities::parseError( CGallery::Modify( $data ) ); //capturing errors
 		if( $returnCode == 1 ) {
 			header('Location: ./');
@@ -64,6 +65,13 @@
 			<legend><h3><?php echo $dictionary['new-gallery']; ?></h3></legend>
 			<form method="post">
 				<p><label for="new-gallery-name"><?php echo $dictionary['new-gallery-name']; ?>: </label><input name="new-gallery-name" id="new-gallery-name" size="55"></span> <?php echo $errorText;?></p>
+				<p><label for="new-gallery-category"><?php echo $dictionary['category-name']; ?>: <select name="new-gallery-category">
+					<?php
+						foreach( $categories as $categoryid => $category ) {
+							echo '<option value="'.$categoryid.'">'.$category['name'].'</option>';
+						}
+					?>
+				</select></p>
 				<p class="confirm-button"><input type="submit" value="<?php echo $dictionary['savechanges']; ?>"></p>
 			</form>
 		</fieldset>
@@ -84,6 +92,25 @@
 				
 			?>
 			
+		</fieldset>
+		
+		<fieldset>
+			<legend><h3><?php echo $dictionary['new-category']; ?></h3></legend>
+			<form method="post">
+				<p><label for="new-gallery-name"><?php echo $dictionary['new-gallery-name']; ?>: </label><input name="new-gallery-name" id="new-gallery-name" size="55"></span> <?php echo $errorText;?></p>
+				<p class="confirm-button"><input type="submit" value="<?php echo $dictionary['savechanges']; ?>"></p>
+			</form>
+		</fieldset>
+		
+		<fieldset>
+			<legend><h3><?php echo $dictionary['existing-categories']; ?></h3></legend>
+			<?php
+			
+				foreach( $categories as $categoryid => $category ) {
+					echo '<li class="gallery-item"><a href="category.php?id='.$categoryid.'">'.$category['name'].'</a></li>';
+				}
+				
+			?>
 		</fieldset>
 	
 		<div class="footer">
