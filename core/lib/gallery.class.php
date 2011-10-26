@@ -131,33 +131,15 @@ class CCategory extends Database {
 		}
 	}
 	
-	/* Modifies category or creates new one */
+	/* Creates category or creates new one */
 	/* $data = Array( "name" => string, "description" => string, "visible" => 'true'/'false' ); */
-	public function Modify( $data, $id = false ){
+	public function Create( $data ){
 		$database = Database::readDB( 'categories' , true );
-		$newId = Utilities::Translit( $data['name'] ); //transliterating title to use as category key
-		if( $id ) {
-			if( $id != $newId ) {
-				if( !isset( $database[(string)$newId] ) ) {
-					$galleries = $database[$id]['galleries'];
-					unset( $database[$id] );
-					$database[$newId] = $data;
-					$database[$newId]['galleries'] = $galleries;
-				} else {
-					return 6;
-				}
-			} else {
-				$galleries = $database[$id]['galleries'];
-				$database[$id] = $data;
-				$database[$id]['galleries'] = $galleries;
-			}
+		if( !isset( $database[(string)$newId] ) ) {
+			$database[(string)$newId] = $data;
+			$database[(string)$newId]['galleries'] = Array();
 		} else {
-			if( !isset( $database[(string)$newId] ) ) {
-				$database[(string)$newId] = $data;
-				$database[(string)$newId]['galleries'] = Array();
-			} else {
-				return 6;	
-			}
+			return 6;	
 		}
 		return Database::writeDB( 'categories' , $database );
 	}

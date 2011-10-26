@@ -867,8 +867,51 @@ class Mustache {
 		die;
 	}
 	
+	/* Renders page by given type with given tags */
 	public function renderPage( $page , $array ){
-		$array = array_merge( Utilities::renderDefault() , $array ); //appending defaul tags
+	
+		/* renders default tags for all pages */
+		$siteSettings = Database::readDB( 'site' , true );
+		$renderArray['homepage'] = $siteSettings['address']; //Site index page
+		$renderArray['theme'] = $siteSettings['theme']; //Site theme
+		$renderArray['title'] = $siteSettings['title']; //Site title
+		$renderArray['subtitle'] = $siteSettings['subtitle']; //Site subtitle
+		$renderArray['artworkscounter'] = $siteSettings['totalartworks']; //Total artworks count
+		$renderArray['language'] = $siteSettings['language']; //Site language
+		$renderArray['version'] = file_get_contents( $siteSettings['address'].'/core/db/version' );
+		
+		/* Data from language files */
+		$renderArray['totalartworks'] = Utilities::getTranslation( 'totalartworks' ); //Artworks counter translation
+		$renderArray['footer'] = Utilities::getTranslation( 'footer' ); //Site footer translation
+		
+		/* Compiles main menu */
+		$renderArray['mainmenu'] = '';
+		$current = ' class="current"';
+		$pageType = Utilities::getPageType();
+		
+		$renderArray['mainmenu'] .= '<li';
+		if( in_array( $pageType , array( 'index' , 'page' , 'article' , 'tag' ) ) ) {
+			$renderArray['mainmenu'] .= $current;
+		}
+		$renderArray['mainmenu'] .= '><a href="'.$siteSettings['address'].'">'.Utilities::getTranslation( 'blog' ).'</a></li>';
+		$categories = Utilities::returnVisible( 'categories' );
+		foreach( $categories as $categoryid => $category ) {
+			$renderArray['mainmenu'] .= '<li';
+			if( $pageType == 'category' && $categoryid == $_GET['pageid'] || in_array( $_GET['pageid'] , $category['galleries'] ) ) {
+				$renderArray['mainmenu'] .= $current;
+			}
+			$renderArray['mainmenu'] .= '><a href="'.$siteSettings['address'].'/category/'.$categoryid.'">'.$category['name'].'</a></li>';
+		}
+		$statics = Utilities::returnVisible( 'statics' );
+		foreach( $statics as $staticid => $static ) {
+			$renderArray['mainmenu'] .= '<li';
+			if( $pageType == 'static' && $staticid == $_GET['pageid'] ) {
+				$renderArray['mainmenu'] .= $current;
+			}
+			$renderArray['mainmenu'] .= '><a href="'.$siteSettings['address'].'/static/'.$staticid.'">'.$static['title'].'</a></li>';
+		}
+	
+		$array = array_merge( $renderArray , $array ); //appending defauly tags
 		echo $this->render( file_get_contents( ROOT.'themes/'.Utilities::readSiteData( 'theme' ).'/header.tpl' ) , $array )."\n";
 		echo $this->render( file_get_contents( ROOT.'themes/'.Utilities::readSiteData( 'theme' ).'/'.$page.'.tpl' ) , $array )."\n";
 		echo $this->render( file_get_contents( ROOT.'themes/'.Utilities::readSiteData( 'theme' ).'/footer.tpl' ) , $array );

@@ -140,7 +140,38 @@
 			<legend><h3><?php echo $dictionary['visual-settings']; ?></h3></legend>
 			<form action="./?type=visual" method="post">
 				<p><strong><?php echo $dictionary['basic-visual-settings']; ?></strong></p>
-				<p><label for="site-theme"><?php echo $dictionary['site-theme']; ?>: </label><select name="site-theme" id="site-theme"><?php echo Utilities::themesList(); ?></select> &nbsp; <label for="site-language"><?php echo $dictionary['site-language']; ?>: </label><select name="site-language" id="site-language"><?php echo Utilities::languagesList(); ?></select></p>
+				<p><label for="site-theme"><?php echo $dictionary['site-theme']; ?>: </label><select name="site-theme" id="site-theme">
+					<?php 
+						$themesList = '';
+						$currentTheme = Utilities::readSiteData( 'theme' );
+						$themes = scandir( ROOT.'themes/' );
+						unset( $themes[0] , $themes[1] ); //Delete '.' and '..'
+						foreach( $themes as $theme ) {
+							if( $theme == $currentTheme ) {
+								$themesList .= '<option value="'.$theme.'" selected>'.$theme.'</option>';
+							} else {
+								$themesList .= '<option value="'.$theme.'">'.$theme.'</option>';
+							}
+						}
+						echo $themesList;
+					?>
+				</select> &nbsp; <label for="site-language"><?php echo $dictionary['site-language']; ?>: </label><select name="site-language" id="site-language">
+					<?php 
+						$languagesList = '';
+						$currentLanguage = self::readSiteData( 'language' );
+						$languages = scandir( ROOT.'core/lang/' );
+						unset( $languages[0] , $languages[1] ); //Delete '.' and '..'
+						foreach( $languages as $language ) {
+							$language = substr( $language , 0 , -5 );
+							if( $language == $currentLanguage ) {
+								$languagesList .= '<option value="'.$language.'" selected>'.$language.'</option>';
+							} else {
+								$languagesList .= '<option value="'.$language.'">'.$language.'</option>';
+							}
+						}
+						echo $languagesList;
+					?>
+				</select></p>
 				
 				<p><strong><?php echo $dictionary['articles-settings']; ?></strong></p>
 				<p><label for="articles-per-page"><?php echo $dictionary['articles-per-page']; ?>: </label><input name="articles-per-page" id="articles-per-page" value="<?php echo $database['articlesperpage']; ?>" size="2"></p>
