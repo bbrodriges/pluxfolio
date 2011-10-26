@@ -26,7 +26,7 @@ class CGallery extends Database {
 	}
 	
 	/* Creates and append new gallery to DB */
-	/* $data is Array("name" => string, "folder" => string, "visible" => 'true'/'false'); */
+	/* $data is Array("name" => string, "folder" => string, "text" => string, "description" => string, "visible" => 'true'/'false'); */
 	/* If $id passed - edits existing gallery. */
 	public function Modify( $data, $id = false ){
 		$database = Database::readDB( 'galleries' , true );
@@ -131,6 +131,55 @@ class CCategory extends Database {
 		}
 	}
 	
+	/* Modifies category or creates new one */
+	/* $data = Array( "name" => string, "description" => string, "visible" => 'true'/'false' ); */
+	public function Modify( $data, $id = false ){
+		$database = Database::readDB( 'categories' , true );
+		$newId = Utilities::Translit( $data['name'] ); //transliterating title to use as category key
+		if( $id ) {
+			if( $id != $newId ) {
+				if( !isset( $database[(string)$newId] ) ) {
+					$galleries = $database[$id]['galleries'];
+					unset( $database[$id] );
+					$database[$newId] = $data;
+					$database[$newId]['galleries'] = $galleries;
+				} else {
+					return 6;
+				}
+			} else {
+				$galleries = $database[$id]['galleries'];
+				$database[$id] = $data;
+				$database[$id]['galleries'] = $galleries;
+			}
+		} else {
+			if( !isset( $database[(string)$newId] ) ) {
+				$database[(string)$newId] = $data;
+				$database[(string)$newId]['galleries'] = Array();
+			} else {
+				return 6;	
+			}
+		}
+		return Database::writeDB( 'galleries' , $database );
+	}
+	
+	/* Adds or removes */
+	/* $categoryid - id of category, $action - 'add'/'remove', $galleryid - id of gallery */
+	public function modifyGallery( $categoryid, $action, $galleryid ){
+		$database = Database::readDB( 'categories' , true );
+		switch ($action) {
+			case 'add':
+				if( !isset( $database[$categoryid]['galleries'][$galleryid] ) ) { //if gallery is not presented
+					array_push( $database[$categoryid]['galleries'] , $galleryid );
+				} else {
+					return 1;
+				}
+				break;
+			case 'remove':
+				unset( $database[$categoryid]['galleries'][$galleryid] );
+				break;
+		}
+		return Database::writeDB( 'categories' , $database );
+	}
 }
 
 /* Artworks in galleries control */
