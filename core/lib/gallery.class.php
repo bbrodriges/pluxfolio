@@ -13,7 +13,7 @@ class CGallery extends Database {
 			if( !empty( $galleryImages ) ) {
 				foreach( $galleryImages as $imageFile => $imageData ) {
 					$imageFilePath = Utilities::readSiteData( 'address' ).'/galleries/'.$galleryData['folder'].'/'.$imageFile;
-					$thumbsList[] = array( 'gallery_thumb' => '<a href="'.$imageFilePath.'" rel="shadowbox" title="'.$imageData['description'].'"><img src="'.$imageFilePath.'.tb" alt="'.$imageData['name'].'"></a>', 'thumb_name' => $imageData['name'], 'thumb_description' => $imageData['description'] );
+					$thumbsList[] = array( 'image_thumb' => '<a href="'.$imageFilePath.'" rel="shadowbox" title="'.$imageData['description'].'"><img src="'.$imageFilePath.'.tb" alt="'.$imageData['name'].'"></a>', 'thumb_name' => $imageData['name'], 'thumb_description' => $imageData['description'] );
 				}
 			} else { //if no images - return empty images array
 				$thumbsList[] = array();
