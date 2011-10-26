@@ -88,6 +88,51 @@ class CGallery extends Database {
 
 }
 
+class CCategory extends Database {
+
+	public function init() {
+		$renderer = new Mustache;
+		$categoryData = Utilities::getById( 'categories' , $_GET['pageid'] );
+		if( $categoryData && $categoryData['visible'] == 'true' ) {
+			$renderArray['category_title'] = $categoryData['name'];
+			$renderArray['category_description'] = $categoryData['description'];
+			$visibleGalleries = Utilities::returnVisible( 'galleries' );
+			if( !empty( $categoryData['galleries'] ) ) {
+				foreach( $categoryData['galleries'] as $gallery ) {
+					if( in_array( $gallery , array_keys( $visibleGalleries ) ) ) {
+						$categoryGalleries[$gallery] = $visibleGalleries[$gallery];
+					}
+				}
+			}
+			if( !empty( $categoryGalleries ) ) {
+				if( count( $categoryGalleries ) > 1 ) { //if more than one gallery - show list
+					foreach( $categoryGalleries as $galleryid => $gallery ) {
+						$galleryTags = array( 'gallery_name' => $gallery['name'] , 'gallery_description' => $gallery['description'], 'gallery_link' => Utilities::readSiteData( 'address' ).'/gallery/'.$galleryid );
+						foreach( $gallery['images'] as $filename => $image ) {
+							$firstImage['gallery_thumb'] = '<img src="'.Utilities::readSiteData( 'address' ).'/galleries/'.$gallery['folder'].'/'.$filename.'.tb">';
+							$galleryTags = array_merge( $galleryTags , $firstImage );
+							break;
+						}
+						$galleriesList[] = $galleryTags;
+					}
+				} else { //if one gallery - show it immediately
+					foreach( $categoryGalleries as $galleryid => $gallery ) {
+						header('Location: '.Utilities::readSiteData( 'address' ).'/gallery/'.$galleryid );
+					}
+				}
+			} else { //if no galleries - return empty array
+				$galleriesList[] = array();
+			}
+				$renderArray['galleries_list'] = new ArrayIterator( $galleriesList );
+				$renderer->renderPage( 'category' , $renderArray );
+			
+		} else { //no such gallery, or it is empty, or invisible
+			$renderer->complileError();
+		}
+	}
+	
+}
+
 /* Artworks in galleries control */
 class Artwork extends CGallery {
 

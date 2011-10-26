@@ -184,7 +184,7 @@ class Utilities extends Database {
 	
 	/* Returns page type */
 	public function getPageType() {
-		$acceptable = array( 'index' , 'page' , 'tag' , 'article' , 'gallery' , 'static' ); //acceptable page types
+		$acceptable = array( 'index' , 'page' , 'tag' , 'article' , 'gallery' , 'static' , 'category' ); //acceptable page types
 		$page = ( ( $_GET['pagetype'] ) ? $_GET['pagetype'] : 'index' );
 		if( !in_array( $page , $acceptable ) ) {
 			return 'error';
@@ -217,13 +217,13 @@ class Utilities extends Database {
 			$renderArray['mainmenu'] .= $current;
 		}
 		$renderArray['mainmenu'] .= '><a href="'.$siteSettings['address'].'">'.self::getTranslation( 'blog' ).'</a></li>';
-		$galleries = self::returnVisible( 'galleries' );
-		foreach( $galleries as $galleryid => $gallery ) {
+		$categories = self::returnVisible( 'categories' );
+		foreach( $categories as $categoryid => $category ) {
 			$renderArray['mainmenu'] .= '<li';
-			if( self::getPageType() == 'gallery' && $galleryid == $_GET['pageid'] ) {
+			if( self::getPageType() == 'category' && $categoryid == $_GET['pageid'] || in_array( $_GET['pageid'] , $category['galleries'] ) ) {
 				$renderArray['mainmenu'] .= $current;
 			}
-			$renderArray['mainmenu'] .= '><a href="'.$siteSettings['address'].'/gallery/'.$galleryid.'">'.$gallery['name'].'</a></li>';
+			$renderArray['mainmenu'] .= '><a href="'.$siteSettings['address'].'/category/'.$categoryid.'">'.$category['name'].'</a></li>';
 		}
 		$statics = self::returnVisible( 'statics' );
 		foreach( $statics as $staticid => $static ) {

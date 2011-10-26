@@ -1,0 +1,10 @@
+{
+	"Promdizayn": {
+		"name": "Промдизайн",
+		"description": "Здесь собраны все работы по промдизайну",
+		"visible": "true",
+		"galleries": [
+			"Pervaya-galereya"
+		]
+	}
+}
