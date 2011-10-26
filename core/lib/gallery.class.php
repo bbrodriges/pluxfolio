@@ -159,7 +159,7 @@ class CCategory extends Database {
 				return 6;	
 			}
 		}
-		return Database::writeDB( 'galleries' , $database );
+		return Database::writeDB( 'categories' , $database );
 	}
 	
 	/* Adds or removes */
