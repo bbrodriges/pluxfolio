@@ -103,25 +103,25 @@ class CCategory extends Database {
 						$categoryGalleries[$gallery] = $visibleGalleries[$gallery];
 					}
 				}
-			}
-			if( !empty( $categoryGalleries ) ) {
-				if( count( $categoryGalleries ) > 1 ) { //if more than one gallery - show list
-					foreach( $categoryGalleries as $galleryid => $gallery ) {
-						$galleryTags = array( 'gallery_name' => $gallery['name'] , 'gallery_description' => $gallery['description'], 'gallery_link' => Utilities::readSiteData( 'address' ).'/gallery/'.$galleryid );
-						foreach( $gallery['images'] as $filename => $image ) {
-							$firstImage['gallery_thumb'] = '<img src="'.Utilities::readSiteData( 'address' ).'/galleries/'.$gallery['folder'].'/'.$filename.'.tb">';
-							$galleryTags = array_merge( $galleryTags , $firstImage );
-							break;
+				if( !empty( $categoryGalleries ) ) {
+					if( count( $categoryGalleries ) > 1 ) { //if more than one gallery - show list
+						foreach( $categoryGalleries as $galleryid => $gallery ) {
+							$galleryTags = array( 'gallery_name' => $gallery['name'] , 'gallery_description' => $gallery['description'], 'gallery_link' => Utilities::readSiteData( 'address' ).'/gallery/'.$galleryid );
+							foreach( $gallery['images'] as $filename => $image ) {
+								$firstImage['gallery_thumb'] = '<img src="'.Utilities::readSiteData( 'address' ).'/galleries/'.$gallery['folder'].'/'.$filename.'.tb">';
+								$galleryTags = array_merge( $galleryTags , $firstImage );
+								break;
+							}
+							$galleriesList[] = $galleryTags;
 						}
-						$galleriesList[] = $galleryTags;
+					} else { //if one gallery - show it immediately
+						foreach( $categoryGalleries as $galleryid => $gallery ) {
+							header('Location: '.Utilities::readSiteData( 'address' ).'/gallery/'.$galleryid );
+						}
 					}
-				} else { //if one gallery - show it immediately
-					foreach( $categoryGalleries as $galleryid => $gallery ) {
-						header('Location: '.Utilities::readSiteData( 'address' ).'/gallery/'.$galleryid );
-					}
+				} else { //if no galleries - return empty array
+					$galleriesList[] = array();
 				}
-			} else { //if no galleries - return empty array
-				$galleriesList[] = array();
 			}
 				$renderArray['galleries_list'] = new ArrayIterator( $galleriesList );
 				$renderer->renderPage( 'category' , $renderArray );
