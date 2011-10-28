@@ -194,6 +194,7 @@ class Utilities extends Database {
 	
 	/* Compiles pagination */
 	function Pagination( $page ) {
+		$page = ( $page ? $page : 1 ); //if $page is empty - this is first page
 		$totalpages = self::paginationPages();
 		if( $totalpages > 1 ) {
 			$address = self::readSiteData( 'address' );
