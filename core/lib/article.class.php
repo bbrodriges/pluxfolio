@@ -13,7 +13,6 @@ class CArticle extends Database {
 			$renderArray['article_date'] = date( 'Y.m.d G:i' , $articleData['date'] );
 			$renderArray['article_author'] = $articleData['author'];
 			$renderArray['article_link'] = Utilities::readSiteData( 'address' ).'/article/'.$articleid;
-			$renderArray['site_description'] = Utilities::readSiteData( 'sitedescription' );
 			
 			/* Translations */
 			$renderArray['tags'] = Utilities::getTranslation( 'tags' );
@@ -74,14 +73,18 @@ class CIndex {
 
 	/* Renders index page */
 	public function init() {
-		$renderArray['articles_list'] = Utilities::itterateArticles( 1 );
-		$renderArray['pagination'] = Utilities::Pagination( 1 );
+		$renderer = new Mustache;
+		$renderer->renderPage( 'index' , self::articlesDefaultTags() );
+	}
+	
+	/* Aggregates default articles tags */
+	public function articlesDefaultTags( $forTag = false ) {
+		$renderArray['articles_list'] = Utilities::itterateArticles( $_GET['pageid'] );
+		$renderArray['pagination'] = Utilities::Pagination( $_GET['pageid'] );
 		$renderArray['toptags'] = Utilities::makeTags( implode( ',' , Utilities::readSiteData( 'toptags' ) ) , true );
 		$renderArray['toptagstitle'] = Utilities::getTranslation( 'toptagstitle' );
 		$renderArray['site_description'] = Utilities::readSiteData( 'sitedescription' );
-		
-		$renderer = new Mustache;
-		$renderer->renderPage( 'index' , $renderArray );
+		return $renderArray;
 	}
 	
 }
@@ -143,14 +146,7 @@ class CPage {
 		if( $_GET['pageid'] == 1 ) { //if first page - redirect to index
 			header( 'Location: '.Utilities::readSiteData( 'address' ) );
 		} elseif( $_GET['pageid'] > 1 && $_GET['pageid'] <= Utilities::paginationPages() ) {
-			$pageNumber = ( ( $_GET['pageid'] ) ? $_GET['pageid'] : 1 ); //if no page given - it is first page
-			$renderArray['articles_list'] = Utilities::itterateArticles( $pageNumber );
-			$renderArray['pagination'] = Utilities::Pagination( $_GET['pageid'] );
-			$renderArray['toptags'] = Utilities::makeTags( implode( ',' , Utilities::readSiteData( 'toptags' ) ) , true );
-			$renderArray['toptagstitle'] = Utilities::getTranslation( 'toptagstitle' );
-			$renderArray['site_description'] = Utilities::readSiteData( 'sitedescription' );
-			
-			$renderer->renderPage( 'index' , $renderArray );
+			$renderer->renderPage( 'index' , CIndex::articlesDefaultTags() );
 		} else {
 			$renderer->complileError();
 		}
